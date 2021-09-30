@@ -22,6 +22,7 @@ tasks:
       - task: commit
       - task: pull
       - task: push
+      - task: push # double check
 
   commit:
     cmds:

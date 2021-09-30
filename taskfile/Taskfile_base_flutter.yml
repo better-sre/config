@@ -23,13 +23,19 @@ tasks:
 
   install:
     cmds:
+      - brew install --cask ngrok
       - brew install fvm
       - fvm install 2.5.1
       - fvm list
 
+  active:
+    cmds:
+      - fvm flutter pub global activate dhttpd
+
   init:
     cmds:
       - fvm use 2.5.1 --force
+      - task: active
 
   new:
     desc: "create flutter app"
@@ -37,7 +43,6 @@ tasks:
       - echo "$(pwd) > ${FLUTTER_APP_ROOT} > ${FLUTTER_APP_NAME}"
       - task: do
         vars: {CMD: "create ${FLUTTER_APP_NAME}"}
-
 
   get:
     cmds:
@@ -64,13 +69,45 @@ tasks:
       - task: do
         vars: {CMD: "run --debug -d chrome"}
 
-  build:web:
+  deploy:
+    cmds:
+      - task: release:web
+      - open http://localhost:8080
+      - echo "$(pwd)"
+#      - cd ${FLUTTER_APP_ROOT}/${FLUTTER_APP_NAME}; ngrok http file:///$(pwd)/build/web
+      - cd ${FLUTTER_APP_ROOT}/${FLUTTER_APP_NAME}; dhttpd --path build/web/
+
+
+  release:web:
     cmds:
       - task: do
-        vars: {CMD: "build web"}
+        vars: {CMD: "build web --release"}
+
+  release:ios:
+    cmds:
+      - task: do
+        vars: {CMD: "build ios"}
+      - open build/ios/iphoneos
+      - task: open-xcode
+
+  release:android:
+    cmds:
+      - task: do
+        vars: {CMD: "build apk"}
+      - echo 'check build/app/outputs/flutter-apk/ folder'
+      - cp build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/wallet-v`date +%Y-%m-%d`-release.apk
+      - open build/app/outputs/flutter-apk/
+  #      - fvm flutter build apk --target-platform android-arm,android-arm64,android-x64 --split-per-abi  # 分 ARM 架构打包, 包更小
 
   do:
     cmds:
       - echo "$(pwd)/${FLUTTER_APP_ROOT}/${FLUTTER_APP_NAME}"
       - cd ${FLUTTER_APP_ROOT}/${FLUTTER_APP_NAME}; fvm flutter {{.CMD}}   # DO CMD
+
+  open-xcode:
+    cmds:
+      - open ios/Runner.xcworkspace   # not Runner.xcodeproj
+      - open https://appstoreconnect.apple.com/apps/1542311370/testflight/ios
+      - open https://testflight.apple.com/join/Vain6SGh
+
 

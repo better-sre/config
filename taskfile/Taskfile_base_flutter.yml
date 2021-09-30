@@ -71,16 +71,23 @@ tasks:
 
   deploy:
     cmds:
+      - task: clean
       - task: release:web
       - open http://localhost:8080
       - echo "$(pwd)"
 #      - cd ${FLUTTER_APP_ROOT}/${FLUTTER_APP_NAME}; ngrok http file:///$(pwd)/build/web
       - cd ${FLUTTER_APP_ROOT}/${FLUTTER_APP_NAME}; dhttpd --port 8080 --path build/web/
 
+  clean:
+    cmds:
+      - task: do
+        vars: {CMD: "clean"}
+
+
   release:web:
     cmds:
       - task: do
-        vars: {CMD: "build web --release"}
+        vars: {CMD: "build web --release --web-renderer html"}  # 不使用 canvaskit.wasm, 优化加载速度
 
   release:ios:
     cmds:

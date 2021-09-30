@@ -65,3 +65,12 @@ tasks:
     desc: "create flutter app"
     cmds:
       - task: flutter:new
+
+
+  push:
+    cmds:
+      - task: base:push
+
+  quick:
+    cmds:
+      - task: base:quick

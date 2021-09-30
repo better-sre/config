@@ -19,3 +19,7 @@ tasks:
   default:
     cmds:
       - task: init
+
+  init:
+    cmds:
+      - echo init

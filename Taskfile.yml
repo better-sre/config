@@ -70,6 +70,10 @@ tasks:
     cmds:
       - task: flutter:new
 
+  run:
+    cmds:
+      - task: flutter:run
+
 
   push:
     cmds:

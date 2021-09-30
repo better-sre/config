@@ -34,8 +34,43 @@ tasks:
   new:
     desc: "create flutter app"
     cmds:
-      - echo $(pwd)
-      - echo ${FLUTTER_APP_ROOT}
-      - cd ${FLUTTER_APP_ROOT}; fvm flutter create ${FLUTTER_APP_NAME}
+      - echo "$(pwd) > ${FLUTTER_APP_ROOT} > ${FLUTTER_APP_NAME}"
+      - task: do
+        vars: {CMD: "create ${FLUTTER_APP_NAME}"}
 
+
+  get:
+    cmds:
+      - task: do
+        vars: {CMD: "pub get"}
+
+  run:
+    cmds:
+      - task: do
+        vars: {CMD: "run --debug"}
+
+  run:ios:
+    cmds:
+      - task: do
+        vars: {CMD: "run --debug -d ${FLUTTER_DEVICE_ID_IOS}"}
+
+  run:android:
+    cmds:
+      - task: do
+        vars: {CMD: "run --debug -d ${FLUTTER_DEVICE_ID_ANDROID}"}
+
+  run:web:
+    cmds:
+      - task: do
+        vars: {CMD: "run --debug -d chrome"}
+
+  build:web:
+    cmds:
+      - task: do
+        vars: {CMD: "build web"}
+
+  do:
+    cmds:
+      - echo "$(pwd)/${FLUTTER_APP_ROOT}/${FLUTTER_APP_NAME}"
+      - cd ${FLUTTER_APP_ROOT}/${FLUTTER_APP_NAME}; fvm flutter {{.CMD}}   # DO CMD
 

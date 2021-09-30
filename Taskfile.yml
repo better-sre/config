@@ -1,0 +1,67 @@
+version: '3'
+
+################################################################################################
+#
+# ref:
+#   - https://taskfile.dev/#/usage
+#
+################################################################################################
+
+
+#
+# sub namespace: https://taskfile.dev/#/usage?id=including-other-taskfiles
+#
+includes:
+  os:
+    taskfile: ./taskfile/Taskfile_{{OS}}.yml
+    dir: ./script
+
+  base:
+    taskfile: ./taskfile/Taskfile_base.yml
+    dir: .
+
+  go:
+    taskfile: ./taskfile/Taskfile_base_go.yml
+    dir: .
+
+  flutter:
+    taskfile: ./taskfile/Taskfile_base_flutter.yml
+    dir: .
+
+
+################################################################################################
+
+#
+# global vars: https://taskfile.dev/#/usage?id=variables
+#
+vars:
+  VAR1: "some-var"
+
+#
+# global env: https://taskfile.dev/#/usage?id=environment-variables
+#
+env:
+  ENV1: testing-env
+
+# env file:
+dotenv:
+  - .env
+
+################################################################################################
+
+# task groups:
+tasks:
+  default:
+    cmds:
+      - task: init
+      - task: run
+
+  init:
+    cmds:
+      - cp .env.local .env
+      - task: flutter:init
+
+  new:
+    desc: "create flutter app"
+    cmds:
+      - task: flutter:new

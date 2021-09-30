@@ -1,15 +1,74 @@
-# Binaries for programs and plugins
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
 
-# Test binary, built with `go test -c`
-*.test
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
 
-# Output of the go coverage tool, specifically when used with LiteIDE
-*.out
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
 
-# Dependency directories (remove the comment below to include it)
-# vendor/
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+/build/
+
+# Web related
+lib/generated_plugin_registrant.dart
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+
+################################################################
+# add at 2021-05
+################################################################
+
+
+# version:
+.fvm/flutter_sdk
+ios/build/
+ios/Podfile.lock
+pubspec.lock
+ios/Runner.xcodeproj/project.pbxproj
+
+# generate files:
+*.g.dart
+generated/
+tmp/
+*.tmp
+*.tmp.*
+.env
+
+
+# storage files during local tests
+**/*.bak
+**/*.gs
+*.hive
+*.lock

@@ -1,0 +1,41 @@
+version: '3'
+
+#
+# global vars: https://taskfile.dev/#/usage?id=variables
+#
+vars:
+  VAR1: "some-var"
+
+# global env:
+env:
+  ENV1: testing
+
+
+################################################################################################
+
+
+# task groups:
+tasks:
+  default:
+    cmds:
+      - task: init
+      - task: run
+
+  install:
+    cmds:
+      - brew install fvm
+      - fvm install 2.5.1
+      - fvm list
+
+  init:
+    cmds:
+      - fvm use 2.5.1 --force
+
+  new:
+    desc: "create flutter app"
+    cmds:
+      - echo $(pwd)
+      - echo ${FLUTTER_APP_ROOT}
+      - cd ${FLUTTER_APP_ROOT}; fvm flutter create ${FLUTTER_APP_NAME}
+
+

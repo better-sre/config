@@ -74,6 +74,7 @@ tasks:
       - task: clean
       - task: release:web
       - open http://localhost:8080
+      - cd ${FLUTTER_APP_ROOT}/${FLUTTER_APP_NAME}; open build/web/
       - echo "$(pwd)"
 #      - cd ${FLUTTER_APP_ROOT}/${FLUTTER_APP_NAME}; ngrok http file:///$(pwd)/build/web
       - cd ${FLUTTER_APP_ROOT}/${FLUTTER_APP_NAME}; dhttpd --port 8080 --path build/web/

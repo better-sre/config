@@ -28,14 +28,25 @@ tasks:
       - fvm install 2.5.1
       - fvm list
 
-  active:
-    cmds:
-      - fvm flutter pub global activate dhttpd
-
   init:
     cmds:
       - fvm use 2.5.1 --force
-      - task: active
+      - task: deactivate
+      - task: activate
+
+  activate: # activate tools
+    cmds:
+      - pub global activate get_cli
+      - pub global activate dhttpd
+    ignore_error: true
+
+  deactivate:
+    cmds:
+      - pub global deactivate get_cli
+      - pub global deactivate dhttpd
+    ignore_error: true
+
+  #########################################################################
 
   new:
     desc: "create flutter app"
@@ -116,4 +127,11 @@ tasks:
       - open https://appstoreconnect.apple.com/apps/1542311370/testflight/ios
       - open https://testflight.apple.com/join/Vain6SGh
 
+
+  #########################################################################
+
+  # cli:
+  get:init:
+    cmds:
+      - get init
 

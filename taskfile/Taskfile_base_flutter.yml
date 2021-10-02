@@ -77,7 +77,7 @@ tasks:
   run:web:
     cmds:
       - task: do
-        vars: {CMD: "run --debug -d chrome"}
+        vars: {CMD: "run --debug -d chrome --web-renderer html"} # load speed
 
   deploy:
     cmds:
@@ -94,6 +94,19 @@ tasks:
       - task: do
         vars: {CMD: "clean"}
 
+  #
+  # 每次升级 flutter 版本, 要执行 clean + run, 否则报奇怪错误.
+  #
+  clean:run:
+    cmds:
+      - task: clean
+      - task: run
+
+  release:
+    cmds:
+      - task: release:ios
+      - task: release:android
+      - task: release:web
 
   release:web:
     cmds:
@@ -105,7 +118,7 @@ tasks:
       - task: do
         vars: {CMD: "build ios"}
       - open build/ios/iphoneos
-      - task: open-xcode
+      - task: open:xcode
 
   release:android:
     cmds:
@@ -121,7 +134,7 @@ tasks:
       - echo "$(pwd)/${FLUTTER_APP_ROOT}/${FLUTTER_APP_NAME}"
       - cd ${FLUTTER_APP_ROOT}/${FLUTTER_APP_NAME}; fvm flutter {{.CMD}}   # DO CMD
 
-  open-xcode:
+  open:xcode:
     cmds:
       - open ios/Runner.xcworkspace   # not Runner.xcodeproj
       - open https://appstoreconnect.apple.com/apps/1542311370/testflight/ios

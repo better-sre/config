@@ -41,8 +41,7 @@ tasks:
     desc: "create flutter app"
     cmds:
       - echo "$(pwd) > ${FLUTTER_APP_ROOT} > ${FLUTTER_APP_NAME}"
-      - task: do
-        vars: {CMD: "create ${FLUTTER_APP_NAME}"}
+      - cd ${FLUTTER_APP_ROOT}; fvm flutter create ${FLUTTER_APP_NAME}
 
   get:
     cmds:

@@ -1,0 +1,32 @@
+# Local development dependencies go here
+-r base.txt
+
+# aio-xxx:
+aiohttp-devtools
+aiohttp_debugtoolbar
+
+# log: https://github.com/xolox/python-coloredlogs
+coloredlogs
+
+coverage==4.4.2
+django-coverage-plugin==1.5.0
+
+django-debug-toolbar==1.9.1
+django-extensions==1.9.9
+
+django-rest-swagger==2.1.2
+django-test-plus==1.0.22
+factory-boy==2.10.0
+
+
+# flower http://localhost:5555 celery tasks monitor  for test only
+flower
+
+# improved REPL
+ipdb==0.10.3
+
+pytest-django==3.1.2
+pytest-sugar==0.9.0
+
+Sphinx==1.6.6
+Werkzeug==0.14.1

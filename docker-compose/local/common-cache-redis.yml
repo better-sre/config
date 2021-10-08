@@ -1,0 +1,42 @@
+##########################################################################################
+#                              redis service:
+# ref:
+#   - https://hub.docker.com/_/redis/
+#   - https://hub.docker.com/r/bitnami/redis/
+#   - https://yq.aliyun.com/articles/57953
+#   - WEB UI:
+#     - https://github.com/joeferner/redis-commander
+#     - https://hub.docker.com/r/tenstartups/redis-commander/
+##########################################################################################
+
+version: "3.3"
+
+services:
+  redis:
+    image: redis:alpine   # redis 4.0+
+    hostname: redis
+    ports:
+      - "0.0.0.0:6379:6379"
+    volumes:
+      - redis_data:/data
+
+  redis-commander:
+    image: tenstartups/redis-commander
+    hostname: redis-commander
+    restart: always
+    command: --redis-host redis
+    links:
+      - redis:redis-server
+    depends_on:
+      - redis
+    ports:
+      - "0.0.0.0:18081:8081"
+
+
+##########################################################################################
+#                                 自定义依赖:
+##########################################################################################
+
+# 自定义数据卷:
+volumes:
+  redis_data:

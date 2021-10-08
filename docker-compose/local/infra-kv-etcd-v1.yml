@@ -1,0 +1,35 @@
+##########################################################################################
+#                              etcd service:
+# ref:
+#   - https://github.com/evildecay/etcdkeeper
+#   - 本地浏览器访问:
+#       - http://0.0.0.0:12000/etcdkeeper/
+#       - 手动设置 etcd 地址:
+#         - 需要指定: 本机本地 IP (192.168.2.10:2379)
+#         - 非 127.0.0.1 和 0.0.0.0
+#         - 亲测有效
+##########################################################################################
+
+version: '3.5'
+
+services:
+  etcd:
+    image: "quay.io/coreos/etcd:v3.3"
+    container_name: "etcd"
+    environment:
+      ETCD_ADVERTISE_CLIENT_URLS: "http://0.0.0.0:2379"
+      ETCD_LISTEN_CLIENT_URLS: "http://0.0.0.0:2379"
+      ETCDCTL_API: "2"
+    ports:
+      - 2379:2379
+      - 2380:2380
+      - 4001:4001
+
+  # web ui:
+  etcdkeeper:
+    image: deltaprojects/etcdkeeper
+    container_name: etcdkeeper
+    ports:
+      - 12000:8080
+    depends_on:
+      - etcd

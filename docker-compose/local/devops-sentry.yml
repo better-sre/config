@@ -1,0 +1,95 @@
+##########################################################################################
+#                              sentry service:
+#
+# ref:
+#   - https://hub.docker.com/_/sentry/
+#   - https://stackoverflow.com/questions/27764032/how-to-setup-sentry-with-docker
+#   - https://github.com/getsentry/onpremise
+#   - https://raw.githubusercontent.com/ARTbio/sentry-compose/master/docker-compose.yml
+#   - https://gist.github.com/denji/b801f19d95b7d7910982c22bb1478f96
+#
+##########################################################################################
+version: '2'
+
+services:
+  redis:
+    image: redis
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: sentry
+      POSTGRES_PASSWORD: sentry
+      #
+      POSTGRES_DBNAME: sentry
+      POSTGRES_DBUSER: sentry
+      POSTGRES_DBPASS: sentry
+    volumes:
+     - postgres_data:/var/lib/postgresql/data
+
+
+  sentry:
+    image: sentry
+    links:
+     - redis
+     - postgres
+    depends_on:
+      - redis
+      - postgres
+    ports:
+     - 9000:9000
+    environment:
+      SENTRY_SECRET_KEY: 'f&to_73jv9vyk&v8(%p)jh*ifmsfmj^vjjk!!v==k(4me&(lms'
+      #
+      SENTRY_POSTGRES_HOST: postgres
+      #SENTRY_POSTGRES_PORT:
+      SENTRY_DB_NAME: sentry
+      SENTRY_DB_USER: sentry
+      SENTRY_DB_PASSWORD: sentry
+      #
+      SENTRY_REDIS_HOST: redis
+
+  sentry_cron:
+    image: sentry
+    links:
+     - redis
+     - postgres
+    command: "sentry run cron"
+    environment:
+      SENTRY_SECRET_KEY: 'f&to_73jv9vyk&v8(%p)jh*ifmsfmj^vjjk!!v==k(4me&(lms'
+      #
+      SENTRY_POSTGRES_HOST: postgres
+      #SENTRY_POSTGRES_PORT:
+      SENTRY_DB_NAME: sentry
+      SENTRY_DB_USER: sentry
+      SENTRY_DB_PASSWORD: sentry
+      #
+      SENTRY_REDIS_HOST: redis
+
+  sentry_worker:
+    image: sentry
+    links:
+     - redis
+     - postgres
+    command: "sentry run worker"
+    environment:
+      SENTRY_SECRET_KEY: 'f&to_73jv9vyk&v8(%p)jh*ifmsfmj^vjjk!!v==k(4me&(lms'
+      #
+      SENTRY_POSTGRES_HOST: postgres
+      #SENTRY_POSTGRES_PORT:
+      SENTRY_DB_NAME: sentry
+      SENTRY_DB_USER: sentry
+      SENTRY_DB_PASSWORD: sentry
+      #
+      SENTRY_REDIS_HOST: redis
+
+
+
+##########################################################################################
+#                                 自定义依赖:
+##########################################################################################
+
+# 自定义数据卷:
+volumes:
+  postgres_data:
+

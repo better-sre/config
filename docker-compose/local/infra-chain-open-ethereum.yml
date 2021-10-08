@@ -1,0 +1,38 @@
+
+################################################################
+#
+# docker run --name eth \
+# -p 8545:8545 -p 15101:15501 \
+# -p 30303:30303 -p 30303:30303/udp \
+# -v ~/.openethereum-main/:/home/openethereum/.local/share/io.parity.ethereum/ \
+# -it openethereum/openethereum:latest  \
+# --ws-interface=all \
+# --ws-origins="all"  \
+# --base-path /home/openethereum/.local/share/io.parity.ethereum/
+#
+################################################################
+
+
+# https://openethereum.github.io/Docker
+# https://github.com/openethereum/parity-deploy/blob/master/include/ethstats.yml
+
+
+version: '3'
+
+services:
+  openethereum_main:
+    image: openethereum/openethereum:latest
+    container_name: openethereum_main
+    volumes:
+      - openethereum_main_data:/home/openethereum/.local/share/io.parity.ethereum/
+    ports:
+      - 8545:8545
+      - 15101:15501
+      - 30303:30303
+      - 30303:30303/udp
+    command: --ws-interface=all --ws-origins="all" --jsonrpc-interface=all --base-path /home/openethereum/.local/share/io.parity.ethereum/
+
+
+# 自定义数据卷:
+volumes:
+  openethereum_main_data:

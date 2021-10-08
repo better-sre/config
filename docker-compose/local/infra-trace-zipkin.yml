@@ -1,0 +1,19 @@
+##########################################################################################
+#                              jaeger: 分布式链路追踪
+# ref:
+#   - https://github.com/openzipkin/zipkin
+#
+#   - https://www.jaegertracing.io/docs/1.18/getting-started/
+#     - 官方文档
+#   - 本地浏览器访问:
+#     - http://localhost:9411
+#
+##########################################################################################
+
+version: '3'
+services:
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - "9411:9411"

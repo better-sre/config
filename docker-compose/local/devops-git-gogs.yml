@@ -1,0 +1,41 @@
+##########################################################################################
+#                              git gogs service:
+# ref:
+#   - https://github.com/gogs/gogs/tree/master/docker
+#     - 官方文档
+#
+#   - https://gogs.io/docs/advanced/configuration_cheat_sheet.html
+#     - 配置文件
+#   - https://gist.github.com/ahromis/4ce4a58623847ca82cb1b745c2f83c82
+#   - https://github.com/DevinY/gogs/blob/master/docker-compose.yml
+# run:
+#   - 启动完, 默认conf配置路径: /data/gogs/conf/app.ini, 如果初始配置错, 可以更改此文件, 重新启动
+#
+##########################################################################################
+
+version: "3"
+
+services:
+  git_gogs_server:
+    image: gogs/gogs
+    restart: always
+    ports:
+      - "20080:3000"
+      - "20022:22"
+    networks:
+       - gogs_net
+    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+      - gogs_data:/data
+
+##########################################################################################
+#                                 自定义依赖:
+##########################################################################################
+
+# 自定义网络:
+networks:
+  gogs_net:
+
+# 自定义数据卷:
+volumes:
+  gogs_data:

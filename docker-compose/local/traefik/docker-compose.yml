@@ -1,0 +1,18 @@
+version: '2'
+
+services:
+  proxy:
+    image: traefik
+    command: --api --docker --logLevel=DEBUG
+    networks:
+      - webgateway
+    ports:
+      - "80:80"
+      - "9999:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${PWD}/traefik.toml:/traefik.toml
+
+networks:
+  webgateway:
+    driver: bridge

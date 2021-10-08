@@ -1,0 +1,30 @@
+version: '2'
+services:
+  parity-eth:
+    image: parity/parity:v1.10.0   # v1.10.0  v1.7.10
+    command: >
+      --pruning fast --ports-shift 10000
+      --jsonrpc-interface 0.0.0.0
+      --jsonrpc-apis web3,eth,parity,personal
+      --jsonrpc-hosts all
+      --ws-interface 0.0.0.0 --ws-origins all
+      --ui-interface 0.0.0.0 --ui-no-validation
+    ports:
+      - '18180:18180'
+      - '18545:18545'
+      - '18546:18546'
+    volumes:
+      - parity_eth:/root/.local/share/io.parity.ethereum
+    mem_limit: 2147483648
+
+
+
+
+##########################################################################################
+#                                 自定义依赖:
+##########################################################################################
+
+# 自定义数据卷:
+volumes:
+  parity_eth:
+

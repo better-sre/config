@@ -1,0 +1,92 @@
+##########################################################################################
+#                              victoriametrics: 分布式监控
+# ref:
+#   - https://github.com/VictoriaMetrics/VictoriaMetrics
+#   - docker:
+#     - https://github.com/VictoriaMetrics/VictoriaMetrics/tree/master/deployment/docker
+#     - 配置文件 copy from 官方 repo
+#   - docker hub:
+#     - https://hub.docker.com/r/victoriametrics/victoria-metrics
+#
+#   - victoriametrics + grafana
+#
+#   - VictoriaMetrics 端口说明:
+#     --graphiteListenAddr=:2003
+#     --opentsdbListenAddr=:4242
+#     --httpListenAddr=:8428
+#
+#   - 本地浏览器访问:
+#     - grafana:
+#       - 默认用户: admin/admin, 首次登录会提示更改默认密码
+#       - http://localhost:3000
+#
+##########################################################################################
+
+
+version: '3.5'
+services:
+  victoriametrics:
+    container_name: victoriametrics
+    image: victoriametrics/victoria-metrics
+    ports:
+      - 8428:8428
+      - 2003:2003
+      - 4242:4242
+    volumes:
+      - vmdata:/storage
+    command:
+      - '--storageDataPath=/storage'
+      - '--graphiteListenAddr=:2003'
+      - '--opentsdbListenAddr=:4242'
+      - '--httpListenAddr=:8428'
+    networks:
+      - vm_net
+    restart: always
+
+  vmagent:
+    container_name: vmagent
+    image: victoriametrics/vmagent
+    depends_on:
+      - "victoriametrics"
+    ports:
+      - 8429:8429
+    volumes:
+      - vmagentdata:/vmagentdata
+      - ./victoriametrics/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--promscrape.config=/etc/prometheus/prometheus.yml'
+      - '--remoteWrite.url=http://victoriametrics:8428/api/v1/write'
+    networks:
+      - vm_net
+    restart: always
+
+  # web ui: http://localhost:3000
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:7.1.1
+    depends_on:
+      - "victoriametrics"
+    ports:
+      - 3000:3000
+    volumes:
+      - grafanadata:/var/lib/grafana
+      - ./victoriametrics/provisioning/:/etc/grafana/provisioning/
+      - ./victoriametrics/dashboards/:/var/lib/grafana/dashboards/
+    networks:
+      - vm_net
+    restart: always
+
+
+##########################################################################################
+#                                 自定义依赖:
+##########################################################################################
+
+# 自定义数据卷:
+volumes:
+  vmagentdata: {}
+  vmdata: {}
+  grafanadata: {}
+
+# 自定义网络:
+networks:
+  vm_net:

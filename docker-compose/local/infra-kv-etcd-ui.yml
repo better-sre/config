@@ -1,0 +1,27 @@
+##########################################################################################
+#                              etcd web ui:
+# ref:
+#   - https://github.com/evildecay/etcdkeeper
+#       - 当前 v3 有 bug, 只显示前缀为 / 下的 kv 值.
+#         - https://github.com/evildecay/etcdkeeper/issues/33
+#       - v2 显示正常:
+#   - 本地浏览器访问:
+#       - http://0.0.0.0:12000/etcdkeeper/
+#       - 手动设置 etcd 地址:
+#         - 需要指定: 本机本地 IP (192.168.2.10:2379)
+#         - 非 127.0.0.1 和 0.0.0.0
+#         - 亲测有效
+#   - d
+##########################################################################################
+
+version: '3.5'
+
+services:
+  # web ui:
+  etcdkeeper:
+    image: deltaprojects/etcdkeeper
+    container_name: etcdkeeper
+    ports:
+      - 12000:8080
+    depends_on:
+      - etcd

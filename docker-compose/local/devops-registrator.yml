@@ -1,0 +1,46 @@
+##########################################################################################
+#                              consul service:
+#
+# notes:
+#   - docker + consul + registrator
+#
+#
+# ref:
+#   - https://kevinguo.me/2017/09/01/docker-consul-consul-template-registrator-nginx/
+#   - https://github.com/osowski/registrator-sample/blob/master/docker-compose.yml
+#   - https://github.com/anthcourtney/docker-consul-registrator-basic/blob/master/docker-compose.yml
+#
+##########################################################################################
+
+version: '2'
+
+services:
+
+  registrator:
+    image: gliderlabs/registrator:latest
+    volumes:
+      - "/var/run/docker.sock:/tmp/docker.sock"
+    command: "consul://0.0.0.0:8500"
+
+#    command: consul://localhost:8500
+#    restart: on-failure
+#    depends_on:
+#      - consul
+
+
+#  consul:
+#    container_name: consul
+#    image: consul
+#    ports:
+#      - "8300"
+#      - "8400"
+#      - "8500"
+#    restart: always
+
+
+##########################################################################################
+#         resource
+##########################################################################################
+
+networks:
+  consul-base:

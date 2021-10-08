@@ -1,0 +1,18 @@
+version: '2'
+
+services:
+  portainer:
+    image: portainer/portainer:latest
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "portainer:/data"
+    ports:
+      - "9001:9000"
+    networks:
+      - standalone
+volumes:
+  portainer:
+    driver: "local"
+networks:
+  standalone:
+    driver: bridge

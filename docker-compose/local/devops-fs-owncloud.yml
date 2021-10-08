@@ -1,0 +1,74 @@
+##########################################################################################
+#                              File System OwnCloud service:
+# ref:
+#   - https://github.com/owncloud-docker/server/blob/master/docker-compose.yml
+
+#   - https://doc.owncloud.org/server/10.0/admin_manual/installation/docker/
+#   - https://hub.docker.com/r/owncloud/server/
+#     - 官方镜像
+#   - http://kekefund.com/2017/04/19/docker-owncloud/
+#   - https://github.com/bitnami/bitnami-docker-owncloud
+#
+# volume copy data:
+#   - docker cp local_git_gogs_server_1:/data .
+#   - 把容器:指定目录下的数据, 复制到宿主机目录下
+#
+# web:
+#   - http://127.0.0.1:20083/
+#
+##########################################################################################
+
+
+version: "3"
+
+services:
+  # db:
+  mariadb:
+    image: 'bitnami/mariadb:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MARIADB_USER=bn_owncloud
+      - MARIADB_DATABASE=bitnami_owncloud
+    volumes:
+      - mariadb_data:/bitnami
+    #
+    networks:
+      - owncloud_net
+
+  # fs:
+  fs_owncloud_server:
+#    image: owncloud/server:latest
+    image: bitnami/owncloud:latest
+    restart: always
+    environment:
+      - MARIADB_HOST=mariadb
+      - MARIADB_PORT_NUMBER=3306
+      - OWNCLOUD_DATABASE_USER=bn_owncloud
+      - OWNCLOUD_DATABASE_NAME=bitnami_owncloud
+      - ALLOW_EMPTY_PASSWORD=yes
+    #
+    volumes:
+      - owncloud_data:/bitnami
+    depends_on:
+      - mariadb
+    ports:
+      - "20083:80"
+      - "20084:443"
+    #
+    networks:
+      - owncloud_net
+
+
+
+##########################################################################################
+#                                 自定义依赖:
+##########################################################################################
+
+# 自定义网络:
+networks:
+  owncloud_net:
+
+# 自定义数据卷:
+volumes:
+  owncloud_data:
+  mariadb_data:

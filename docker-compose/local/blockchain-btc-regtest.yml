@@ -1,0 +1,42 @@
+##########################################################################################
+#                              btc(bitcoin) main net:
+# ref:
+#   - https://github.com/ruimarinho/docker-bitcoin-core
+#   - https://github.com/kylemanna/docker-bitcoind
+#   - https://hub.docker.com/r/kylemanna/bitcoind/
+#
+# run:
+#   - Mainnet
+#   - Testnet
+#   - Regtest
+#
+##########################################################################################
+
+version: "3"
+
+services:
+  # test net:
+  btc_node_regtest:
+    image: ruimarinho/bitcoin-core
+    restart: always
+    networks:
+      - btc_node_net
+    command:
+      -printtoconsole
+      -regtest=1
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#      - btc_regtest_data:/data
+
+
+##########################################################################################
+#                                 自定义依赖:
+##########################################################################################
+
+# 自定义网络:
+networks:
+  btc_node_net:
+
+# 自定义数据卷:
+volumes:
+  btc_regtest_data:

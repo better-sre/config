@@ -1,0 +1,34 @@
+##########################################################################################
+#                              vault service:
+#
+# version: 0.10.1
+#
+# Web UI:
+#   - http://localhost:8200/ui
+#
+# ref:
+#   - https://hub.docker.com/r/library/vault/
+#   - https://github.com/hashicorp/docker-vault
+#   - https://yuhao.space/blog/2018/02/vault-introduction/
+#
+##########################################################################################
+
+version: '3'
+
+services:
+  vault:
+    image: vault:0.10.1
+    privileged: true
+    hostname: "vault"
+    ports:
+      - "8200:8200"
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: "admin1234"
+#      VAULT_TOKEN: "admin6666"
+      VAULT_ADDR: http://127.0.0.1:8200
+    restart: always
+
+
+##########################################################################################
+#         resource
+##########################################################################################

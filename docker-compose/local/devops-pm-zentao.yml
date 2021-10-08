@@ -1,0 +1,39 @@
+##########################################################################################
+#                              git gogs service:
+# ref:
+#   - http://www.zentao.net/download
+#   - https://github.com/HofmannHe/zentao/blob/master/docker-compose.yml
+# web:
+#   - http://127.0.0.1:20081/
+# mysql-admin:
+#   - http://192.168.0.116:20081/adminer/index.php?server=localhost:3306&username=root
+#   - admin:123456
+#
+##########################################################################################
+
+version: "3"
+
+services:
+  pm_zentao_server:
+    image: hofmann/zentao
+    restart: always
+    ports:
+      - "20081:80"
+    networks:
+      zentao_frontend_net:
+      zentao_backend_net:
+    volumes:
+      - zentao_data:/opt/zbox
+
+##########################################################################################
+#                                 自定义依赖:
+##########################################################################################
+
+# 自定义网络:
+networks:
+  zentao_frontend_net:
+  zentao_backend_net:
+
+# 自定义数据卷:
+volumes:
+  zentao_data:

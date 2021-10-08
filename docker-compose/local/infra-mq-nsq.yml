@@ -1,0 +1,86 @@
+##########################################################################################
+#                              nsq:
+# ref:
+#   - docs:
+#     - https://nsq.io/deployment/docker.html
+#   - image:
+#     - https://registry.hub.docker.com/r/nsqio/nsq/
+#   - 本地浏览器访问:
+#       - http://127.0.0.1:4171
+##########################################################################################
+
+version: '3'
+services:
+  nsqlookupd:
+    image: nsqio/nsq
+    container_name: nsqlookupd
+    command: /nsqlookupd
+    ports:
+      - 14160:4160
+      - 14161:4161  # 服务端口
+
+  # data node:
+  nsqd1:
+    image: nsqio/nsq
+    container_name: nsqd1
+    command: /nsqd --lookupd-tcp-address=nsqlookupd:4160
+    depends_on:
+      - nsqlookupd
+    ports:
+      - 14150:4150  # msg pub: tcp
+      - 14151:4151  # msg pub: http api
+
+  # data node:
+  nsqd2:
+    image: nsqio/nsq
+    container_name: nsqd2
+    command: /nsqd --lookupd-tcp-address=nsqlookupd:4160
+    depends_on:
+      - nsqlookupd
+    ports:
+      - 14154:4150 # msg pub: tcp
+      - 14153:4151 # msg pub: http api
+
+  # admin ui:
+  nsqadmin:
+    image: nsqio/nsq
+    container_name: nsqadmin
+    command: /nsqadmin --lookupd-http-address=nsqlookupd:4161
+    depends_on:
+      - nsqlookupd
+    ports:
+      - 14171:4171
+
+  # pub msg : file log: /tmp
+  nsqlog1:
+    image: nsqio/nsq
+    container_name: nsqlog1
+    command: /nsq_to_file --lookupd-http-address=nsqlookupd:4161 --topic=test --channel=test_ch1 -output-dir=/tmp/nsq/test/ch1
+    depends_on:
+      - nsqd1
+
+  # pub msg: file log: /tmp
+  nsqlog2:
+    image: nsqio/nsq
+    container_name: nsqlog2
+    command: /nsq_to_file --lookupd-http-address=nsqlookupd:4161 --topic=test --channel=test_ch2 -output-dir=/tmp/nsq/test/ch2
+    depends_on:
+      - nsqd2
+
+
+##########################################################################################
+#                                 自定义依赖:
+##########################################################################################
+
+# 自定义网络: 不可乱用, 会影响 4161 端口搜索
+networks:
+  nsq_net:
+
+# 自定义数据卷:
+volumes:
+  #
+  nsqd1_data:
+  nsqd2_data:
+
+
+

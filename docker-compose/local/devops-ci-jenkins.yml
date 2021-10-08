@@ -1,0 +1,45 @@
+##########################################################################################
+#                              CI/CD Jenkins service:
+# ref:
+#   - https://github.com/jenkinsci/docker
+#   - https://github.com/jenkinsci/docker/blob/master/docker-compose.yml
+#   - https://github.com/jenkinsci/docker/blob/master/README.md
+#     - 官方镜像
+#
+# volume copy data:
+#   - docker cp local_git_gogs_server_1:/data .
+#   - 把容器:指定目录下的数据, 复制到宿主机目录下
+#
+# web:
+#   - http://127.0.0.1:20082/
+#
+##########################################################################################
+
+version: "3"
+
+services:
+  ci_jenkins_server:
+    image: jenkins/jenkins:lts-alpine
+    restart: always
+    #
+    volumes:
+      - jenkins_data:/var/jenkins_home
+    ports:
+      - "20082:8080"
+      - "50000:50000"
+    #
+    networks:
+      - jenkins_net
+
+
+##########################################################################################
+#                                 自定义依赖:
+##########################################################################################
+
+# 自定义网络:
+networks:
+  jenkins_net:
+
+# 自定义数据卷:
+volumes:
+  jenkins_data:

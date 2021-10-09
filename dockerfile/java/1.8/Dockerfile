@@ -1,4 +1,3 @@
-
 #
 # ref:
 #   - https://github.com/chanjarster/dockerfile-examples
@@ -9,6 +8,8 @@ FROM openjdk:8-alpine
 
 ARG NAME
 ARG VERSION
+
+# jar 文件挂载:
 ARG JAR_FILE
 
 LABEL name=$NAME \
@@ -30,11 +31,17 @@ RUN set -eux; \
 # 导入启动脚本
 COPY --chown=java-app:java-app docker-entrypoint.sh /home/java-app/docker-entrypoint.sh
 
+# 添加可执行权限:
+RUN chmod +x /home/java-app/docker-entrypoint.sh
+
 # 导入JAR
 COPY --chown=java-app:java-app target/${JAR_FILE} /home/java-app/lib/app.jar
 
+# 指定用户身份:
 USER java-app
 
+# 启动入口脚本:
 ENTRYPOINT ["/home/java-app/docker-entrypoint.sh"]
 
+# 服务端口:
 EXPOSE 8080

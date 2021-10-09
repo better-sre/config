@@ -7,6 +7,8 @@
 
 ## awesome: 
 
+- https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
+- https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#use-multi-stage-builds
 - https://github.com/docker-library/official-images
 - https://github.com/docker-library/python
 - https://github.com/docker-library/openjdk

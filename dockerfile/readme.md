@@ -13,7 +13,17 @@
 - https://github.com/docker-library/python
 - https://github.com/docker-library/openjdk
 
-## python 3.6
+
+## Nginx:
+
+- nginx web server:
+- nginx lb server:
+
+## Golang:
+
+- https://github.com/docker/awesome-compose/blob/master/nginx-golang/backend/Dockerfile
+
+## Python 3.6
 
 - base: `python:3.6.5-alpine3.6`
 - install:

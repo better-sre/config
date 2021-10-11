@@ -1,47 +1,41 @@
 #
 # ref:
+#   - https://github.com/cpayret-KDM/KDM_API/blob/master/backend/Dockerfile
 #   - https://github.com/chanjarster/dockerfile-examples
 #     - https://chanjarster.github.io/post/java-dockerfile-best-practice/
 #
 
-FROM openjdk:8-alpine
+# build jar:
+FROM maven:3.8.3-adoptopenjdk-8 AS maven_build
+# FROM maven:3.6.3-adoptopenjdk-15  as maven_build
 
-ARG NAME
+# code:
+COPY pom.xml /build/
+COPY src /build/src/
+
+WORKDIR /build/
+
+# build:
+RUN mvn clean package
+
+
+# run with:
+FROM openjdk:8-jdk-alpine
+VOLUME /tmp
+
 ARG VERSION
 
-# jar 文件挂载:
-ARG JAR_FILE
+LABEL version=${VERSION}
+LABEL description="Spring Boot Application"
 
-LABEL name=$NAME \
-      version=$VERSION
 
-# 设定时区
-ENV TZ=Asia/Shanghai
-RUN set -eux; \
-    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime; \
-    echo $TZ > /etc/timezone
-
-# 新建用户java-app
-RUN set -eux; \
-    addgroup --gid 1000 java-app; \
-    adduser -S -u 1000 -g java-app -h /home/java-app/ -s /bin/sh -D java-app; \
-    mkdir -p /home/java-app/lib /home/java-app/etc /home/java-app/jmx-ssl /home/java-app/logs /home/java-app/tmp /home/java-app/jmx-exporter/lib /home/java-app/jmx-exporter/etc; \
-    chown -R java-app:java-app /home/java-app
-
-# 导入启动脚本
-COPY --chown=java-app:java-app docker-entrypoint.sh /home/java-app/docker-entrypoint.sh
-
-# 添加可执行权限:
-RUN chmod +x /home/java-app/docker-entrypoint.sh
-
-# 导入JAR
-COPY --chown=java-app:java-app target/${JAR_FILE} /home/java-app/lib/app.jar
-
-# 指定用户身份:
-USER java-app
-
-# 启动入口脚本:
-ENTRYPOINT ["/home/java-app/docker-entrypoint.sh"]
-
-# 服务端口:
 EXPOSE 8080
+
+ENV JAVA_OPTS ""
+
+COPY --from=maven_build /build/target/*.jar /app.jar
+
+
+# exec:
+ENTRYPOINT /usr/bin/java ${JAVA_OPTS} -jar /app.jar
+

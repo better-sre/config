@@ -22,8 +22,20 @@
 - Taskfile 原生支持跨平台, 改写起来也简单, 只是我没有太多精力, 照顾不到.😄
 
 
-## Content:
+## QuickStart:
 
+> requirements:
+
+- https://taskfile.dev/#/installation
+
+```ruby
+# instasll:
+brew install go-task/tap/go-task
+
+# check: go-task version
+task --version
+
+```
 
 
 

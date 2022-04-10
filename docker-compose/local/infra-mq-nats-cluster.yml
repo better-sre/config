@@ -2,6 +2,7 @@
 #                              nats service:
 # reference:
 #   - https://github.com/hhstore/blog/issues/349
+#   - https://github.com/nats-io/nats-docker
 #   - https://docs.nats.io/running-a-nats-service/nats_docker#creating-a-nats-cluster-with-docker-compose
 #   - https://docs.nats.io/running-a-nats-service/introduction/running#docker
 #   - https://www.cnblogs.com/liang1101/p/6652830.html

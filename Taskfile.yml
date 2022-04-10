@@ -74,7 +74,6 @@ tasks:
   init:
     cmds:
       - cp .env.local .env
-      - task: flutter:init
 
   echo:
     cmds:
@@ -92,19 +91,10 @@ tasks:
       TASK_ROOT_DIR: "~/.task/local/"
     ignore_error: true
 
-  new:
-    desc: "create flutter app"
-    cmds:
-      - task: flutter:new
-
-  run:
-    cmds:
-      - task: flutter:run
-
   push:
     cmds:
-      - task: base:push
+      - task: git:push
 
   quick:
     cmds:
-      - task: base:quick
+      - task: git:quick

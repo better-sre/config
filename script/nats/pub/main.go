@@ -20,7 +20,7 @@ func main() {
 	_ = nc.Publish(sub1, []byte("Hello World"))
 
 	// 队列 模式，发布是一样的，只是订阅不同，向 test2 发布一个 `Hello zngw` 数据
-	_ = nc.Publish(sub2, []byte("Hello zngw"))
+	_ = nc.Publish(sub2, []byte("Hello xyz"))
 
 	// 请求-响应， 向 test3 发布一个 `help me` 请求数据，设置超时间3秒，如果有多个响应，只接收第一个收到的消息
 	msg, err := nc.Request(sub3, []byte("help me"), 3*time.Second)

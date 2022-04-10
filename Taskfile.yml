@@ -101,9 +101,18 @@ tasks:
 
   ################################################################################
 
-  nats:
+  #
+  # 验证 nats 部署正常:
+  #
+  test:nats:sub:
     cmds:
-      - go run main.go
+      - go run sub/main.go
     dir: ./script/nats/
+
+  test:nats:pub:
+    cmds:
+      - go run pub/main.go
+    dir: ./script/nats/
+
 
 ################################################################################################

@@ -2,6 +2,16 @@
 
 - 验证 nats 中间件部署正常.
 
+## requirements:
+
+- go 1.17+
+
+```ruby
+# install:
+go mod tidy -v 
+
+```
+
 ## usage:
 
 - 先 sub, 后 pub.

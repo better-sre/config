@@ -46,22 +46,29 @@ tasks:
     cmds:
       - task: compose:do
         vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}", COMPOSE_CMD: "up -d" }   # 注意参数透传的写法: COMPOSE_FILE 透传参数
-      - task: compose:log
+      - task: compose:log:no:watch
         vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}" }
 
   compose:restart:
     cmds:
       - task: compose:do
         vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}", COMPOSE_CMD: "restart" }
-      - task: compose:log
+      - task: compose:log:no:watch
         vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}" }
 
   compose:down:
     cmds:
       - task: compose:do
         vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}", COMPOSE_CMD: "down" }
-      - task: compose:log
+      - task: compose:log:no:watch
         vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}" }
+
+  compose:log:no:watch:
+    cmds:
+      - task: compose:do
+        vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}", COMPOSE_CMD: "ps" }
+      - task: compose:do
+        vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}",COMPOSE_CMD: "logs" }
 
   compose:log:
     cmds:

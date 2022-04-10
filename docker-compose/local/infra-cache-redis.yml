@@ -5,30 +5,32 @@
 #   - https://hub.docker.com/r/bitnami/redis/
 #   - https://yq.aliyun.com/articles/57953
 #   - WEB UI:
-#     - https://github.com/joeferner/redis-commander
-#     - https://hub.docker.com/r/tenstartups/redis-commander/
+#     - https://github.com/joeferner/redis-commander/blob/master/docker-compose.yml
+#   - https://docs.docker.com/compose/reference/envvars/#compose_file#compose_project_name
+#   - 本地浏览器访问:
+#       - http://127.0.0.1:18081/
 ##########################################################################################
 
 version: "3.3"
 
 services:
   redis:
-    image: redis:alpine   # redis 4.0+
+    container_name: redis:alpine   # redis 4.0+
     hostname: redis
+    image: redis
+    restart: always
     ports:
       - "0.0.0.0:6379:6379"
     volumes:
       - redis_data:/data
 
   redis-commander:
-    image: tenstartups/redis-commander
+    container_name: redis-commander
     hostname: redis-commander
+    image: rediscommander/redis-commander:latest
     restart: always
-    command: --redis-host redis
-    links:
-      - redis:redis-server
-    depends_on:
-      - redis
+    environment:
+      - REDIS_HOSTS=local:redis:6379
     ports:
       - "0.0.0.0:18081:8081"
 
@@ -40,3 +42,6 @@ services:
 # 自定义数据卷:
 volumes:
   redis_data:
+
+networks:
+  redis:

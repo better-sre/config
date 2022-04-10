@@ -17,16 +17,26 @@
 #     - https://github.com/docker-library/mysql/issues/201
 #     - https://hub.docker.com/_/mysql/
 #
+# 创建测试 db+table:
+#   - docker exec -it a3567fb78d0d bash
+#   - mysql -u root -p
+#   - 导入 db 创建 sql:
+#     - 方法1: mysql -u 用户名 -p 密码 数据库名 < 数据库名.sql
+#     - 方法2: mysql> source /home/to/path/infra-db-mysql-init.sql;
+#     - 方法3: IDE db 插件连接 db, 导入初始化 sql.  ( db 右键: run sql script, 选择 sql 文件, 执行)
+#
+# 说明:
+#   1. 支持 Mac M1 芯片
+#
 ##########################################################################################
-
-
 
 version: '3.1'
 
 services:
-
   mysql:
-    image: mysql:5.7
+    image: mysql:8.0
+    container_name: mysql8
+    platform: linux/amd64   # fix for Mac M1 chip
     volumes:
       - mysql_data:/var/lib/mysql/
     restart: always
@@ -44,8 +54,10 @@ services:
     ports:
       - "0.0.0.0:13306:3306"
 
+  # web ui:
   adminer:
     image: adminer
+    container_name: mysql-adminer
     restart: always
     links:
       - mysql
@@ -53,7 +65,6 @@ services:
       - mysql
     ports:
       - "0.0.0.0:18080:8080"
-
 
 ##########################################################################################
 #                                 自定义依赖:

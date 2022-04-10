@@ -1,0 +1,37 @@
+##########################################################################################
+#                              etcd service:
+# ref:
+#   - https://github.com/evildecay/etcdkeeper
+#   - 本地浏览器访问:
+#       - http://0.0.0.0:12001
+#       - 手动设置 etcd 地址:
+#         - 需要指定: 本机本地 IP (192.168.2.10:2379)
+#         - 非 127.0.0.1 和 0.0.0.0
+#         - 亲测有效
+# docker run \
+#  -p 2379:2379 \
+#  -p 2380:2380 \
+#  --volume=${DATA_DIR}:/etcd-data \
+#  --name etcd ${REGISTRY}:latest \
+#  /usr/local/bin/etcd \
+#  --data-dir=/etcd-data --name node1 \
+#  --initial-advertise-peer-urls http://${NODE1}:2380 --listen-peer-urls http://0.0.0.0:2380 \
+#  --advertise-client-urls http://${NODE1}:2379 --listen-client-urls http://0.0.0.0:2379 \
+#  --initial-cluster node1=http://${NODE1}:2380
+##########################################################################################
+
+version: '3.5'
+
+services:
+  etcd:
+    image: gcr.io/etcd-development/etcd:v3.5.0
+    container_name: etcd
+    ports:
+      - 2379:2379
+    environment:
+      ETCD_LISTEN_CLIENT_URLS: http://0.0.0.0:2379
+      ETCD_ADVERTISE_CLIENT_URLS: http://0.0.0.0:2379
+
+volumes:
+  etcd_data:
+    driver: local

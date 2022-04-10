@@ -1,20 +1,24 @@
 ##########################################################################################
-#                              jaeger: 分布式链路追踪
+#                              jaeger service:
+#
 # ref:
 #   - https://www.jaegertracing.io/docs/1.18/getting-started/
 #     - 官方文档
+#   - https://docs.docker.com/compose/compose-file/
+#   - https://github.com/micahhausler/rabbitmq-compose/blob/master/docker-compose.yml
+#
+# usage:
 #   - 本地浏览器访问:
 #     - http://localhost:16686
 #
 ##########################################################################################
 
-version: '3'
+version: '3.7'
 services:
   jaeger:
-    image: jaegertracing/all-in-one:1.18
+    image: jaegertracing/all-in-one:latest  # 1.18
     container_name: jaeger
-    environment:
-      - COLLECTOR_ZIPKIN_HTTP_PORT=9411
+    #restart: always
     ports:
       - "5775:5775/udp"
       - "6831:6831/udp"
@@ -23,10 +27,8 @@ services:
       - "16686:16686"
       - "14268:14268"
       - "9411:9411"
+    networks:
+      - jaeger-net
 
-
-
-
-
-
-
+networks:
+  jaeger-net:

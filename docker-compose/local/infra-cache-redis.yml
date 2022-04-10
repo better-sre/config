@@ -15,7 +15,7 @@ version: "3.3"
 
 services:
   redis:
-    container_name: redis:alpine   # redis 4.0+
+    container_name: redis   # redis 4.0+
     hostname: redis
     image: redis
     restart: always
@@ -29,6 +29,8 @@ services:
     hostname: redis-commander
     image: rediscommander/redis-commander:latest
     restart: always
+    depends_on:
+      - redis
     environment:
       - REDIS_HOSTS=local:redis:6379
     ports:

@@ -3,9 +3,16 @@
 # reference:
 #   - https://github.com/hhstore/blog/issues/349
 #   - https://docs.nats.io/running-a-nats-service/introduction/running#docker
+#   - https://www.cnblogs.com/liang1101/p/6652830.html
 #
 # usage:
 #   - local web browser:
+#     - http://localhost:8222/
+#     - http://localhost:8222/varz
+#     - http://localhost:8222/connz　
+#     - http://localhost:8222/subscriptionsz
+#     - http://localhost:8222/routez
+#     - http://localhost:8222/routez?subs=1
 #
 ##########################################################################################
 

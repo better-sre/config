@@ -260,7 +260,10 @@ tasks:
 
   open:nats:
     cmds:
-      - open http://localhost:4222
+      - open http://localhost:8222/
+      - open http://localhost:8222/varz
+      - open http://localhost:8222/connz
+      - open http://localhost:8222/connz?limit=1&offset=1
 
   open:consul:
     cmds:

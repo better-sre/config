@@ -1,0 +1,35 @@
+##########################################################################################
+#                              nats service:
+# reference:
+#   - https://github.com/hhstore/blog/issues/349
+#   - https://docs.nats.io/running-a-nats-service/introduction/running#docker
+#
+# usage:
+#   - local web browser:
+#
+##########################################################################################
+
+version: '3.5'
+
+services:
+  nats:
+    image: nats:2.7-alpine3.15
+    container_name: nats
+    restart: always
+    ports:
+      - '4222:4222'
+      - '6222:6222'
+      - '8222:8222'
+    networks:
+      - nats_net
+
+
+##########################################################################################
+#                                 自定义依赖:
+##########################################################################################
+
+# 自定义网络:
+networks:
+  nats_net:
+
+

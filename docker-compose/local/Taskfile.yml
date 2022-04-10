@@ -1,0 +1,217 @@
+version: "3"
+
+#
+# sub namespace: https://taskfile.dev/#/usage?id=including-other-taskfiles
+#
+#includes:
+#  demo:
+#    taskfile: ./app/basic/demo/Taskfile.yml
+#    dir: ./app/basic/demo/
+
+#
+# global vars: https://taskfile.dev/#/usage?id=variables
+#
+vars:
+  VAR1: "some-var"
+
+# global env:
+env:
+  ENV1: testing
+
+# env file:
+#dotenv:
+#  - .env
+
+################################################################################################
+
+tasks:
+  default:
+    cmds:
+      - task: echo
+
+  echo:
+    cmds:
+      - echo: "hello world"
+
+  ################################################################################
+
+  #
+  # docker-compose cmd:
+  #
+  compose:do:
+    cmds:
+      - docker-compose -f {{.COMPOSE_FILE}} {{.COMPOSE_CMD}}
+
+  compose:up:
+    cmds:
+      - task: compose:do
+        vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}", COMPOSE_CMD: "up -d" }   # 注意参数透传的写法: COMPOSE_FILE 透传参数
+      - task: compose:log
+        vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}" }
+
+  compose:log:
+    cmds:
+      - task: compose:do
+        vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}", COMPOSE_CMD: "ps" }
+      - task: compose:do
+        vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}",COMPOSE_CMD: "logs -f" }
+
+  compose:down:
+    cmds:
+      - task: compose:do
+        vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}", COMPOSE_CMD: "down" }
+      - task: compose:log
+        vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}" }
+
+  ################################################################################
+
+
+  up:hello:
+    cmds:
+      - task: compose:up
+        vars: { COMPOSE_FILE: "./compose-hello.yml" }
+
+  up:
+    cmds:
+      - task: up:db:mysql
+      - task: up:cache:redis
+      - task: up:mq:rabbitmq
+
+  up:db:mysql:
+    cmds:
+      - docker-compose -f ./infra-db-mysql-server.yml up -d
+      - docker-compose -f ./infra-db-mysql-server.yml ps
+
+  up:db:mysql8:
+    cmds:
+      - docker-compose -f ./infra-db-mysql8.yml up -d
+      - docker-compose -f ./infra-db-mysql8.yml ps
+
+  up:cache:redis:
+    cmds:
+      - docker-compose -f ./infra-cache-redis.yml up -d
+      - docker-compose -f ./infra-cache-redis.yml ps
+
+  up:mq:rabbitmq:
+    cmds:
+      - docker-compose -f ./infra-mq-rabbitmq.yml up -d
+      - docker-compose -f ./infra-mq-rabbitmq.yml ps
+
+  up:kv:consul:
+    cmds:
+      - docker-compose -f ./infra-kv-consul-v2.yml up -d
+      - docker-compose -f ./infra-kv-consul-v2.yml ps
+      - docker-compose -f ./infra-kv-consul-v2.yml logs -f
+
+  up:kv:consul:cluster:
+    cmds:
+      - docker-compose -f ./infra-kv-consul-cluster.yml up -d
+      - docker-compose -f ./infra-kv-consul-cluster.yml ps
+
+  up:consul:
+    cmds:
+      - docker-compose -f ./consul/consul.yml up -d
+      - docker-compose -f ./consul/consul.yml ps
+      - docker-compose -f ./consul/consul.yml logs -f
+
+  down:consul:
+    cmds:
+      - docker-compose -f ./consul/consul.yml down
+      - docker ps
+
+  log:consul:
+    cmds:
+      - docker-compose -f ./consul/consul.yml logs -f
+
+  up:etcd:
+    cmds:
+      - docker-compose -f ./infra-kv-etcd.yml up -d
+      - docker-compose -f ./infra-kv-etcd.yml ps
+      - docker-compose -f ./infra-kv-etcd.yml logs -f
+
+  up:etcd:v2:
+    cmds:
+      - docker-compose -f ./infra-kv-etcd-v2.yml up -d
+      - docker-compose -f ./infra-kv-etcd-v2.yml ps
+      - docker-compose -f ./infra-kv-etcd-v2.yml logs -f
+
+  down:etcd:
+    cmds:
+      - docker-compose -f ./infra-kv-etcd-v2.yml down
+      - docker ps
+
+  up:trace:jaeger:
+    cmds:
+      - docker-compose -f ./infra-trace-jaeger.yml up -d
+      - docker-compose -f ./infra-trace-jaeger.yml ps
+
+
+  restart:kv:consul:
+    cmds:
+      - docker-compose -f ./infra-kv-consul.yml restart
+
+  ################################################################################
+
+  cmd:db:mysql:
+    cmds:
+      - docker exec -it mysql8 bash
+
+  ################################################################################
+
+  down:
+    cmds:
+      - task: down:db:mysql
+      - task: down:cache:redis
+      - task: down:mq:rabbitmq
+
+
+  down:db:mysql:
+    cmds:
+      - docker-compose -f ./infra-db-mysql8.yml down
+      - docker-compose -f ./infra-db-mysql-server.yml down
+      - docker ps
+    ignore_error: true
+
+  down:cache:redis:
+    cmds:
+      - docker-compose -f ./infra-cache-redis.yml down
+      - docker-compose -f ./infra-cache-redis.yml ps
+
+  down:mq:rabbitmq:
+    cmds:
+      - docker-compose -f ./infra-mq-rabbitmq.yml down
+      - docker-compose -f ./infra-mq-rabbitmq.yml ps
+
+  down:kv:consul:
+    cmds:
+      - docker-compose -f ./infra-kv-consul.yml down
+      - docker-compose -f ./infra-kv-consul-cluster.yml down
+      - docker ps
+    ignore_error: true
+
+
+  ################################################################################
+
+  log:db:mysql:
+    cmds:
+      - docker-compose -f ./infra-db-mysql8.yml logs -f
+
+  open:consul:
+    cmds:
+      - open http://localhost:8500/ui/
+
+  open:jaeger:
+    cmds:
+      - open http://localhost:16686/
+
+  ################################################################################
+
+  # 提取本机 IP:
+  ip:get:macos:
+    cmds:
+      - ifconfig en0 | grep inet | awk '{print $2}'
+
+  ip:get:linux:
+    cmds:
+      - ip a | grep inet | grep -v inet6 | grep -v 127 | sed 's/^[ \t]*//g' | cut -d ' ' -f2
+

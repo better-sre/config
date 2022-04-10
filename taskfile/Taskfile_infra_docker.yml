@@ -1,14 +1,28 @@
-################################################################################################
-#
-# ref:
-#   - https://taskfile.dev/#/styleguide
-#     - https://taskfile.dev/#/styleguide?id=use-the-correct-order-of-keywords
-#     - https://taskfile.dev/#/styleguide?id=use-colon-for-task-namespacing
-#   - yml format: https://juejin.cn/post/6844903972688363534
-#
-################################################################################################
+version: "3"
 
-version: '3'
+#
+# sub namespace: https://taskfile.dev/#/usage?id=including-other-taskfiles
+#
+includes:
+  local:
+    taskfile: ../docker-compose/local/Taskfile.yml
+    dir: ../docker-compose/local
+
+#
+# global vars: https://taskfile.dev/#/usage?id=variables
+#
+vars:
+  VAR1: "some-var"
+
+# global env:
+env:
+  ENV1: testing
+
+# env file:
+#dotenv:
+#  - .env
+
+################################################################################################
 
 tasks:
   default:
@@ -16,4 +30,5 @@ tasks:
       - task: echo
 
   echo:
-    cmd: echo "hello world"
+    cmds:
+      - echo "hello world"

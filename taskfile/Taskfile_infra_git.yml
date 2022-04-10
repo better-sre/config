@@ -17,3 +17,29 @@ tasks:
 
   echo:
     cmd: echo "hello world"
+
+  quick:
+    cmds:
+      - task: commit
+      - task: pull
+      - task: push
+      - task: push # double check
+
+  commit:
+    cmds:
+      - git commit -m "update"
+
+  push:
+    cmds:
+      - git push origin main --tags
+      - echo "git push success"
+
+  pull:
+    cmds:
+      - git config pull.rebase false
+      - git pull
+
+  stash:
+    cmds:
+      - git stash
+

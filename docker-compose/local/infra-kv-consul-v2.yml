@@ -1,0 +1,27 @@
+##########################################################################################
+#                              consul service:
+# ref:
+#   - https://github.com/bitnami/bitnami-docker-consul
+#   - 本地浏览器访问:
+#     - http://localhost:8500/ui/
+##########################################################################################
+
+version: '3'
+
+services:
+  consul:
+    image: consul:latest
+    container_name: consul
+#    platform: linux/amd64
+    #    restart: always
+#    environment:
+#      CONSUL_BIND_INTERFACE: eth0
+    volumes:
+      - consul_data:/consul/data/
+    ports:
+      - 8500:8500
+#    command: agent -server -bind 0.0.0.0 -client 0.0.0.0 -bootstrap-expect=1 -disable-host-node-id
+
+volumes:
+  consul_data:
+    driver: local

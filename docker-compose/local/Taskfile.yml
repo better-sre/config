@@ -49,12 +49,12 @@ tasks:
       - task: compose:log
         vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}" }
 
-  compose:log:
+  compose:restart:
     cmds:
       - task: compose:do
-        vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}", COMPOSE_CMD: "ps" }
-      - task: compose:do
-        vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}",COMPOSE_CMD: "logs -f" }
+        vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}", COMPOSE_CMD: "restart" }
+      - task: compose:log
+        vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}" }
 
   compose:down:
     cmds:
@@ -63,138 +63,173 @@ tasks:
       - task: compose:log
         vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}" }
 
+  compose:log:
+    cmds:
+      - task: compose:do
+        vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}", COMPOSE_CMD: "ps" }
+      - task: compose:do
+        vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}",COMPOSE_CMD: "logs -f" }
+
+  ################################################################################
+  #
+  # up: 打开所有服务
+  #
   ################################################################################
 
+  up:infra:
+    cmds:
+      - task: up:mysql
+      - task: up:redis
+      - task: up:nats
+    ignore_error: true
+
+  down:infra:
+    cmds:
+      - task: down:nats
+      - task: down:redis
+      - task: down:mysql
+    ignore_error: true
 
   up:hello:
     cmds:
       - task: compose:up
         vars: { COMPOSE_FILE: "./compose-hello.yml" }
 
-  up:
+  up:mysql:
     cmds:
-      - task: up:db:mysql
-      - task: up:cache:redis
-      - task: up:mq:rabbitmq
+      - task: compose:up
+        vars: { COMPOSE_FILE: "./infra-db-mysql8.yml" }
 
-  up:db:mysql:
+  up:mysql5:
     cmds:
-      - docker-compose -f ./infra-db-mysql-server.yml up -d
-      - docker-compose -f ./infra-db-mysql-server.yml ps
+      - task: compose:up
+        vars: { COMPOSE_FILE: "./infra-db-mysql.yml" }
 
-  up:db:mysql8:
+  up:redis:
     cmds:
-      - docker-compose -f ./infra-db-mysql8.yml up -d
-      - docker-compose -f ./infra-db-mysql8.yml ps
+      - task: compose:up
+        vars: { COMPOSE_FILE: "./infra-cache-redis.yml" }
 
-  up:cache:redis:
+  up:nats:
     cmds:
-      - docker-compose -f ./infra-cache-redis.yml up -d
-      - docker-compose -f ./infra-cache-redis.yml ps
+      - task: compose:up
+        vars: { COMPOSE_FILE: "./infra-mq-nats.yml" }
 
-  up:mq:rabbitmq:
+  up:rabbitmq:
     cmds:
-      - docker-compose -f ./infra-mq-rabbitmq.yml up -d
-      - docker-compose -f ./infra-mq-rabbitmq.yml ps
+      - task: compose:up
+        vars: { COMPOSE_FILE: "./infra-mq-rabbitmq.yml" }
 
-  up:kv:consul:
+  up:jaeger:
     cmds:
-      - docker-compose -f ./infra-kv-consul-v2.yml up -d
-      - docker-compose -f ./infra-kv-consul-v2.yml ps
-      - docker-compose -f ./infra-kv-consul-v2.yml logs -f
-
-  up:kv:consul:cluster:
-    cmds:
-      - docker-compose -f ./infra-kv-consul-cluster.yml up -d
-      - docker-compose -f ./infra-kv-consul-cluster.yml ps
+      - task: compose:up
+        vars: { COMPOSE_FILE: "./infra-trace-jaeger.yml" }
 
   up:consul:
     cmds:
-      - docker-compose -f ./consul/consul.yml up -d
-      - docker-compose -f ./consul/consul.yml ps
-      - docker-compose -f ./consul/consul.yml logs -f
+      - task: compose:up
+        vars: { COMPOSE_FILE: "./consul/consul.yml" }
 
-  down:consul:
+  up:consul:v2:
     cmds:
-      - docker-compose -f ./consul/consul.yml down
-      - docker ps
+      - task: compose:up
+        vars: { COMPOSE_FILE: "./infra-kv-consul-v2.yml" }
 
-  log:consul:
+  up:consul:v3:
     cmds:
-      - docker-compose -f ./consul/consul.yml logs -f
+      - task: compose:up
+        vars: { COMPOSE_FILE: "./infra-kv-consul-cluster.yml" }
 
   up:etcd:
     cmds:
-      - docker-compose -f ./infra-kv-etcd.yml up -d
-      - docker-compose -f ./infra-kv-etcd.yml ps
-      - docker-compose -f ./infra-kv-etcd.yml logs -f
+      - task: compose:up
+        vars: { COMPOSE_FILE: "./infra-kv-etcd.yml" }
 
   up:etcd:v2:
     cmds:
-      - docker-compose -f ./infra-kv-etcd-v2.yml up -d
-      - docker-compose -f ./infra-kv-etcd-v2.yml ps
-      - docker-compose -f ./infra-kv-etcd-v2.yml logs -f
-
-  down:etcd:
-    cmds:
-      - docker-compose -f ./infra-kv-etcd-v2.yml down
-      - docker ps
-
-  up:trace:jaeger:
-    cmds:
-      - docker-compose -f ./infra-trace-jaeger.yml up -d
-      - docker-compose -f ./infra-trace-jaeger.yml ps
-
-
-  restart:kv:consul:
-    cmds:
-      - docker-compose -f ./infra-kv-consul.yml restart
-
-  ################################################################################
-
-  cmd:db:mysql:
-    cmds:
-      - docker exec -it mysql8 bash
-
-  ################################################################################
-
-  down:
-    cmds:
-      - task: down:db:mysql
-      - task: down:cache:redis
-      - task: down:mq:rabbitmq
-
-
-  down:db:mysql:
-    cmds:
-      - docker-compose -f ./infra-db-mysql8.yml down
-      - docker-compose -f ./infra-db-mysql-server.yml down
-      - docker ps
-    ignore_error: true
-
-  down:cache:redis:
-    cmds:
-      - docker-compose -f ./infra-cache-redis.yml down
-      - docker-compose -f ./infra-cache-redis.yml ps
-
-  down:mq:rabbitmq:
-    cmds:
-      - docker-compose -f ./infra-mq-rabbitmq.yml down
-      - docker-compose -f ./infra-mq-rabbitmq.yml ps
-
-  down:kv:consul:
-    cmds:
-      - docker-compose -f ./infra-kv-consul.yml down
-      - docker-compose -f ./infra-kv-consul-cluster.yml down
-      - docker ps
-    ignore_error: true
+      - task: compose:up
+        vars: { COMPOSE_FILE: "./infra-kv-etcd-v2.yml" }
 
 
   ################################################################################
+  #
+  # down: 关闭所有服务
+  #
+  ################################################################################
 
-  log:db:mysql:
+  down:mysql:
     cmds:
-      - docker-compose -f ./infra-db-mysql8.yml logs -f
+      - task: compose:down
+        vars: { COMPOSE_FILE: "./infra-db-mysql8.yml" }
+
+  down:redis:
+    cmds:
+      - task: compose:down
+        vars: { COMPOSE_FILE: "./infra-cache-redis.yml" }
+
+  down:nats:
+    cmds:
+      - task: compose:down
+        vars: { COMPOSE_FILE: "./infra-mq-nats.yml" }
+
+
+
+  ################################################################################
+  #
+  # log: 查看服务日志
+  #
+  ################################################################################
+
+  log:hello:
+    cmds:
+      - task: compose:log
+        vars: { COMPOSE_FILE: "./compose-hello.yml" }
+
+  log:consul:
+    cmds:
+      - task: compose:log
+        vars: { COMPOSE_FILE: "./consul/consul.yml" }
+
+
+  ################################################################################
+  #
+  # restart: 服务重启
+  #
+  ################################################################################
+
+  restart:hello:
+    cmds:
+      - task: compose:restart
+        vars: { COMPOSE_FILE: "./compose-hello.yml" }
+
+  restart:consul:
+    cmds:
+      - task: compose:restart
+        vars: { COMPOSE_FILE: "./consul/consul.yml" }
+
+
+  ################################################################################
+  #
+  # docker exec: 命令行交互式访问容器
+  #
+  ################################################################################
+
+  docker:do:
+    cmds:
+      - docker exec -it {{.CONTAINER_NAME}} {{.DOCKER_CMD}}
+
+  exec:mysql:
+    cmds:
+      - task: docker:do
+#        vars: { CONTAINER_NAME: "mysql8", DOCKER_CMD: "mysql -u root -proot -e 'show databases;'" }
+        vars: { CONTAINER_NAME: "mysql8", DOCKER_CMD: "bash" }
+
+
+  ################################################################################
+  #
+  # open web ui: 打开各种中间件服务的 Web UI(dashboard)
+  #
+  ################################################################################
 
   open:consul:
     cmds:

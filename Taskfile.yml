@@ -14,23 +14,35 @@ version: '3'
 includes:
   os:
     taskfile: ./taskfile/Taskfile_{{OS}}.yml
-    dir: ./script
+    dir: ./taskfile/
 
   base:
     taskfile: ./taskfile/Taskfile_base.yml
-    dir: .
+    dir: ./taskfile/
 
   go:
     taskfile: ./taskfile/Taskfile_base_go.yml
-    dir: .
+    dir: ./taskfile/
 
   flutter:
     taskfile: ./taskfile/Taskfile_base_flutter.yml
-    dir: .
+    dir: ./taskfile/
 
   rust:
     taskfile: ./taskfile/Taskfile_base_rust.yml
-    dir: .
+    dir: ./taskfile/
+
+  python:
+    taskfile: ./taskfile/Taskfile_base_python.yml
+    dir: ./taskfile/
+
+  docker:
+    taskfile: ./taskfile/Taskfile_infra_docker.yml
+    dir: ./taskfile/
+
+  git:
+    taskfile: ./taskfile/Taskfile_infra_git.yml
+    dir: ./taskfile/
 
 
 ################################################################################################
@@ -48,8 +60,8 @@ env:
   ENV1: testing-env
 
 # env file:
-dotenv:
-  - .env
+#dotenv:
+#  - .env
 
 ################################################################################################
 
@@ -57,13 +69,28 @@ dotenv:
 tasks:
   default:
     cmds:
-      - task: init
-      - task: run
+      - task: echo
 
   init:
     cmds:
       - cp .env.local .env
       - task: flutter:init
+
+  echo:
+    cmds:
+      - echo "hello world"
+
+  use:
+    cmds:
+      - echo "setup user global taskfile root dir >> {{.TASK_ROOT_DIR}}"
+      - mkdir -p {{.TASK_ROOT_DIR}}
+      - echo "current dir >> $(pwd)"
+      - ln -sf $(pwd)/ {{.TASK_ROOT_DIR}}   # link dir:
+      - ls -al {{.TASK_ROOT_DIR}}
+      - open {{.TASK_ROOT_DIR}}
+    vars:
+      TASK_ROOT_DIR: "~/.task/local/"
+    ignore_error: true
 
   new:
     desc: "create flutter app"
@@ -73,7 +100,6 @@ tasks:
   run:
     cmds:
       - task: flutter:run
-
 
   push:
     cmds:

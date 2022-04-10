@@ -1,6 +1,3 @@
-version: '3'
-
-
 ################################################################################################
 #
 # ref:
@@ -11,35 +8,12 @@ version: '3'
 #
 ################################################################################################
 
+version: '3'
 
 tasks:
+  default:
+    cmds:
+      - task: echo
+
   echo:
     cmd: echo "hello world"
-
-  stash:
-    cmds:
-      - git stash
-
-  quick:
-    cmds:
-      - task: commit
-      - task: pull
-      - task: push
-      - task: push # double check
-
-  commit:
-    cmds:
-      - git commit -m "update"
-
-  push:
-    cmds:
-      - git push origin main --tags
-
-  pull:
-    cmds:
-      - git config pull.rebase false
-      - git pull
-
-
-################################################################################################
-

@@ -238,6 +238,30 @@ tasks:
   #
   ################################################################################
 
+  open:infra:
+    cmds:
+      - task: open:mysql
+      - task: open:redis
+      - task: open:nats
+      - task: open:rabbitmq
+      - task: open:jaeger
+
+  open:mysql:
+    cmds:
+      - open http://localhost:18080
+
+  open:redis:
+    cmds:
+      - open http://localhost:18081
+
+  open:rabbitmq:
+    cmds:
+      - open http://localhost:15672
+
+  open:nats:
+    cmds:
+      - open http://localhost:4222
+
   open:consul:
     cmds:
       - open http://localhost:8500/ui/

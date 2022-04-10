@@ -117,10 +117,15 @@ tasks:
       - task: compose:up
         vars: { COMPOSE_FILE: "./infra-cache-redis.yml" }
 
-  up:nats:
+  up:nats:one:
     cmds:
       - task: compose:up
         vars: { COMPOSE_FILE: "./infra-mq-nats.yml" }
+
+  up:nats:
+    cmds:
+      - task: compose:up
+        vars: { COMPOSE_FILE: "./infra-mq-nats-cluster.yml" }
 
   up:rabbitmq:
     cmds:
@@ -177,6 +182,11 @@ tasks:
   down:nats:
     cmds:
       - task: compose:down
+        vars: { COMPOSE_FILE: "./infra-mq-nats-cluster.yml" }
+
+  down:nats:one:
+    cmds:
+      - task: compose:down
         vars: { COMPOSE_FILE: "./infra-mq-nats.yml" }
 
 
@@ -228,7 +238,7 @@ tasks:
   exec:mysql:
     cmds:
       - task: docker:do
-#        vars: { CONTAINER_NAME: "mysql8", DOCKER_CMD: "mysql -u root -proot -e 'show databases;'" }
+        #        vars: { CONTAINER_NAME: "mysql8", DOCKER_CMD: "mysql -u root -proot -e 'show databases;'" }
         vars: { CONTAINER_NAME: "mysql8", DOCKER_CMD: "bash" }
 
 

@@ -17,11 +17,12 @@
 #
 ##########################################################################################
 
-
 version: "3.5"
+
 services:
   nats:
     image: nats
+    container_name: nats
     ports:
       - "8222:8222"
     command: "--cluster_name NATS --cluster nats://0.0.0.0:6222 --http_port 8222 "
@@ -29,12 +30,14 @@ services:
 
   nats-1:
     image: nats
+    container_name: nats-1
     command: "--cluster_name NATS --cluster nats://0.0.0.0:6222 --routes=nats://ruser:T0pS3cr3t@nats:6222"
     networks: [ "nats" ]
     depends_on: [ "nats" ]
 
   nats-2:
     image: nats
+    container_name: nats-2
     command: "--cluster_name NATS --cluster nats://0.0.0.0:6222 --routes=nats://ruser:T0pS3cr3t@nats:6222"
     networks: [ "nats" ]
     depends_on: [ "nats" ]

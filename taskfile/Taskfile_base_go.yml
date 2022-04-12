@@ -6,11 +6,22 @@ version: '3'
 #
 ################################################################################################
 
+#
+# sub namespace: https://taskfile.dev/#/usage?id=including-other-taskfiles
+#
+includes:
+  micro:
+    taskfile: ./Taskfile_base_go_micro.yml
+
+################################################################################################
+
+# task groups:
 tasks:
   install:
     cmds:
-      - go get -u -v github.com/cosmtrek/air
+      - go install github.com/cosmtrek/air@latest
       - go install github.com/BurntSushi/toml/cmd/tomlv@master # https://pre-commit.com/hooks.html
+      - air -v
 
   install-go-zero:
     cmds:

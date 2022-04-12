@@ -184,6 +184,18 @@ tasks:
       - task: compose:down
         vars: { COMPOSE_FILE: "./infra-cache-redis.yml" }
 
+  down:consul:
+    cmds:
+      - task: compose:down
+        vars: { COMPOSE_FILE: "./consul/consul.yml" }
+      - task: compose:down
+        vars: { COMPOSE_FILE: "./infra-kv-consul-v0.yml" }
+      - task: compose:down
+        vars: { COMPOSE_FILE: "./infra-kv-consul-v2.yml" }
+      - task: compose:down
+        vars: { COMPOSE_FILE: "./infra-kv-consul-cluster.yml" }
+    ignore_error: true
+
   down:nats:
     cmds:
       - task: compose:down
@@ -260,6 +272,7 @@ tasks:
       - task: open:nats
       - task: open:rabbitmq
       - task: open:jaeger
+      - task: open:consul
 
   open:mysql:
     cmds:

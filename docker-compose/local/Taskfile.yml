@@ -142,6 +142,11 @@ tasks:
       - task: compose:up
         vars: { COMPOSE_FILE: "./consul/consul.yml" }
 
+  up:consul:v0:
+    cmds:
+      - task: compose:up
+        vars: { COMPOSE_FILE: "./infra-kv-consul-v0.yml" }
+
   up:consul:v2:
     cmds:
       - task: compose:up

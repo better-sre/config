@@ -31,4 +31,4 @@ tasks:
 
   echo:
     cmds:
-      - echo "hello world"
+      - echo "hello docker"

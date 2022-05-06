@@ -31,7 +31,7 @@ tasks:
 
   echo:
     cmds:
-      - echo: "hello world"
+      - echo: "hello local docker-compose"
 
   ################################################################################
 
@@ -59,9 +59,10 @@ tasks:
   compose:down:
     cmds:
       - task: compose:do
-        vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}", COMPOSE_CMD: "down" }
+        vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}", COMPOSE_CMD: "down --remove-orphans" }
       - task: compose:log:no:watch
         vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}" }
+    ignore_error: true
 
   compose:log:no:watch:
     cmds:
@@ -155,7 +156,13 @@ tasks:
   up:consul:v3:
     cmds:
       - task: compose:up
+        vars: { COMPOSE_FILE: "./infra-kv-consul-v3.yml" }
+
+  up:consul:v4:
+    cmds:
+      - task: compose:up
         vars: { COMPOSE_FILE: "./infra-kv-consul-cluster.yml" }
+
 
   up:etcd:
     cmds:
@@ -194,6 +201,8 @@ tasks:
         vars: { COMPOSE_FILE: "./infra-kv-consul-v2.yml" }
       - task: compose:down
         vars: { COMPOSE_FILE: "./infra-kv-consul-cluster.yml" }
+      - task: compose:down
+        vars: { COMPOSE_FILE: "./infra-kv-consul-v3.yml" }
     ignore_error: true
 
   down:nats:

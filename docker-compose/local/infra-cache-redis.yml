@@ -19,6 +19,8 @@ services:
     hostname: redis
     image: redis
     restart: always
+    networks:
+      - redis_net
     ports:
       - "0.0.0.0:6379:6379"
     volumes:
@@ -29,6 +31,8 @@ services:
     hostname: redis-commander
     image: rediscommander/redis-commander:latest
     restart: always
+    networks:
+      - redis_net
     depends_on:
       - redis
     environment:
@@ -46,4 +50,4 @@ volumes:
   redis_data:
 
 networks:
-  redis:
+  redis_net:

@@ -40,6 +40,8 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql/
     restart: always
+    networks:
+      - db_net
     environment:
       MYSQL_ROOT_PASSWORD: root    # root: root
       # project:
@@ -59,6 +61,8 @@ services:
     image: adminer
     container_name: mysql-adminer
     restart: always
+    networks:
+      - db_net
     links:
       - mysql
     depends_on:
@@ -73,3 +77,6 @@ services:
 # 自定义数据卷:
 volumes:
   mysql_data:
+
+networks:
+  db_net:

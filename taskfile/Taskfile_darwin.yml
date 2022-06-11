@@ -3,61 +3,177 @@ version: '3'
 
 ################################################################################################
 
-
+#
+# MacOS only:
+#
 tasks:
-  install:
-    desc: install requirements
-    deps:
-      - install-osx-tool
-      - install-brew
-      - update
+  init:
     cmds:
-      - task: install-plugins
-      - task: install-go
+      - task: setup
 
-  install-osx-tool:
+  # 0->1:
+  setup:
+    desc: setup a macos devlopment environment
     cmds:
+      - task: install:macos:infra
+      - task: install:dev
+      - task: install:tools
+
+  install:dev:
+    desc: install dev requirements
+    cmds:
+      - task: install:go
+      - task: install:rust
+      - task: install:java
+
+
+  #################################################################################################
+  #
+  # MacOS Infra:
+  #
+  #################################################################################################
+
+  install:macos:infra:
+    cmds:
+      - task: install:xcode
+      - task: install:brew
+
+  install:xcode:
+    cmds:
+      - echo "install xcode utilities"
       - xcode-select --install
     ignore_error: true
 
-  # ref: https://mirrors.tuna.tsinghua.edu.cn/help/homebrew/
-  install-brew:
+  # alias: install:brew:
+  install:homebrew:
     cmds:
+      - task: install:brew
+
+  # ref: https://mirrors.tuna.tsinghua.edu.cn/help/homebrew/
+  install:brew:
+    cmds:
+      - echo "install homebrew"
       - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-  install-plugins:
-    cmds:
-      - brew install --cask ngrok
-      - brew install go-task/tap/go-task
-      - brew install pre-commit     # 不建议使用 pip 安装, 除非你对 python 很熟悉
-      - pre-commit --version
-      - brew install docker-compose
-      - brew install protobuf
 
-  install-go:
-    cmds:
-      - brew install go
-      - go version
-
-  install-java:
-    cmds:
-      - brew install openjdk@11
-
-  version:
-    cmds:
-      - sw_vers
-
-  init:
-    cmds:
-      - cp .env.local ../.env
+  #################################################################################################
 
   update:
+    cmds:
+      - task: update:macos:infra
+
+  update:macos:infra:
     cmds:
       - softwareupdate --all --install --force
       - brew update
     ignore_error: true
 
+
+  #################################################################################################
+
   check:
     cmds:
+      - task: version
       - brew doctor
+
+  version:
+    cmds:
+      - task: check:os:version
+
+  check:os:version:
+    cmds:
+      - echo -e "\033[33m [check macos version] \033[0m"
+      - sw_vers
+
+
+  #################################################################################################
+  #
+  # MacOS Dev:
+  #
+  #################################################################################################
+
+
+  install:go:
+    cmds:
+      - brew install go
+      - go version
+
+  # alias: install:java11:
+  install:java:
+    cmds:
+      - task: install:java11
+
+  install:java11:
+    cmds:
+      - brew install openjdk@11
+      - java -version
+
+  # ref: https://www.rust-lang.org/tools/install
+  install:rust:
+    cmds:
+      - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+      - rustup --version  # rust version management tool
+      - cargo --version   # rust package management tool
+      - rustup check
+
+  # with fvm: https://github.com/fluttertools/fvm
+  install:flutter:
+    cmds:
+      - echo "install flutter"
+      - brew tap leoafarias/fvm
+      - brew install fvm
+      - fvm --version
+      - fvm install 3.0.0  # install flutter version 3.0.0
+      - flutter --version
+
+
+  #################################################################################################
+  # MacOS 3rd-party tools:
+  #################################################################################################
+
+
+  # alias:
+  install:plugins:
+    cmds:
+      - task: install:tools
+
+  install:tools:
+    cmds:
+      - task: install:go-task
+      - task: install:pre-commit
+      - task: install:docker-compose
+      - task: install:protobuf
+
+
+  install:go-task:
+    cmds:
+      - brew install go-task/tap/go-task
+      - task --version
+
+  install:docker-compose:
+    cmds:
+      - brew install docker-compose
+      - docker-compose --version
+
+  install:pre-commit:
+    cmds:
+      - brew install pre-commit # 不建议使用 pip 安装, 除非你对 python 很熟悉
+      - pre-commit --version
+
+  install:protobuf:
+    cmds:
+      - brew install protobuf
+      - protoc --version
+
+  install:ngrok:
+    cmds:
+      - brew install --cask ngrok
+
+
+  install:cookiecutter:
+    cmds:
+      - echo "install cookiecutter"
+
+
+
 

@@ -1,0 +1,25 @@
+version: '3'
+
+
+################################################################################################
+
+#
+# Windows only:
+#
+tasks:
+
+  install:dev:
+    cmds:
+      - task install:go
+
+  install:go:
+    cmds:
+      - echo "install go"
+
+  install:rust:
+    cmds:
+      - echo "install rust"
+
+  install:cookiecutter:
+    cmds:
+      - echo "install cookiecutter"

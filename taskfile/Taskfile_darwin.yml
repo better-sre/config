@@ -2,6 +2,10 @@ version: '3'
 
 
 ################################################################################################
+#
+# TODO X: 注意缩进, 如果 task 定义的缩进出错, 会导致无法找到 task.
+#
+################################################################################################
 
 #
 # MacOS only:
@@ -9,6 +13,7 @@ version: '3'
 tasks:
   init:
     cmds:
+      - echo "os init"
       - task: setup
 
   # 0->1:
@@ -19,13 +24,39 @@ tasks:
       - task: install:dev
       - task: install:tools
 
+  #################################################################################################
+  #
+  # for Developers: (All in one)
+  #
+  #################################################################################################
+
+  dev:
+    cmds:
+      - task: install:dev
+
+  # for golang developer, all in one:
+  dev:go:
+    cmds:
+      - task: install:go
+
+  dev:rust:
+    cmds:
+      - task: install:rust
+
+  dev:java:
+    cmds:
+      - task: install:java
+
+  dev:flutter:
+    cmds:
+      - task: install:flutter
+
   install:dev:
     desc: install dev requirements
     cmds:
       - task: install:go
       - task: install:rust
       - task: install:java
-
 
   #################################################################################################
   #
@@ -78,7 +109,7 @@ tasks:
 
   sys:version:
     cmds:
-      - task: check:os:version
+      - task: check:sys:version
 
   check:sys:version:
     cmds:
@@ -126,24 +157,34 @@ tasks:
       - fvm install 3.0.0  # install flutter version 3.0.0
       - flutter --version
 
+  # with pyenv:
+  install:python:
+    cmds:
+      - echo "install python"
+      - brew install pyenv
+      - pyenv --version
+      - pyenv install -l | grep 3.9
+      - pyenv install 3.9.9  # install python version 3.9.9
+      - pyenv global 3.9.9
+      - pyenv virtualenv 3.9.9 py39-base  # create a virtualenv for python 3.9.9
+      - pyenv versions
+      - python --version
 
   #################################################################################################
   # MacOS 3rd-party tools:
   #################################################################################################
 
-
   # alias:
-  install:plugins:
-    cmds:
-      - task: install:tools
-
   install:tools:
+    cmds:
+      - task: install:plugins
+
+  install:plugins:
     cmds:
       - task: install:go-task
       - task: install:pre-commit
       - task: install:docker-compose
       - task: install:protobuf
-
 
   install:go-task:
     cmds:
@@ -168,7 +209,6 @@ tasks:
   install:ngrok:
     cmds:
       - brew install --cask ngrok
-
 
   install:cookiecutter:
     cmds:

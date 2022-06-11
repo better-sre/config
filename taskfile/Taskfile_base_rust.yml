@@ -1,5 +1,16 @@
 version: '3'
 
+
+#
+# sub namespace: https://taskfile.dev/#/usage?id=including-other-taskfiles
+#
+includes:
+  # support cross-platform tasks
+  os:
+    taskfile: ./Taskfile_{{OS}}.yml
+    dir: .
+
+
 #
 # global vars: https://taskfile.dev/#/usage?id=variables
 #
@@ -23,3 +34,22 @@ tasks:
   init:
     cmds:
       - echo init
+
+  install:
+    cmds:
+      - os:install:rust  # auto-detect OS, cross-platform install
+
+  check:
+    cmds:
+      - task: sys:check
+      - rustup --version
+      - cargo --version
+      - rustup toolchain list
+      - rustup check
+
+  sys:check:
+    cmds:
+      - task: os:check:sys:version
+
+
+

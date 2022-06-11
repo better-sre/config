@@ -15,7 +15,7 @@ tasks:
   setup:
     desc: setup a macos devlopment environment
     cmds:
-      - task: install:macos:infra
+      - task: install:sys:infra
       - task: install:dev
       - task: install:tools
 
@@ -33,7 +33,7 @@ tasks:
   #
   #################################################################################################
 
-  install:macos:infra:
+  install:sys:infra:
     cmds:
       - task: install:xcode
       - task: install:brew
@@ -60,9 +60,9 @@ tasks:
 
   update:
     cmds:
-      - task: update:macos:infra
+      - task: update:sys:infra
 
-  update:macos:infra:
+  update:sys:infra:
     cmds:
       - softwareupdate --all --install --force
       - brew update
@@ -73,14 +73,14 @@ tasks:
 
   check:
     cmds:
-      - task: version
+      - task: sys:version
       - brew doctor
 
-  version:
+  sys:version:
     cmds:
       - task: check:os:version
 
-  check:os:version:
+  check:sys:version:
     cmds:
       - echo -e "\033[33m [check macos version] \033[0m"
       - sw_vers

@@ -80,8 +80,9 @@ includes:
 ```
 
 
-
 > 🍄 usages: (with `go-task` + [Taskfile.yml](./Taskfile.yml))
+
+- with `sre:` prefix, in your own project.
 
 ```ruby
 
@@ -93,20 +94,32 @@ task go:install
 task python:install
 task flutter:install
 
-
-
 # for docker: check details in ./taskfile/Taskfile_infra_docker.yml
 task docker:local:up:mysql
 task docker:local:up:redis
 task docker:local:up:rabitmq
 task docker:local:up:kafka
 
-
 # for git:
 task git:push 
 task push  # auto push to github
 
 ```
+
+
+> ❓ Note that when using in your project, you need to use the [sre:]() `prefix` to use the following scripts.
+> like this:
+
+```ruby
+
+#
+# with `sre` prefix:
+#
+task sre:rust:install
+task sre:go:install
+
+```
+
 
 - 😄 enjoy!
 

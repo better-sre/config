@@ -1,7 +1,7 @@
 #
 # please ignore this folder in your gitignore file.
 #
-# use for:
+# local project use manual: ( vs global use)
 #
 # 1. in your own project, do:
 #    `cd your-repo/; mkdir .task/;`

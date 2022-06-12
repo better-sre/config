@@ -11,7 +11,7 @@
 #
 
 includes:
-  os:
+  sre:
     taskfile: ./.task/config/Taskfile.yml
     dir: ./.task/config/
 

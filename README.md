@@ -25,10 +25,30 @@ task --version
 
 > 🍄 then, clone the repo.
 
+- There are `3 ways` to use it, just choose the way you like.
+
 
 ```ruby 
 
+# way1: flexible path (not your project path)
+cd your-workspace/
 git clone https://github.com/better-sre/config.git 
+
+# way2: global path
+mkdir ~/.task/
+cd ~/.task/
+git clone https://github.com/better-sre/config.git 
+
+
+#
+# recommended way:
+#
+# way3: local path(under your project)
+cd your-project/
+mkdir .task/
+cd .task/
+git clone https://github.com/better-sre/config.git 
+
 
 
 ```
@@ -38,10 +58,24 @@ git clone https://github.com/better-sre/config.git
 ```yaml
 
 includes:
-  std:
+  # way1: flexible path
+  sre:
     taskfile: ~/your-real-path-to/better-sre/config/Taskfile.yml # TODO: please set your own path to the config dir
     dir: ~/your-real-path-to/better-sre/config  # TODO: please set your own path to the config dir
     optional: true  # safeguard, if not found, no error
+
+  # way2: global path
+  sre2:
+    taskfile: ~/.task/config/Taskfile.yml # TODO: please create `~/.task/` first before use
+    dir: ~/.task/config # global path
+    optional: true  # safeguard, if not found, no error
+
+  # way3: local path(recommended)
+  sre3:
+    taskfile: ./.task/config/Taskfile.yml # TODO: under your project, please add `.task/` to your `.gitignore` file
+    dir: ./.task/config  # local path
+    optional: true  # safeguard, if not found, no error
+
 
 ```
 

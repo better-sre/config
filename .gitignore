@@ -175,3 +175,7 @@ tmp/
 **/*.gs
 *.hive
 *.lock
+
+
+# go-task:
+.task/

@@ -70,7 +70,7 @@ task docker:local:up:kafka
 
 # for git:
 task git:push 
-
+task push  # auto push to github
 
 ```
 

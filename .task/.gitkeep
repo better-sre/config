@@ -1,0 +1,21 @@
+#
+# please ignore this folder in your gitignore file.
+#
+# use for:
+#
+# 1. in your own project, do:
+#    `cd your-repo/; mkdir .task/;`
+# 2. then clone this repo to `your-repo/.task/`.
+# 3. set `your-repo/.task/this` in your Taskfile.yml > include:
+#    like this:
+#
+
+includes:
+  os:
+    taskfile: ./.task/config/Taskfile.yml
+    dir: ./.task/config/
+
+# 4. done.
+
+
+

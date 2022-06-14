@@ -157,6 +157,11 @@ tasks:
       - fvm install 3.0.0  # install flutter version 3.0.0
       - flutter --version
 
+  install:zig:
+    cmds:
+      - brew install zig
+      - zig --version
+
   # with pyenv:
   install:python:
     cmds:

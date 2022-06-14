@@ -1,0 +1,42 @@
+version: '3'
+
+
+#
+# sub namespace: https://taskfile.dev/#/usage?id=including-other-taskfiles
+#
+includes:
+  # support cross-platform tasks
+  os:
+    taskfile: ./Taskfile_{{OS}}.yml
+    dir: .
+
+
+#
+# global vars: https://taskfile.dev/#/usage?id=variables
+#
+vars:
+  VAR1: "some-var"
+
+# global env:
+env:
+  ENV1: testing
+
+
+################################################################################################
+
+
+# task groups:
+tasks:
+  default:
+    cmds:
+      - task: init
+
+  init:
+    cmds:
+      - echo init
+
+  install:
+    cmds:
+      - task: os:install:zig  # auto-detect OS, cross-platform install
+
+

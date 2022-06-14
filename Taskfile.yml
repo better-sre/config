@@ -32,6 +32,10 @@ includes:
     taskfile: ./taskfile/Taskfile_base_rust.yml
     dir: ./taskfile/
 
+  zig:
+    taskfile: ./taskfile/Taskfile_base_zig.yml
+    dir: ./taskfile/
+
   python:
     taskfile: ./taskfile/Taskfile_base_python.yml
     dir: ./taskfile/

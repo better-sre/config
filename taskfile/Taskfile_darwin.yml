@@ -162,6 +162,10 @@ tasks:
       - brew install zig
       - zig version
       - brew install xz # for zig zls
+      - brew install xz
+      - mkdir $HOME/zls && cd $HOME/zls && curl -L https://github.com/zigtools/zls/releases/download/0.9.0/x86_64-macos.tar.xz | tar -xJ --strip-components=1 -C .
+      - chmod +x $HOME/zls/zls
+      - sudo $HOME/zls/zls configure
 
   # with pyenv:
   install:python:

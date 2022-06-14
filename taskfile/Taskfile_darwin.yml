@@ -161,6 +161,7 @@ tasks:
     cmds:
       - brew install zig
       - zig version
+      - brew install xz # for zig zls
 
   # with pyenv:
   install:python:

@@ -39,4 +39,26 @@ tasks:
     cmds:
       - task: os:install:zig  # auto-detect OS, cross-platform install
 
+  docs:
+    cmds:
+      - open https://ziglang.org/zh/learn/
+      - open https://ziglang.org/documentation/0.9.1/
+      - open https://aquila.red/
+
+  new:
+    cmds:
+      - mkdir demo; cd demo; zig init-exe
+
+  new:lib:
+    cmds:
+      #      - mkdir ${NEW_PACKAGE_NAME}; cd ${NEW_PACKAGE_NAME}; zig init-lib
+      - mkdir demo; cd demo; zig init-lib
+
+  run:
+    cmds:
+      - cd demo; zig build run
+
+  build:lib:
+    cmds:
+      - cd demo; zig build test
 

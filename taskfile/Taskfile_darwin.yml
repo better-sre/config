@@ -160,7 +160,7 @@ tasks:
   install:zig:
     cmds:
       - brew install zig
-      - zig --version
+      - zig version
 
   # with pyenv:
   install:python:

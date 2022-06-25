@@ -1,12 +1,19 @@
-version: '3'
-
+version: "3"
 
 ################################################################################################
+
+includes:
+  macos:
+    taskfile: ./Taskfile_darwin.yml
+    dir: .
 
 #
 # Linux only:
 #
 tasks:
+  echo:
+    cmds:
+      - task: macos:echo
 
   install:dev:
     cmds:
@@ -23,3 +30,8 @@ tasks:
   install:cookiecutter:
     cmds:
       - echo "install cookiecutter"
+
+  # with fnm // same as macos
+  install:node:
+    cmds:
+      - task: macos:install:node

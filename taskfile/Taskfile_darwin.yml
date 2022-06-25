@@ -1,5 +1,4 @@
-version: '3'
-
+version: "3"
 
 ################################################################################################
 #
@@ -15,6 +14,10 @@ tasks:
     cmds:
       - echo "os init"
       - task: setup
+
+  echo:
+    cmds:
+      - echo "macos say hello world."
 
   # 0->1:
   setup:
@@ -86,6 +89,23 @@ tasks:
       - echo "install homebrew"
       - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
+  # fish + oh-my-fish:
+  install:fish:
+    cmds:
+      - brew install fish
+      - fish -v
+      - which fish
+      - echo $(which fish) | sudo tee -a /etc/shells
+      - chsh -s `which fish`
+      - curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
+
+  config:fish:
+    cmds:
+      - fish_config
+
+  install:zsh:
+    cmds:
+      - brew install zsh
 
   #################################################################################################
 
@@ -98,7 +118,6 @@ tasks:
       - softwareupdate --all --install --force
       - brew update
     ignore_error: true
-
 
   #################################################################################################
 
@@ -116,13 +135,11 @@ tasks:
       - echo -e "\033[33m [check macos version] \033[0m"
       - sw_vers
 
-
   #################################################################################################
   #
   # MacOS Dev:
   #
   #################################################################################################
-
 
   install:go:
     cmds:
@@ -143,8 +160,8 @@ tasks:
   install:rust:
     cmds:
       - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-      - rustup --version  # rust version management tool
-      - cargo --version   # rust package management tool
+      - rustup --version # rust version management tool
+      - cargo --version # rust package management tool
       - rustup check
 
   # with fvm: https://github.com/fluttertools/fvm
@@ -154,7 +171,7 @@ tasks:
       - brew tap leoafarias/fvm
       - brew install fvm
       - fvm --version
-      - fvm install 3.0.0  # install flutter version 3.0.0
+      - fvm install 3.0.0 # install flutter version 3.0.0
       - flutter --version
 
   install:zig:
@@ -167,6 +184,17 @@ tasks:
       - sudo $HOME/zls/zls configure
     ignore_error: true
 
+  # with fnm:
+  install:node:
+    cmds:
+      - curl -fsSL https://fnm.vercel.app/install | bash
+      - fnm --version
+      - fnm install v16.15.1
+      - fnm use v16.15.1
+      - fnm alias default v16.15.1 #设置默认版本
+      - fnm list
+      - node -v
+
   # with pyenv:
   install:python:
     cmds:
@@ -174,9 +202,9 @@ tasks:
       - brew install pyenv
       - pyenv --version
       - pyenv install -l | grep 3.9
-      - pyenv install 3.9.9  # install python version 3.9.9
+      - pyenv install 3.9.9 # install python version 3.9.9
       - pyenv global 3.9.9
-      - pyenv virtualenv 3.9.9 py39-base  # create a virtualenv for python 3.9.9
+      - pyenv virtualenv 3.9.9 py39-base # create a virtualenv for python 3.9.9
       - pyenv versions
       - python --version
 
@@ -223,7 +251,3 @@ tasks:
   install:cookiecutter:
     cmds:
       - echo "install cookiecutter"
-
-
-
-

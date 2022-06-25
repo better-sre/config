@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 ################################################################################################
 #
@@ -6,7 +6,6 @@ version: '3'
 #   - https://taskfile.dev/#/usage
 #
 ################################################################################################
-
 
 #
 # sub namespace: https://taskfile.dev/#/usage?id=including-other-taskfiles
@@ -40,6 +39,11 @@ includes:
     taskfile: ./taskfile/Taskfile_base_python.yml
     dir: ./taskfile/
 
+  # typescript / javascript / nodejs
+  ts:
+    taskfile: ./taskfile/Taskfile_base_typescript.yml
+    dir: ./taskfile/
+
   docker:
     taskfile: ./taskfile/Taskfile_infra_docker.yml
     dir: ./taskfile/
@@ -47,7 +51,6 @@ includes:
   git:
     taskfile: ./taskfile/Taskfile_infra_git.yml
     dir: ./taskfile/
-
 
 ################################################################################################
 
@@ -88,7 +91,7 @@ tasks:
       - echo "setup user global taskfile root dir >> {{.TASK_ROOT_DIR}}"
       - mkdir -p {{.TASK_ROOT_DIR}}
       - echo "current dir >> $(pwd)"
-      - ln -sf $(pwd)/ {{.TASK_ROOT_DIR}}   # link dir:
+      - ln -sf $(pwd)/ {{.TASK_ROOT_DIR}} # link dir:
       - ls -al {{.TASK_ROOT_DIR}}
       - open {{.TASK_ROOT_DIR}}
     vars:
@@ -118,7 +121,6 @@ tasks:
       - go run pub/main.go
     dir: ./script/nats/
 
-
   #
   # unit test for this project:
   #
@@ -130,6 +132,4 @@ tasks:
     cmds:
       - task --dry os:init
       - task --dry rust:init
-
-
 ################################################################################################

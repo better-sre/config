@@ -8,12 +8,34 @@
 #
 ################################################################################################
 
-version: '3'
+version: "3"
+
+includes:
+  # support cross-platform tasks
+  os:
+    taskfile: ./Taskfile_{{OS}}.yml
+    dir: .
 
 tasks:
   default:
     cmds:
       - task: echo
+
+  init:
+    cmds:
+      - task: install:node
+      - task: install:yarn
+
+  install:node:
+    cmds:
+      - task: os:install:node
+
+  install:yarn:
+    cmds:
+      - node -v
+      - npm -v
+      - npm install --global yarn
+      - yarn -v
 
   echo:
     cmd: echo "hello world"

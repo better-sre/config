@@ -10,11 +10,10 @@
 
 > MacOS/Linux:
 
+- auto check `go-task`, if not installed, auto install it.
+
 ```ruby
-
-# auto check go-task, if not installed, auto install it.
 curl -fsSL https://raw.githubusercontent.com/better-sre/config/main/init.sh | sh
-
 ```
 
 > Windows+PowerShell:

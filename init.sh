@@ -56,7 +56,13 @@ download() {
 		DOWNLOAD_URL="${DOWNLOAD_BASE_URL}/${1}.zip"
 	fi
 
-	echo "download: ${DOWNLOAD_URL}"
+
+	echo "download: ${DOWNLOAD_URL} to ${ROOT_DIR}"
+
+	# clean: fix: 不可以加引号
+	rm -rf ${ROOT_DIR}/*
+
+	# download:
 	curl --fail --location --progress-bar --output "${ROOT_DIR}/config.zip" "${DOWNLOAD_URL}"
 	unzip -d "${ROOT_DIR}" -o "${ROOT_DIR}/config.zip"
 	mv -f ${ROOT_DIR}/config-* ${ROOT_DIR}/config

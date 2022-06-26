@@ -78,6 +78,11 @@ tasks:
     cmds:
       - task: echo
 
+  download:
+    cmds:
+      - chmod +x init.sh
+      - ./init.sh
+
   init:
     cmds:
       - cp .env.local .env

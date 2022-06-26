@@ -1,6 +1,6 @@
 # config
 
-- Contains a large number of `installation/deployment` scripts that developers need to use in their daily work. 
+- Contains a large number of `installation/deployment` scripts that developers need to use in their daily work.
 - Automatically supports `cross-platform` installation.
 - Thanks to the [go-task](https://github.com/go-task/task) project.
 
@@ -15,8 +15,16 @@
 - https://taskfile.dev/#/installation
 
 ```ruby
-# instasll:
+
+# macos:
 brew install go-task/tap/go-task
+
+# linux:
+sudo snap install task --classic
+
+# windows:
+choco install go-task
+
 
 # check: go-task version
 task --version
@@ -27,17 +35,16 @@ task --version
 
 - There are `3 ways` to use it, just choose the way you like.
 
-
-```ruby 
+```ruby
 
 # way1: flexible path (not your project path)
 cd your-workspace/
-git clone https://github.com/better-sre/config.git 
+git clone https://github.com/better-sre/config.git
 
 # way2: global path
 mkdir ~/.task/
 cd ~/.task/
-git clone https://github.com/better-sre/config.git 
+git clone https://github.com/better-sre/config.git
 
 
 #
@@ -47,7 +54,7 @@ git clone https://github.com/better-sre/config.git
 cd your-project/
 mkdir .task/
 cd .task/
-git clone https://github.com/better-sre/config.git 
+git clone https://github.com/better-sre/config.git
 
 
 
@@ -56,29 +63,25 @@ git clone https://github.com/better-sre/config.git
 - 🍄 add these content to your `Taskfile.yml` file.
 
 ```yaml
-
 includes:
   # way1: flexible path
   sre:
     taskfile: ~/your-real-path-to/better-sre/config/Taskfile.yml # TODO: please set your own path to the config dir
-    dir: ~/your-real-path-to/better-sre/config  # TODO: please set your own path to the config dir
-    optional: true  # safeguard, if not found, no error
+    dir: ~/your-real-path-to/better-sre/config # TODO: please set your own path to the config dir
+    optional: true # safeguard, if not found, no error
 
   # way2: global path
   sre2:
     taskfile: ~/.task/config/Taskfile.yml # TODO: please create `~/.task/` first before use
     dir: ~/.task/config # global path
-    optional: true  # safeguard, if not found, no error
+    optional: true # safeguard, if not found, no error
 
   # way3: local path(recommended)
   sre3:
     taskfile: ./.task/config/Taskfile.yml # TODO: under your project, please add `.task/` to your `.gitignore` file
-    dir: ./.task/config  # local path
-    optional: true  # safeguard, if not found, no error
-
-
+    dir: ./.task/config # local path
+    optional: true # safeguard, if not found, no error
 ```
-
 
 > 🍄 usages: (with `go-task` + [Taskfile.yml](./Taskfile.yml))
 
@@ -101,11 +104,10 @@ task docker:local:up:rabitmq
 task docker:local:up:kafka
 
 # for git:
-task git:push 
+task git:push
 task push  # auto push to github
 
 ```
-
 
 > ❓ Note that when using in your project, you need to use the [sre:]() `prefix` to use the following scripts.
 > like this:
@@ -120,17 +122,13 @@ task sre:go:install
 
 ```
 
-
 - 😄 enjoy!
 
-
 ## Contents:
-
 
 - [docker-compose/local](docker-compose/local)
 - [dockerfile](dockerfile)
 - [Taskfile](taskfile)
-
 
 > Attention:
 
@@ -141,10 +139,3 @@ task sre:go:install
   - Windows: 可以参考脚本细节, 自行改写, 同时欢迎 PR 进来. 我会 merge 的.
 - 部分脚本写了跨平台, 比较少, 如果有兴趣, 欢迎 PR 支持.
 - Taskfile 原生支持跨平台, 改写起来也简单, 只是我没有太多精力, 照顾不到.😄
-
-
-
-
-
-
-

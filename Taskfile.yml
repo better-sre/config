@@ -91,6 +91,16 @@ tasks:
     cmds:
       - echo "hello world"
 
+  up:postgres:
+    cmds:
+      - task: docker:local:up:postgres
+
+  up:mysql:
+    cmds:
+      - task: docker:local:up:mysql
+
+  ################################################################################################
+
   use:
     cmds:
       - echo "setup user global taskfile root dir >> {{.TASK_ROOT_DIR}}"

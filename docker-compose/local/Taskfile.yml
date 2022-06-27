@@ -45,7 +45,7 @@ tasks:
   compose:up:
     cmds:
       - task: compose:do
-        vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}", COMPOSE_CMD: "up -d" }   # 注意参数透传的写法: COMPOSE_FILE 透传参数
+        vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}", COMPOSE_CMD: "up -d" } # 注意参数透传的写法: COMPOSE_FILE 透传参数
       - task: compose:log:no:watch
         vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}" }
 
@@ -59,7 +59,11 @@ tasks:
   compose:down:
     cmds:
       - task: compose:do
-        vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}", COMPOSE_CMD: "down --remove-orphans" }
+        vars:
+          {
+            COMPOSE_FILE: "{{.COMPOSE_FILE }}",
+            COMPOSE_CMD: "down --remove-orphans",
+          }
       - task: compose:log:no:watch
         vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}" }
     ignore_error: true
@@ -69,14 +73,14 @@ tasks:
       - task: compose:do
         vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}", COMPOSE_CMD: "ps" }
       - task: compose:do
-        vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}",COMPOSE_CMD: "logs" }
+        vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}", COMPOSE_CMD: "logs" }
 
   compose:log:
     cmds:
       - task: compose:do
         vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}", COMPOSE_CMD: "ps" }
       - task: compose:do
-        vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}",COMPOSE_CMD: "logs -f" }
+        vars: { COMPOSE_FILE: "{{.COMPOSE_FILE }}", COMPOSE_CMD: "logs -f" }
 
   ################################################################################
   #
@@ -102,6 +106,11 @@ tasks:
     cmds:
       - task: compose:up
         vars: { COMPOSE_FILE: "./compose-hello.yml" }
+
+  up:postgres:
+    cmds:
+      - task: compose:up
+        vars: { COMPOSE_FILE: "./infra-db-postgres.yml" }
 
   up:mysql:
     cmds:
@@ -163,7 +172,6 @@ tasks:
       - task: compose:up
         vars: { COMPOSE_FILE: "./infra-kv-consul-cluster.yml" }
 
-
   up:etcd:
     cmds:
       - task: compose:up
@@ -173,7 +181,6 @@ tasks:
     cmds:
       - task: compose:up
         vars: { COMPOSE_FILE: "./infra-kv-etcd-v2.yml" }
-
 
   ################################################################################
   #
@@ -185,6 +192,11 @@ tasks:
     cmds:
       - task: compose:down
         vars: { COMPOSE_FILE: "./infra-db-mysql8.yml" }
+
+  down:postgres:
+    cmds:
+      - task: compose:down
+        vars: { COMPOSE_FILE: "./infra-db-postgres.yml" }
 
   down:redis:
     cmds:
@@ -215,8 +227,6 @@ tasks:
       - task: compose:down
         vars: { COMPOSE_FILE: "./infra-mq-nats.yml" }
 
-
-
   ################################################################################
   #
   # log: 查看服务日志
@@ -232,7 +242,6 @@ tasks:
     cmds:
       - task: compose:log
         vars: { COMPOSE_FILE: "./consul/consul.yml" }
-
 
   ################################################################################
   #
@@ -250,7 +259,6 @@ tasks:
       - task: compose:restart
         vars: { COMPOSE_FILE: "./consul/consul.yml" }
 
-
   ################################################################################
   #
   # docker exec: 命令行交互式访问容器
@@ -266,7 +274,6 @@ tasks:
       - task: docker:do
         #        vars: { CONTAINER_NAME: "mysql8", DOCKER_CMD: "mysql -u root -proot -e 'show databases;'" }
         vars: { CONTAINER_NAME: "mysql8", DOCKER_CMD: "bash" }
-
 
   ################################################################################
   #
@@ -320,4 +327,3 @@ tasks:
   ip:get:linux:
     cmds:
       - ip a | grep inet | grep -v inet6 | grep -v 127 | sed 's/^[ \t]*//g' | cut -d ' ' -f2
-

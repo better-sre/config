@@ -1,0 +1,58 @@
+##########################################################################################
+#                          postgres
+#
+# ref:
+#   - https://hub.docker.com/_/postgres
+#   - https://github.com/khezen/compose-postgres/blob/master/docker-compose.yml
+#
+# admin ui:
+#   - https://hub.docker.com/r/dpage/pgadmin4
+#   - https://www.pgadmin.org/
+#
+#
+##########################################################################################
+
+version: "3.5"
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    container_name: postgres
+    # restart: always
+    ports:
+      - 15432:5432
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-root} # default: root
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-root} # default: root
+      POSTGRES_DB: dev
+    networks:
+      - db_net
+
+  pg-admin:
+    container_name: pg-admin
+    image: dpage/pgadmin4
+    # restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@admin.com} # default: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin} # default: admin
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - pg_admin_data:/var/lib/pgadmin
+    ports:
+      - "${PGADMIN_PORT:-18020}:80" # default: 18020
+    networks:
+      - db_net
+
+##########################################################################################
+#                                 自定义依赖:
+##########################################################################################
+
+# 自定义数据卷:
+volumes:
+  pg_data:
+  pg_admin_data:
+
+networks:
+  db_net:

@@ -30,29 +30,30 @@
 #
 ##########################################################################################
 
-version: '3.1'
+version: "3.1"
 
 services:
   mysql:
     image: mysql:8.0
     container_name: mysql8
-    platform: linux/amd64   # fix for Mac M1 chip
+    platform: linux/amd64 # fix for Mac M1 chip
     volumes:
       - mysql_data:/var/lib/mysql/
     restart: always
     networks:
       - db_net
     environment:
-      MYSQL_ROOT_PASSWORD: root    # root: root
+      MYSQL_ROOT_PASSWORD: root # root: root
       # project:
       MYSQL_DATABASE: dev
       MYSQL_USER: dev
       MYSQL_PASSWORD: dev
-    # fix utf8:
+    # fix utf8: fix mysql auth password
     command: >
       mysqld
       --character-set-server=utf8mb4
       --collation-server=utf8mb4_unicode_ci
+      --default-authentication-plugin=mysql_native_password
     ports:
       - "0.0.0.0:13306:3306"
 

@@ -39,7 +39,7 @@ services:
     platform: linux/amd64 # fix for Mac M1 chip
     volumes:
       - mysql_data:/var/lib/mysql/
-    restart: always
+    # restart: always
     networks:
       - db_net
     environment:
@@ -58,18 +58,18 @@ services:
       - "0.0.0.0:13306:3306"
 
   # web ui:
-  adminer:
-    image: adminer
-    container_name: mysql-adminer
-    restart: always
-    networks:
-      - db_net
-    links:
-      - mysql
-    depends_on:
-      - mysql
-    ports:
-      - "0.0.0.0:18080:8080"
+  # adminer:
+  #   image: adminer
+  #   container_name: mysql-adminer
+  #   restart: always
+  #   networks:
+  #     - db_net
+  #   links:
+  #     - mysql
+  #   depends_on:
+  #     - mysql
+  #   ports:
+  #     - "0.0.0.0:18080:8080"
 
 ##########################################################################################
 #                                 自定义依赖:

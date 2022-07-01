@@ -18,7 +18,7 @@ services:
     container_name: redis   # redis 4.0+
     hostname: redis
     image: redis
-    restart: always
+    # restart: always
     networks:
       - redis_net
     ports:
@@ -26,19 +26,19 @@ services:
     volumes:
       - redis_data:/data
 
-  redis-commander:
-    container_name: redis-commander
-    hostname: redis-commander
-    image: rediscommander/redis-commander:latest
-    restart: always
-    networks:
-      - redis_net
-    depends_on:
-      - redis
-    environment:
-      - REDIS_HOSTS=local:redis:6379
-    ports:
-      - "0.0.0.0:18081:8081"
+  # redis-commander:
+  #   container_name: redis-commander
+  #   hostname: redis-commander
+  #   image: rediscommander/redis-commander:latest
+  #   restart: always
+  #   networks:
+  #     - redis_net
+  #   depends_on:
+  #     - redis
+  #   environment:
+  #     - REDIS_HOSTS=local:redis:6379
+  #   ports:
+  #     - "0.0.0.0:18081:8081"
 
 
 ##########################################################################################

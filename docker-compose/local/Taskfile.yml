@@ -299,6 +299,8 @@ tasks:
       - task: open:rabbitmq
       - task: open:jaeger
       - task: open:consul
+      - task: open:prometheus
+
 
   open:mysql:
     cmds:

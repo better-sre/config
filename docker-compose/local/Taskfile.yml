@@ -172,6 +172,11 @@ tasks:
       - task: compose:up
         vars: { COMPOSE_FILE: "./infra-kv-consul-cluster.yml" }
 
+  up:prometheus:
+    cmds:
+      - task: compose:up
+        vars: { COMPOSE_FILE: "./metrics/infra-monitor-prometheus-grafana.yml" }
+
   up:etcd:
     cmds:
       - task: compose:up
@@ -216,6 +221,11 @@ tasks:
       - task: compose:down
         vars: { COMPOSE_FILE: "./infra-kv-consul-v3.yml" }
     ignore_error: true
+
+  down:prometheus:
+    cmds:
+      - task: compose:down
+        vars: { COMPOSE_FILE: "./metrics/infra-monitor-prometheus-grafana.yml" }
 
   down:nats:
     cmds:
@@ -301,6 +311,10 @@ tasks:
   open:rabbitmq:
     cmds:
       - open http://localhost:15672
+
+  open:prometheus:
+    cmds:
+      - open http://localhost:13000
 
   open:nats:
     cmds:

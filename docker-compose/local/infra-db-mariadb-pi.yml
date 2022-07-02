@@ -1,0 +1,42 @@
+##########################################################################################
+#                              mariadb/mysql:
+#
+# https://docs.linuxserver.io/images/docker-mariadb
+#
+#
+#
+##########################################################################################
+
+version: "3"
+
+services:
+  mariadb:
+    image: lscr.io/linuxserver/mariadb:latest
+    container_name: mariadb
+    # restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - MYSQL_ROOT_PASSWORD=root
+      # - TZ=Europe/London
+      - MYSQL_DATABASE=dev #optional
+      - MYSQL_USER=dev #optional
+      - MYSQL_PASSWORD=dev #optional
+      # - REMOTE_SQL=http://URL1/your.sql,https://URL2/your.sql #optional
+    volumes:
+      - mariadb_data:/config
+    ports:
+      - "0.0.0.0:13306:3306"
+    networks:
+      - db_net
+
+##########################################################################################
+#                                 自定义依赖:
+##########################################################################################
+
+# 自定义数据卷:
+volumes:
+  mariadb_data:
+
+networks:
+  db_net:

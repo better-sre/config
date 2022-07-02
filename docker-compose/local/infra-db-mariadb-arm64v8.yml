@@ -1,0 +1,46 @@
+##########################################################################################
+#                              mariadb/mysql:
+#
+# https://hub.docker.com/r/yobasystems/alpine-mariadb/tags
+#
+# docker pull yobasystems/alpine-mariadb:10.6.7-arm64v8
+#
+##########################################################################################
+
+version: "3"
+
+services:
+  mariadb:
+    image: yobasystems/alpine-mariadb:10.6.7-arm64v8
+    container_name: mariadb
+    # restart: always
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: dev
+      MYSQL_USER: dev
+      MYSQL_PASSWORD: dev
+    ports:
+      - "0.0.0.0:13306:3306"
+    expose:
+      - "3306"
+    networks:
+      - db_net
+    # fix utf8: fix mysql auth password
+    command: >
+      mysqld
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --default-authentication-plugin=mysql_native_password
+
+##########################################################################################
+#                                 自定义依赖:
+##########################################################################################
+
+# 自定义数据卷:
+volumes:
+  mariadb_data:
+
+networks:
+  db_net:

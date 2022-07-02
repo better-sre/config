@@ -212,7 +212,6 @@ tasks:
     cmds:
       - task: compose:down
         vars: { COMPOSE_FILE: "./infra-db-mariadb-arm64v8.yml" }
-    cmds:
       - task: compose:down
         vars: { COMPOSE_FILE: "./infra-db-mariadb-arm32v7.yml" }
     ignore_error: true

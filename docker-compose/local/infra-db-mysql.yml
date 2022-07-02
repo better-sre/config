@@ -54,16 +54,16 @@ services:
     ports:
       - "0.0.0.0:13306:3306"
 
-  adminer:
-    image: adminer
-    container_name: mysql-adminer
-    restart: always
-    links:
-      - mysql
-    depends_on:
-      - mysql
-    ports:
-      - "0.0.0.0:18080:8080"
+  # adminer:
+  #   image: adminer
+  #   container_name: mysql-adminer
+  #   restart: always
+  #   links:
+  #     - mysql
+  #   depends_on:
+  #     - mysql
+  #   ports:
+  #     - "0.0.0.0:18080:8080"
 
 
 ##########################################################################################

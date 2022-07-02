@@ -18,7 +18,7 @@ set -e
 
 # TODO X: Need Sync Update this Version.
 # download version:
-DOWNLOAD_VERSION="v0.0.4"
+DOWNLOAD_VERSION="v0.0.5"
 
 
 main() {

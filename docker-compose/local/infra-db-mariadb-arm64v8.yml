@@ -23,8 +23,6 @@ services:
       MYSQL_PASSWORD: dev
     ports:
       - "0.0.0.0:13306:3306"
-    expose:
-      - "3306"
     networks:
       - db_net
     # fix utf8: fix mysql auth password

@@ -1,5 +1,4 @@
-version: '3'
-
+version: "3"
 
 #
 # sub namespace: https://taskfile.dev/#/usage?id=including-other-taskfiles
@@ -9,7 +8,6 @@ includes:
   os:
     taskfile: ./Taskfile_{{OS}}.yml
     dir: .
-
 
 #
 # global vars: https://taskfile.dev/#/usage?id=variables
@@ -21,9 +19,7 @@ vars:
 env:
   ENV1: testing
 
-
 ################################################################################################
-
 
 # task groups:
 tasks:
@@ -37,7 +33,13 @@ tasks:
 
   install:
     cmds:
-      - os:install:rust  # auto-detect OS, cross-platform install
+      - os:install:rust # auto-detect OS, cross-platform install
+      - task: install:fleet
+
+  install:fleet:
+    cmds:
+      - curl -L get.fleet.rs | sh
+      - fleet -v
 
   check:
     cmds:
@@ -50,6 +52,3 @@ tasks:
   sys:check:
     cmds:
       - task: os:check:sys:version
-
-
-

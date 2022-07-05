@@ -91,6 +91,11 @@ tasks:
     cmds:
       - echo "hello world"
 
+  # update itself:
+  update:
+    cmds:
+      - curl -fsSL https://raw.githubusercontent.com/better-sre/config/main/init.sh | sh
+
   up:postgres:
     cmds:
       - task: docker:local:up:postgres

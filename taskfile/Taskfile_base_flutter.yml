@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 #
 # global vars: https://taskfile.dev/#/usage?id=variables
@@ -10,9 +10,7 @@ vars:
 env:
   ENV1: testing
 
-
 ################################################################################################
-
 
 # task groups:
 tasks:
@@ -54,30 +52,34 @@ tasks:
       - echo "$(pwd) > ${FLUTTER_APP_ROOT} > ${FLUTTER_APP_NAME}"
       - cd ${FLUTTER_APP_ROOT}; fvm flutter create ${FLUTTER_APP_NAME}
 
+  new:mono:
+    cmds:
+      - cookiecutter https://github.com/better-dart/flutter-template.git --directory="mono-repo"
+
   get:
     cmds:
       - task: do
-        vars: {CMD: "pub get"}
+        vars: { CMD: "pub get" }
 
   run:
     cmds:
       - task: do
-        vars: {CMD: "run --debug"}
+        vars: { CMD: "run --debug" }
 
   run:ios:
     cmds:
       - task: do
-        vars: {CMD: "run --debug -d ${FLUTTER_DEVICE_ID_IOS}"}
+        vars: { CMD: "run --debug -d ${FLUTTER_DEVICE_ID_IOS}" }
 
   run:android:
     cmds:
       - task: do
-        vars: {CMD: "run --debug -d ${FLUTTER_DEVICE_ID_ANDROID}"}
+        vars: { CMD: "run --debug -d ${FLUTTER_DEVICE_ID_ANDROID}" }
 
   run:web:
     cmds:
       - task: do
-        vars: {CMD: "run --debug -d chrome --web-renderer html"} # load speed
+        vars: { CMD: "run --debug -d chrome --web-renderer html" } # load speed
 
   deploy:
     cmds:
@@ -86,13 +88,13 @@ tasks:
       - open http://localhost:8080
       - cd ${FLUTTER_APP_ROOT}/${FLUTTER_APP_NAME}; open build/web/
       - echo "$(pwd)"
-#      - cd ${FLUTTER_APP_ROOT}/${FLUTTER_APP_NAME}; ngrok http file:///$(pwd)/build/web
+      #      - cd ${FLUTTER_APP_ROOT}/${FLUTTER_APP_NAME}; ngrok http file:///$(pwd)/build/web
       - cd ${FLUTTER_APP_ROOT}/${FLUTTER_APP_NAME}; dhttpd --port 8080 --path build/web/
 
   clean:
     cmds:
       - task: do
-        vars: {CMD: "clean"}
+        vars: { CMD: "clean" }
 
   #
   # 每次升级 flutter 版本, 要执行 clean + run, 否则报奇怪错误.
@@ -111,19 +113,19 @@ tasks:
   release:web:
     cmds:
       - task: do
-        vars: {CMD: "build web --release --web-renderer html"}  # 不使用 canvaskit.wasm, 优化加载速度
+        vars: { CMD: "build web --release --web-renderer html" } # 不使用 canvaskit.wasm, 优化加载速度
 
   release:ios:
     cmds:
       - task: do
-        vars: {CMD: "build ios"}
+        vars: { CMD: "build ios" }
       - open build/ios/iphoneos
       - task: open:xcode
 
   release:android:
     cmds:
       - task: do
-        vars: {CMD: "build apk"}
+        vars: { CMD: "build apk" }
       - echo 'check build/app/outputs/flutter-apk/ folder'
       - cp build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/wallet-v`date +%Y-%m-%d`-release.apk
       - open build/app/outputs/flutter-apk/
@@ -132,14 +134,13 @@ tasks:
   do:
     cmds:
       - echo "$(pwd)/${FLUTTER_APP_ROOT}/${FLUTTER_APP_NAME}"
-      - cd ${FLUTTER_APP_ROOT}/${FLUTTER_APP_NAME}; fvm flutter {{.CMD}}   # DO CMD
+      - cd ${FLUTTER_APP_ROOT}/${FLUTTER_APP_NAME}; fvm flutter {{.CMD}} # DO CMD
 
   open:xcode:
     cmds:
-      - open ios/Runner.xcworkspace   # not Runner.xcodeproj
+      - open ios/Runner.xcworkspace # not Runner.xcodeproj
       - open https://appstoreconnect.apple.com/apps/1542311370/testflight/ios
       - open https://testflight.apple.com/join/Vain6SGh
-
 
   #########################################################################
 
@@ -147,4 +148,3 @@ tasks:
   get:init:
     cmds:
       - get init
-

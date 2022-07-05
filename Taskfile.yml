@@ -25,7 +25,7 @@ includes:
 
   flutter:
     taskfile: ./taskfile/Taskfile_base_flutter.yml
-    dir: ./taskfile/
+    dir: .
 
   rust:
     taskfile: ./taskfile/Taskfile_base_rust.yml

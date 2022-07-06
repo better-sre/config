@@ -78,6 +78,10 @@ tasks:
       - xcode-select --install
     ignore_error: true
 
+  install:cocoapods:
+    cmds:
+      - brew install cocoapods
+
   # alias: install:brew:
   install:homebrew:
     cmds:

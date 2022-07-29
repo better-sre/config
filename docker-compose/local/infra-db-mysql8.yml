@@ -34,9 +34,9 @@ version: "3.1"
 
 services:
   mysql:
-    image: mysql:8.0
+    image: mysql/mysql-server:8.0.30 # fix m1 mac
     container_name: mysql8
-    platform: linux/amd64 # fix for Mac M1 chip
+    # platform: linux/amd64 # fix for Mac M1 chip
     volumes:
       - mysql_data:/var/lib/mysql/
     # restart: always

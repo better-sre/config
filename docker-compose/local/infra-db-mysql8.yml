@@ -37,11 +37,12 @@ services:
     image: mysql/mysql-server:8.0.30 # fix m1 mac
     container_name: mysql8
     # platform: linux/amd64 # fix for Mac M1 chip
-    volumes:
-      - mysql_data:/var/lib/mysql/
+    # volumes:
+    # - mysql_data:/var/lib/mysql/
     # restart: always
     networks:
       - db_net
+    privileged: true
     environment:
       MYSQL_ROOT_PASSWORD: root # root: root
       # project:
@@ -53,7 +54,7 @@ services:
       mysqld
       --character-set-server=utf8mb4
       --collation-server=utf8mb4_unicode_ci
-      --default-authentication-plugin=mysql_native_password
+      --authentication_policy=mysql_native_password
     ports:
       - "0.0.0.0:13306:3306"
 

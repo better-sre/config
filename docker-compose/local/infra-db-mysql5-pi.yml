@@ -1,0 +1,12 @@
+version: "2"
+services:
+  mysql:
+    image: beercan1989/arm-mysql:5.7
+    container_name: mysql5
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: dev
+      MYSQL_USER: dev
+      MYSQL_PASSWORD: dev
+    ports:
+      - "0.0.0.0:13306:3306"

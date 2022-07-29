@@ -114,8 +114,7 @@ tasks:
 
   up:mysql:
     cmds:
-      - task: compose:up
-        vars: { COMPOSE_FILE: "./infra-db-mysql8.yml" }
+      - task: up:mariadb:m1
 
   up:mysql5:
     cmds:
@@ -126,11 +125,6 @@ tasks:
     cmds:
       - task: compose:up
         vars: { COMPOSE_FILE: "./infra-db-mariadb-arm64v8.yml" }
-
-  up:mariadb:pi:
-    cmds:
-      - task: compose:up
-        vars: { COMPOSE_FILE: "./infra-db-mariadb-arm32v7.yml" }
 
   up:redis:
     cmds:
@@ -212,8 +206,6 @@ tasks:
     cmds:
       - task: compose:down
         vars: { COMPOSE_FILE: "./infra-db-mariadb-arm64v8.yml" }
-      - task: compose:down
-        vars: { COMPOSE_FILE: "./infra-db-mariadb-arm32v7.yml" }
     ignore_error: true
 
   down:postgres:

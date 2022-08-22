@@ -104,6 +104,14 @@ tasks:
     cmds:
       - task: docker:local:up:mysql
 
+  up:infra:
+    cmds:
+      - task: docker:local:up:mysql
+      - task: docker:local:up:redis
+      - task: docker:local:up:consul:v3 # 服务发现/服务注册
+      - task: docker:local:up:jaeger  # 链路追踪 # https://go-kratos.dev/docs/component/middleware/tracing
+  #      - task: std:docker:local:up:prometheus
+
   ################################################################################################
 
   use:

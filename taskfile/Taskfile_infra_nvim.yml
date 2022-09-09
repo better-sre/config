@@ -1,0 +1,37 @@
+################################################################################################
+#
+# ref:
+#   - https://taskfile.dev/#/styleguide
+#     - https://taskfile.dev/#/styleguide?id=use-the-correct-order-of-keywords
+#     - https://taskfile.dev/#/styleguide?id=use-colon-for-task-namespacing
+#   - yml format: https://juejin.cn/post/6844903972688363534
+#
+################################################################################################
+
+version: "3"
+
+tasks:
+  # lvim:
+  init:
+    cmds:
+      # - bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh)
+      - LV_BRANCH=rolling bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/rolling/utils/installer/install.sh)
+
+  init2:
+    cmds:
+      - cd ../tmp; git clone https://github.com/Eatsolx/nvim-lua
+      - cd ../tmp/nvim-lua; sh install.sh
+    ignore_error: true
+
+  ################################################################
+
+  uninstall:
+    cmds:
+      - task: del
+
+  # linux/macos (unix)
+  del:
+    cmds:
+      - rm -rf ~/.config/nvim
+      - rm -rf ~/.local/share/nvim
+      - rm -rf ~/.cache/nvim

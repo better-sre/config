@@ -44,10 +44,6 @@ includes:
     taskfile: ./taskfile/Taskfile_base_typescript.yml
     dir: ./taskfile/
 
-  docker:
-    taskfile: ./taskfile/Taskfile_infra_docker.yml
-    dir: ./taskfile/
-
   git:
     taskfile: ./taskfile/Taskfile_infra_git.yml
     dir: ./taskfile/
@@ -61,6 +57,18 @@ includes:
     taskfile: ./taskfile/Taskfile_infra_nvim.yml
     dir: ./taskfile/
     ignore_error: true
+
+  docker:
+    taskfile: ./taskfile/Taskfile_infra_docker.yml
+    dir: ./taskfile/
+
+  compose:
+    aliases: [ 'dc', "docker-compose" ]
+    taskfile: ./docker-compose/local/
+    dir: ./docker-compose/local/
+    optional: true
+
+
 
 ################################################################################################
 
@@ -106,14 +114,6 @@ tasks:
     cmds:
       - curl -fsSL https://raw.githubusercontent.com/better-sre/config/main/init.sh | sh
 
-  up:postgres:
-    cmds:
-      - task: docker:local:up:postgres
-
-  up:mysql:
-    cmds:
-      - task: docker:local:up:mysql
-
   up:infra:
     cmds:
       - task: docker:local:up:mysql
@@ -136,13 +136,6 @@ tasks:
       TASK_ROOT_DIR: "~/.task/local/"
     ignore_error: true
 
-  push:
-    cmds:
-      - task: git:push
-
-  quick:
-    cmds:
-      - task: git:quick
 
   ################################################################################
 
@@ -170,4 +163,42 @@ tasks:
     cmds:
       - task --dry os:init
       - task --dry rust:init
-################################################################################################
+
+
+  ################################################################################
+
+  pull:
+    aliases: [ "pl" ]
+    cmds:
+      - git config pull.rebase false
+      - git pull origin main
+
+  fetch:
+    aliases: [ "f" ]
+    cmds:
+      - git fetch
+      - git rebase
+      - git merge origin/main
+
+  quick:
+    aliases: [ "q" ]
+    cmds:
+      - task: commit
+      - task: commit
+      #      - task: pull
+      - task: push
+
+  commit:
+    aliases: [ "c" ]
+    cmds:
+      - git add .
+      - |
+        git commit -m 'chore: update' --no-verify
+    ignore_error: true
+
+  push:
+    aliases: [ "p" ]
+    cmds:
+      - git push origin main --tags
+      - repo_url=`git remote -v | grep push | awk -F ":" '{print $2}' | awk -F ".git" '{print "https://github.com/"$1}'`; open $repo_url
+

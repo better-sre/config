@@ -5,6 +5,10 @@
 #   - https://docs.nats.io/running-a-nats-service/introduction/running#docker
 #   - https://www.cnblogs.com/liang1101/p/6652830.html
 #
+# tags:
+#   - https://hub.docker.com/_/nats/tags
+#     - docker pull nats:alpine3.20
+#
 # usage:
 #   - local web browser:
 #     - http://localhost:8222/
@@ -19,10 +23,10 @@
 version: '3.5'
 
 services:
-  nats:
-    image: nats:2.7-alpine3.15
+  nats-server:
+    image: nats:alpine3.20
     container_name: nats
-    restart: always
+    restart: unless-stopped
     ports:
       - '4222:4222'
       - '6222:6222'

@@ -31,9 +31,14 @@ tasks:
 
   echo:
     cmds:
-      - echo: "hello local docker-compose"
+      - echo "hello local docker-compose"
 
   ################################################################################
+
+  compose:
+    aliases: [ 'dc', 'docker-compose', 'exec', 'x' ]
+    cmds:
+      - docker-compose {{.CLI_ARGS}}
 
   #
   # docker-compose cmd:
@@ -131,15 +136,14 @@ tasks:
       - task: compose:up
         vars: { COMPOSE_FILE: "./infra-cache-redis.yml" }
 
-  up:nats:one:
+  nats:
     cmds:
-      - task: compose:up
-        vars: { COMPOSE_FILE: "./infra-mq-nats.yml" }
+      - docker-compose -f ./infra-mq-nats.yml {{.CLI_ARGS}}
 
-  up:nats:
+  nats:cluster:
     cmds:
-      - task: compose:up
-        vars: { COMPOSE_FILE: "./infra-mq-nats-cluster.yml" }
+      - docker-compose -f ./infra-mq-nats-cluster.yml {{.CLI_ARGS}}
+
 
   up:rabbitmq:
     cmds:

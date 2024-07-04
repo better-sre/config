@@ -27,10 +27,12 @@ services:
     image: nats:alpine3.20
     container_name: nats
     restart: unless-stopped
+    command: [ "-js" ]   # TODO X: 启用 JetStream
     ports:
       - '4222:4222'
       - '6222:6222'
       - '8222:8222'
+
     networks:
       - nats_net
 

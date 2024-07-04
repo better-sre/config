@@ -1,12 +1,16 @@
 import asyncio
 
 import nats
+from loguru import logger
 
 
 async def main():
     host = "nats://localhost:4222"
     nc = await nats.connect(host)
-    js = nc.jetstream()
+
+    logger.debug(f"Connecting to {host}")
+
+    js = nc.jetstream()  # TODO X: 如果此处报超时错误, 是 nats 启动时, 未开启 jetstream, 加个运行参数, 即可.
 
     # Create a KV
     kv = await js.create_key_value(bucket='MY_KV')

@@ -27,11 +27,17 @@ services:
     image: nats:alpine3.20
     container_name: nats
     restart: unless-stopped
-    command: [ "-js" ]   # TODO X: 启用 JetStream
+    command: [
+      "-js",  # TODO X: 启用 JetStream
+      "-m", "8222"  # 启用 HTTP 监控并指定端口
+    ]
     ports:
       - '4222:4222'
       - '6222:6222'
       - '8222:8222'
+
+    volumes:
+      - nats_data:/data
 
     networks:
       - nats_net
@@ -45,4 +51,6 @@ services:
 networks:
   nats_net:
 
-
+# 自定义数据卷:
+volumes:
+  nats_data:

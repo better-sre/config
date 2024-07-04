@@ -15,11 +15,16 @@ async def main():
     # Create a KV
     kv = await js.create_key_value(bucket='MY_KV')
 
+    for i in range(5):
+        await kv.put(f'key_{i}', b'value_{i}')
+
     # Set and retrieve a value
     await kv.put('hello', b'world')
     entry = await kv.get('hello')
-    print(f'KeyValue.Entry: key={entry.key}, value={entry.value}')
+    logger.debug(f'KeyValue.Entry: key={entry.key}, value={entry.value}')
     # KeyValue.Entry: key=hello, value=world
+
+    logger.debug(f"kv: {await kv.status()}")
 
     await nc.close()
 

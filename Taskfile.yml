@@ -68,7 +68,11 @@ includes:
     dir: ./docker-compose/local/
     optional: true
 
-
+  packages:
+    aliases: [ "p", "pkg" ]
+    taskfile: ./packages/
+    dir: ./packages/
+    optional: true
 
 ################################################################################################
 

@@ -1,0 +1,14 @@
+version: "3"
+
+includes:
+  nats:
+    aliases: [ 'npy', 'nats-py' ]
+    taskfile: ./try-nats/py/
+    dir: ./try-nats/py/
+    optional: true
+
+
+tasks:
+  echo:
+    cmds:
+      - echo "hello"

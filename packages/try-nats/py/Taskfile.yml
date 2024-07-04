@@ -19,3 +19,18 @@ tasks:
     aliases: [ "pm" ]
     cmds:
       - pdm {{.CLI_ARGS}}
+
+  kv:
+    cmds:
+      - python run_kv.py
+    dir: ./src/try_nats
+
+  pub:
+    cmds:
+      - python run_pub.py
+    dir: ./src/try_nats
+
+  sub:
+    cmds:
+      - python run_sub.py
+    dir: ./src/try_nats

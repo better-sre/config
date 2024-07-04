@@ -19,3 +19,11 @@ build-backend = "pdm.backend"
 
 [tool.pdm]
 distribution = true
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "black>=24.4.2",
+    "mypy>=1.10.1",
+    "isort>=5.13.2",
+    "pytest>=8.2.2",
+]

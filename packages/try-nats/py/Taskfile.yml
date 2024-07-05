@@ -34,3 +34,9 @@ tasks:
     cmds:
       - python run_sub.py
     dir: ./src/try_nats
+
+  sub:m:
+    aliases: [ "multi:sub", "m:sub" ]
+    cmds:
+      - python run_multi_sub.py
+    dir: ./src/try_nats

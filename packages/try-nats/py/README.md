@@ -10,6 +10,10 @@ pip install nats-py
 
 ```
 
+### 说明:
+
+- ✅ 给出了`多个 worker`, `唯一性`消费的示例, 非常简单.
+
 ### Nats 官方示例:
 
 - https://github.com/nats-io/nats.py/tree/main/examples

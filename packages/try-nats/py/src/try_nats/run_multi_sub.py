@@ -12,6 +12,9 @@ async def message_handler(msg):
 
 
 async def main():
+    #
+    # TODO X: docker 容器内访问, 需要使用本地真实 IP, 不可使用 localhost
+    #
     host = "nats://10.211.1.58:4222"
     nc = NATS()
 

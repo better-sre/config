@@ -49,6 +49,12 @@ RUN pipx install pdm
 RUN sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin
 
 
+# TODO X: Add Tini
+ENV TINI_VERSION v0.19.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
+
+
 ######################################################################################################
 # python src codes:
 ######################################################################################################
@@ -83,3 +89,6 @@ WORKDIR /app
 
 # TODO X: set entrypoint
 CMD ["python3"]
+
+# TODO X: Add entrypoint
+ENTRYPOINT ["/tini", "--"]

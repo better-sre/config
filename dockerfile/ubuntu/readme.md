@@ -26,6 +26,10 @@ docker pull ubuntu:24.04
 ```ruby
 docker pull ubuntu:22.04
 
+
+# test run:
+docker run --rm -it ubuntu:22.04 bash
+
 ```
 
 ## Ubuntu + 中间件:

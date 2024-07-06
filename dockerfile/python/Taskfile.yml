@@ -10,15 +10,22 @@ tasks:
     cmds:
       - docker build
 
-
-  py312:test:
-    aliases: [ 'py312t', 't312' ]
-    cmds:
-      - docker run --rm -it py312:latest bash
-
   py312:build:
     aliases: [ 'py312b', 'b312' ]
     cmds:
       - docker build -f ./Dockerfile.ubuntu -t py312:latest .
       - docker images | grep py
     dir: ./3.12/
+
+  py312:test:
+    aliases: [ 'py312t', 't312' ]
+    cmds:
+      - docker run --rm -it py312:latest bash
+    ignore_error: true
+
+  py312:build:test:
+    aliases: [ 'py312bt', 'bt312' ]
+    cmds:
+      - task: py312:build
+      - task: py312:test
+    ignore_error: true

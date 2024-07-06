@@ -16,13 +16,17 @@ ENV TIME_ZONE Asia/Shanghai
 RUN groupadd -g 1002 dev && \
     useradd -u 1002 -g 1002 -m -s /usr/sbin/nologin dev
 
-
 ######################################################################################################
-#  install Tools:
+#  set Env:
 ######################################################################################################
 
 # set time zone
 RUN export TZ=Asia/Shanghai
+RUN export PATH="$PATH:~/.local/bin"  # TODO X: fix for $USER + PDM
+
+######################################################################################################
+#  install Tools:
+######################################################################################################
 
 # install python3.10
 RUN apt-get update && apt-get install -y python3 python3-pip
@@ -34,8 +38,10 @@ RUN apt update && apt install -y tzdata pipx
 RUN pipx ensurepath
 
 # install pdm
-#RUN pipx install pdm
+RUN pipx install pdm
 
+# fix env:
+RUN echo "export PATH=$PATH" > /etc/environment
 
 ######################################################################################################
 # python src codes:
@@ -49,18 +55,18 @@ COPY . /app
 ######################################################################################################
 
 # 更改目录用户权限
-RUN chown -R dev /app
+#RUN chown -R dev /app
 
 # set user
-USER dev
+#USER dev
 
 ######################################################################################################
 
 # fix env:
-RUN pipx ensurepath
+#RUN pipx ensurepath
 
 # install pdm
-RUN pipx install pdm
+#RUN pipx install pdm
 
 ######################################################################################################
 

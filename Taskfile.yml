@@ -62,6 +62,12 @@ includes:
     taskfile: ./taskfile/Taskfile_infra_docker.yml
     dir: ./taskfile/
 
+  dockerfile:
+    aliases: [ 'df', "dockerfiles" ]
+    taskfile: ./dockerfile/
+    dir: ./dockerfile/
+    optional: true
+
   compose:
     aliases: [ 'dc', "docker-compose" ]
     taskfile: ./docker-compose/local/

@@ -1,0 +1,15 @@
+version: '3'
+
+
+tasks:
+  build:
+    cmds:
+      - task: init
+
+  docker:build:
+    cmds:
+      - docker build
+
+  py312:
+    cmds:
+      - docker build

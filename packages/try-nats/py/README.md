@@ -24,3 +24,30 @@ pip install nats-py
   - https://github.com/mdawar/nats-dashboard
 - https://github.com/piotrpersona/nats-streaming-ui
 - https://github.com/DefactoTechnology/nats-ui
+
+## Deployment(Docker-compose):
+
+### build
+
+- build base image:
+
+```ruby
+
+task pkg:npy:ops:base -- build
+
+
+```
+
+
+### deploy `pub` service:
+
+- 
+
+
+### deploy `sub` service:
+
+```ruby
+
+task ops:sub -- up -d 
+
+```

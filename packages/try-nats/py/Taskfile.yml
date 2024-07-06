@@ -49,11 +49,19 @@ tasks:
   ops:sub:
     aliases: [ "compose:sub" ]
     cmds:
+      - docker network create py_nats_net
+      - docker network ls
       - docker-compose -f compose-sub.yml {{.CLI_ARGS}}
+    ignore_error: true
 
   ops:pub:
     aliases: [ "compose:pub" ]
     cmds:
       - docker-compose -f compose-pub.yml {{.CLI_ARGS}}
 
-
+  sub:up:
+    cmds:
+      - docker-compose -f compose-sub.yml up -d
+      - docker-compose -f compose-sub.yml ps
+      - docker-compose -f compose-sub.yml logs -f
+    ignore_error: true

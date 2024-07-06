@@ -11,10 +11,9 @@ services:
       context: ./
       dockerfile: ./Dockerfile
     image: "py-nats-sub1:latest"
-    container_name: "py-nats-sub1"
     restart: unless-stopped
-    volumes:
-      - nats_data:/app
+#    volumes:
+#      - nats_data:/app
     environment:
       - USE_DOCKER=yes
     expose:
@@ -29,8 +28,8 @@ services:
       config.wsgi
       -w 1 -b :8000
 
-    networks:
-      - py_nats_net
+#    networks:
+#      - py_nats_net
 
 
 ##########################################################################################
@@ -40,6 +39,7 @@ services:
 # 自定义网络:
 networks:
   py_nats_net:
+    driver: bridge
 
 # 自定义数据卷:
 volumes:

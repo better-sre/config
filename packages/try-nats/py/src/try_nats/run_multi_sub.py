@@ -1,25 +1,28 @@
 import asyncio
 
 from nats.aio.client import Client as NATS
+from loguru import logger
+
 
 
 async def message_handler(msg):
     subject = msg.subject
     data = msg.data.decode()
-    print(f"Received a message on '{subject}': {data}")
+    logger.debug(f"Received a message on '{subject}': {data}")
 
 
 async def main():
+    host = "nats://10.211.1.58:4222"
     nc = NATS()
 
-    await nc.connect("nats://localhost:4222")
+    await nc.connect(host)
 
     #
     # todo x: 基于 queue 方式订阅, worker 消息处理唯一性
     #
     await nc.subscribe("updates", "workers", cb=message_handler)
 
-    print("Listening for messages...")
+    logger.debug("Listening for messages...")
 
     # Keep the program running to listen for messages
     while True:

@@ -34,7 +34,7 @@ ENV PATH="/app/.venv/bin:~/.local/bin:$PATH"
 RUN apt-get update && apt-get install -y python3 python3-pip curl
 
 # TODO X: install pipx
-RUN apt update && apt install -y tzdata pipx
+RUN apt update && apt install -y tzdata pipx tini
 
 # TODO X: fix env for pipx, pdm
 RUN pipx ensurepath
@@ -49,10 +49,10 @@ RUN pipx install pdm
 RUN sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin
 
 
-# TODO X: Add Tini
-ENV TINI_VERSION v0.19.0
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
-RUN chmod +x /tini
+# TODO X: Add Tini(使用 apt 安装, 此安装, 在 M1 MAC 上会报错, 懒得改运行参数)
+#ENV TINI_VERSION v0.19.0
+#ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+#RUN chmod +x /tini
 
 
 ######################################################################################################
@@ -87,8 +87,8 @@ COPY . /app
 # TODO X: set work dir
 WORKDIR /app
 
+# TODO X: Add entrypoint, required!!!
+ENTRYPOINT ["tini", "--"]
+
 # TODO X: set entrypoint
 CMD ["python3"]
-
-# TODO X: Add entrypoint
-ENTRYPOINT ["/tini", "--"]

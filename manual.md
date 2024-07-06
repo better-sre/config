@@ -1,5 +1,8 @@
 # Manual:
 
+
+
+
 ## Setup:
 
 > 🍄 before use, please install [go-task](https://github.com/go-task/task).
@@ -131,6 +134,85 @@ task sre:go:install
   - Windows: 可以参考脚本细节, 自行改写, 同时欢迎 PR 进来. 我会 merge 的.
 - 部分脚本写了跨平台, 比较少, 如果有兴趣, 欢迎 PR 支持.
 - Taskfile 原生支持跨平台, 改写起来也简单, 只是我没有太多精力, 照顾不到.😄
+
+
+
+## QuickStart:
+
+### 1. Setup:
+
+> MacOS/Linux:
+
+- auto check `go-task`, if not installed, auto install it.
+
+```ruby
+curl -fsSL https://raw.githubusercontent.com/better-sre/config/main/init.sh | sh
+```
+
+> Windows+PowerShell:
+
+```ruby
+
+```
+
+> other usage:
+
+- [Manual](./manual.md)
+
+### 2. Include in your Project:
+
+- 🍄 add these content to your `Taskfile.yml` file.
+
+```yml
+includes:
+  # way: global path
+  sre:
+    taskfile: ~/.local/task/better-sre/config/Taskfile.yml # TODO: please create `~/.task/` first before use
+    dir: ~/.local/task/better-sre/config # global path
+    optional: true # safeguard, if not found, no error
+```
+
+### 3. Usage:
+
+> ❓ Note that when using in your project, you need to use the [sre:]() `prefix` to use the following scripts.
+> like this:
+
+```ruby
+
+task sre:rust:install
+task sre:go:install
+
+task sre:docker:local:up:mysql
+task sre:docker:local:up:redis
+```
+
+- 😄 enjoy!
+
+## Structure:
+
+- `Directory of files` automatically created by the `installation script`.
+
+```ruby
+
+# PROJECT_PATH="${HOME}/.local/task/better-sre/config"
+
+➤ tree ~/.local/ -L 4
+/Users/XX-USER/.local/
+└── task
+    └── better-sre
+        └── config
+            ├── LICENSE
+            ├── README.md
+            ├── Taskfile.yml
+            ├── docker-compose
+            ├── dockerfile
+            ├── k8s
+            ├── run
+            ├── script
+            └── taskfile
+
+```
+
 
 ## Related:
 

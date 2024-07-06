@@ -6,78 +6,37 @@
 - Automatically supports `cross-platform` installation.
 - Thanks to the [go-task](https://github.com/go-task/task) project.
 
-## QuickStart:
+> included:
 
-### 1. Setup:
+- `docker-compose`
+- `dockerfile`
+- `Taskfile`
 
-> MacOS/Linux:
+## Manual:
 
-- auto check `go-task`, if not installed, auto install it.
+- ✅ [Manual](./manual.md)
 
-```ruby
-curl -fsSL https://raw.githubusercontent.com/better-sre/config/main/init.sh | sh
-```
+## Contents:
 
-> Windows+PowerShell:
+### Docker-compose:
 
-```ruby
+- ✅ [docker-compose/local](docker-compose/local)
 
-```
+### Docker + Dockerfile:
 
-> other usage:
+- ✅ [Dockerfile](./dockerfile)
 
-- [Manual](./manual.md)
+#### Python + Ubuntu + Dockerfile:
 
-### 2. Include in your Project:
-
-- 🍄 add these content to your `Taskfile.yml` file.
-
-```yml
-includes:
-  # way: global path
-  sre:
-    taskfile: ~/.local/task/better-sre/config/Taskfile.yml # TODO: please create `~/.task/` first before use
-    dir: ~/.local/task/better-sre/config # global path
-    optional: true # safeguard, if not found, no error
-```
-
-### 3. Usage:
-
-> ❓ Note that when using in your project, you need to use the [sre:]() `prefix` to use the following scripts.
-> like this:
+- ✅ [dockerfile/python](dockerfile/python)
 
 ```ruby
 
-task sre:rust:install
-task sre:go:install
+# build ubuntu + python:3.12
+task df:py:b312
 
-task sre:docker:local:up:mysql
-task sre:docker:local:up:redis
-```
-
-- 😄 enjoy!
-
-## Structure:
-
-- `Directory of files` automatically created by the `installation script`.
-
-```ruby
-
-# PROJECT_PATH="${HOME}/.local/task/better-sre/config"
-
-➤ tree ~/.local/ -L 4
-/Users/XX-USER/.local/
-└── task
-    └── better-sre
-        └── config
-            ├── LICENSE
-            ├── README.md
-            ├── Taskfile.yml
-            ├── docker-compose
-            ├── dockerfile
-            ├── k8s
-            ├── run
-            ├── script
-            └── taskfile
+# test container:
+task df:py:t312
 
 ```
+

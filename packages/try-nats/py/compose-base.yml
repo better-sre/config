@@ -18,8 +18,10 @@ services:
       - USE_DOCKER=yes
     expose:
       - 8000
-    ports:
-      - '8000:8000'
+
+# TODO X: 基镜像, 不可以映射端口(会导致端口冲突)
+#    ports:
+#      - '8000:8000'
 
     command: >
       tini -- gunicorn

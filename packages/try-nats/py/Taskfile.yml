@@ -61,7 +61,7 @@ tasks:
 
   sub:up:
     cmds:
-      - docker-compose -f compose-sub.yml up -d
+      - docker-compose -f compose-sub.yml up -d --scale py-nats-sub=3
       - docker-compose -f compose-sub.yml ps
       - docker-compose -f compose-sub.yml logs -f
     ignore_error: true

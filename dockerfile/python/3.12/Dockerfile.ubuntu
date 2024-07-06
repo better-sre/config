@@ -8,8 +8,9 @@ ENV TZ=Asia/Shanghai \
 ENV TIME_ZONE Asia/Shanghai
 
 
-RUN addgroup -S dev \
-    && adduser -S -g dev dev
+#RUN addgroup -S ubuntu && \
+#    adduser -S -D ubuntu -h /home/ubuntu -s /bin/bash -G ubuntu && \
+#    addgroup ubuntu root
 
 # 创建 dev 用户
 RUN groupadd -g 1002 dev && \
@@ -33,7 +34,7 @@ RUN apt update && apt install -y tzdata pipx
 RUN pipx ensurepath
 
 # install pdm
-RUN pipx install pdm
+#RUN pipx install pdm
 
 
 ######################################################################################################
@@ -44,7 +45,7 @@ COPY . /app
 
 
 ######################################################################################################
-# run service:
+# use dev user:
 ######################################################################################################
 
 # 更改目录用户权限
@@ -52,6 +53,17 @@ RUN chown -R dev /app
 
 # set user
 USER dev
+
+######################################################################################################
+
+# fix env:
+RUN pipx ensurepath
+
+# install pdm
+RUN pipx install pdm
+
+######################################################################################################
+
 
 # set work dir
 WORKDIR /app

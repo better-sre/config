@@ -60,8 +60,11 @@ tasks:
       - docker-compose -f compose-pub.yml {{.CLI_ARGS}}
 
   sub:up:
+    aliases: [ "compose:sub:up", "up:sub" ]
     cmds:
-      - docker-compose -f compose-sub.yml up -d --scale py-nats-sub=3
+      - docker-compose -f compose-sub.yml up -d --scale py-nats-sub=3  # TODO X: --scale 可以启动多个容器实例
       - docker-compose -f compose-sub.yml ps
       - docker-compose -f compose-sub.yml logs -f
     ignore_error: true
+
+

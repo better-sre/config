@@ -1,0 +1,16 @@
+##########################################################################################
+#                             python nats sub service:
+#
+##########################################################################################
+
+version: '3.5'
+
+services:
+  py-nats-pub:
+    extends:
+      file: compose-base.yml
+      service: py-nats-base
+    ports: [ ]
+    restart: no
+    command: "python3 src/try_nats/run_pub.py"
+

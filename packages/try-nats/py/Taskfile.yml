@@ -40,3 +40,20 @@ tasks:
     cmds:
       - python run_multi_sub.py
     dir: ./src/try_nats
+
+  ops:base:
+    aliases: [ "compose:base" ]
+    cmds:
+      - docker-compose -f compose-base.yml {{.CLI_ARGS}}
+
+  ops:sub:
+    aliases: [ "compose:sub" ]
+    cmds:
+      - docker-compose -f compose-sub.yml {{.CLI_ARGS}}
+
+  ops:pub:
+    aliases: [ "compose:pub" ]
+    cmds:
+      - docker-compose -f compose-pub.yml {{.CLI_ARGS}}
+
+

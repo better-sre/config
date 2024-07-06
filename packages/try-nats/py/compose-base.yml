@@ -1,0 +1,46 @@
+##########################################################################################
+#                              nats service:
+#
+##########################################################################################
+
+version: '3.5'
+
+services:
+  py-nats-base: &py-nats-base
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    image: "py-nats-sub1:latest"
+    container_name: "py-nats-sub1"
+    restart: unless-stopped
+    volumes:
+      - nats_data:/app
+    environment:
+      - USE_DOCKER=yes
+    expose:
+      - 8000
+    ports:
+      - '8000:8000'
+
+    command: >
+      tini -- gunicorn
+      --worker-class=gevent
+      --chdir=/app
+      config.wsgi
+      -w 1 -b :8000
+
+    networks:
+      - py_nats_net
+
+
+##########################################################################################
+#                                 自定义依赖:
+##########################################################################################
+
+# 自定义网络:
+networks:
+  py_nats_net:
+
+# 自定义数据卷:
+volumes:
+  nats_data:

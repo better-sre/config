@@ -1,0 +1,15 @@
+##########################################################################################
+#                             python nats sub service:
+#
+##########################################################################################
+
+version: '3.5'
+
+services:
+  py-nats-sub:
+    extends:
+      file: compose-base.yml
+      service: py-nats-base
+    ports: [ ]
+    command: "task sub:m"
+

@@ -1,5 +1,7 @@
 # config
 
+[简体中文](./README_CN.md) | [English](./README.md)
+
 - Contains a large number of `installation/deployment` scripts that developers need to use in their daily work.
 - Automatically supports `cross-platform` installation.
 - Thanks to the [go-task](https://github.com/go-task/task) project.

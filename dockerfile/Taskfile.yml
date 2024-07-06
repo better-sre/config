@@ -22,3 +22,11 @@ tasks:
   docker:build:
     cmds:
       - docker build
+
+  clean:
+    aliases: [ 'c', 'rm' ]
+    cmds:
+      - docker image prune -f
+      - docker images
+      - docker container prune -f
+      - docker ps -a

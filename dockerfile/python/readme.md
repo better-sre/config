@@ -8,9 +8,13 @@
 
 ## Python 3.12:
 
--
+- 安装了 `PDM/Pip/PipX` 包管理工具, 通过 `pdm` 创建 `.venv` 来安装不同版本的 python.
+- 安装了 `go-task` 工具, 通过 go-task 来管理任务.
+- 安装了 `curl` 工具, 通过 curl 来下载文件.
 
 ## Python 3.6:
+
+- 过时的文件, 不再使用.
 
 ## docker pull:
 

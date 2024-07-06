@@ -12,7 +12,7 @@ COPY . /app
 WORKDIR /app
 
 # TODO X: create .venv + install
-RUN pdm install
+RUN ~/.local/bin/pdm install
 
 # run sub
 CMD ["task", "sub"]

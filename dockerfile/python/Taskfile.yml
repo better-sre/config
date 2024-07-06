@@ -29,3 +29,19 @@ tasks:
       - task: py312:build
       - task: py312:test
     ignore_error: true
+
+  py312:save:
+    aliases: [ 'py312s','s312' ]
+    cmds:
+      - mkdir -p ./tmp
+      - docker save py312:latest -o ./tmp/py312.tar
+      - ls -al ./tmp
+      - open ./tmp
+    ignore_error: true
+
+  py312:load:
+    aliases: [ 'py312l', 'l312', 'py312:import' ]
+    cmds:
+      - docker load -i ./tmp/py312.tar
+      - docker images | grep py
+    ignore_error: true

@@ -30,7 +30,15 @@ Version 28.0.2-debian  # 此版本低了, 需要安装 35 版本, 已经修复�
 Installed as /usr/lib/android-sdk/platform-tools/adb
 
 
-# 本地 Mac 安装版本对比:
+# docker 容器安装版本:(修复 $PATH, 正确的版本号: v35)
+dev@e78bf036eb60:/app$ adb version
+Android Debug Bridge version 1.0.41
+Version 35.0.1-11580240
+Installed as /usr/local/android-sdk/platform-tools/adb
+Running on Linux 6.5.13-orbstack-00116-gb64875927ef8 (x86_64)
+
+
+# 本地 M1 Mac 安装版本对比:
 ❯ adb --version
 Android Debug Bridge version 1.0.41
 Version 35.0.1-11580240
@@ -47,6 +55,25 @@ Running on Darwin 21.6.0 (arm64)
 - `Python3.10`
 - `pip3`
 - `pdm`: 支持 `.venv` 创建不同版本的 python 环境
+
+
+### 使用方式:
+
+- 配对:
+
+```ruby
+
+dev@e78bf036eb60:/app$ adb pair 10.211.1.129:42641
+Enter pairing code: 322393
+Successfully paired to 10.211.1.129:42641 [guid=adb-ab3015d3-d2orWm]
+dev@e78bf036eb60:/app$ 
+
+
+
+
+```
+
+
 
 ## FAQ:
 

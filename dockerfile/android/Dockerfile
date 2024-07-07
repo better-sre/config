@@ -51,7 +51,7 @@ RUN pipx install pdm
 RUN sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin
 
 
-# TODO X: 更新软件包列表并安装必要的软件包
+# TODO X: 更新软件包列表并安装必要的软件包, 此处安装的 adb-tools 版本过低, 需要从 Google 官网下载+安装
 RUN apt-get update && apt-get install -y \
     android-tools-adb \
     android-tools-fastboot \

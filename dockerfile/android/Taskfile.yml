@@ -1,0 +1,47 @@
+version: '3'
+
+
+tasks:
+  build:
+    cmds:
+      - task: init
+
+  docker:build:
+    cmds:
+      - docker build
+
+  adb:build:
+    aliases: [ 'android:build', 'ab' ]
+    cmds:
+      - docker build -f ./Dockerfile.ubuntu -t adb:latest .
+      - docker images | grep adb
+    dir: .
+
+  adb:test:
+    aliases: [ 'android:build', 'at' ]
+    cmds:
+      - docker run --rm -it adb:latest bash
+    ignore_error: true
+
+  adb:build:test:
+    aliases: [ 'android:build:test', 'abt' ]
+    cmds:
+      - task: adb:build
+      - task: adb:test
+    ignore_error: true
+
+  adb:save:
+    aliases: [ 'android:save','as' ]
+    cmds:
+      - mkdir -p ./tmp
+      - docker save adb:latest -o ./tmp/adb.tar
+      - ls -al ./tmp
+      - open ./tmp
+    ignore_error: true
+
+  adb:load:
+    aliases: [ 'android:load', 'al', 'adb:import' ]
+    cmds:
+      - docker load -i ./tmp/adb.tar
+      - docker images | grep adb
+    ignore_error: true

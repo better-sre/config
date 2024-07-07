@@ -48,3 +48,10 @@ Running on Darwin 21.6.0 (arm64)
 - `pip3`
 - `pdm`: 支持 `.venv` 创建不同版本的 python 环境
 
+## FAQ:
+
+### M1 Mac 运行报错问题:
+
+- `CPU` 架构问题: `m1 arm64` vs `x86_64`
+- 需要构建 `amd64` 版本的镜像: `docker buildx build --platform linux/amd64 --load`
+- dockerfile 内指定 `platform` 版本: `FROM --platform=linux/amd64 ubuntu:20.04`

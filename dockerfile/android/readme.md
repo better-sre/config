@@ -63,14 +63,32 @@ Running on Darwin 21.6.0 (arm64)
 
 ```ruby
 
+# 容器内版本:
+dev@e78bf036eb60:/app$ uname -a
+Linux e78bf036eb60 6.5.13-orbstack-00116-gb64875927ef8 #1 SMP Wed Dec  6 22:19:46 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+
+
+# 配对手机:
 dev@e78bf036eb60:/app$ adb pair 10.211.1.129:42641
 Enter pairing code: 322393
 Successfully paired to 10.211.1.129:42641 [guid=adb-ab3015d3-d2orWm]
 dev@e78bf036eb60:/app$ 
 
 
+# 连接手机:
+dev@e78bf036eb60:/app$ adb connect 10.211.1.129:42119
+connected to 10.211.1.129:42119
 
 
+# 进入手机 shell:
+dev@e78bf036eb60:/app$ adb shell
+alioth:/ $                                                                                                                                                                                                 
+alioth:/ $ 
+alioth:/ $ uname -a
+Linux localhost 4.19.157-perf-g92c089fc2d37 #1 SMP PREEMPT Wed Jun 5 13:27:08 UTC 2024 aarch64 Toybox
+
+# 查看手机安装的应用:
+alioth:/ $ pm list packages -3   
 ```
 
 

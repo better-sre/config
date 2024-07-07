@@ -17,10 +17,25 @@ tasks:
       - docker images | grep adb
     dir: .
 
+  # TODO X: fix for M1 Mac
+  adb:build:amd64:
+    aliases: [ 'android:build:amd64', 'abu' ]
+    cmds:
+      - docker build -f ./Dockerfile.amd64 -t adb:amd64 .
+      - docker images | grep adb
+    dir: .
+
   adb:test:
     aliases: [ 'android:build', 'at' ]
     cmds:
-      - docker run --rm -it -p 5037:5037  adb:latest bash
+      - docker run --rm -it -p 5037:5037 adb:amd64 bash
+    ignore_error: true
+
+  # TODO X: fix for M1 Mac
+  adb:test:amd64:
+    aliases: [ 'android:build:amd64', 'atu' ]
+    cmds:
+      - docker run --rm -it -p 5037:5037 --platform linux/amd64 adb:amd64 bash
     ignore_error: true
 
   adb:build:test:

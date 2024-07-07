@@ -7,6 +7,12 @@ includes:
     dir: ./python/
     optional: true
 
+  android:
+    aliases: [ 'adb' ]
+    taskfile: ./android/
+    dir: ./android/
+    optional: true
+
   ubuntu:
     aliases: [ 'ub' ]
     taskfile: ./ubuntu/

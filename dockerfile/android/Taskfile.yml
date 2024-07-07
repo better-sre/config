@@ -13,14 +13,14 @@ tasks:
   adb:build:
     aliases: [ 'android:build', 'ab' ]
     cmds:
-      - docker build -f ./Dockerfile.ubuntu -t adb:latest .
+      - docker build -f ./Dockerfile -t adb:latest .
       - docker images | grep adb
     dir: .
 
   adb:test:
     aliases: [ 'android:build', 'at' ]
     cmds:
-      - docker run --rm -it adb:latest bash
+      - docker run --rm -it -p 5037:5037  adb:latest bash
     ignore_error: true
 
   adb:build:test:

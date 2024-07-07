@@ -19,9 +19,10 @@ ENV PATH="/app/.venv/bin:~/.local/bin:$PATH"
 
 # 设置环境变量
 ENV ANDROID_HOME=/usr/local/android-sdk
-ENV PATH=$PATH:$ANDROID_HOME/cmdline-tools/bin
-ENV PATH=$PATH:$ANDROID_HOME/cmdline-tools/tools/bin
-
+ENV PATH=$PATH:$ANDROID_HOME/platform-tools
+ENV PATH=$PATH:$ANDROID_HOME/tools
+ENV PATH=$PATH:$ANDROID_HOME/tools/bin
+ENV PATH=$PATH:$ANDROID_HOME/emulator
 
 # 创建一个新用户（非 root 用户）
 RUN useradd -m dev && echo "dev:dev" | chpasswd && adduser dev sudo
@@ -64,10 +65,14 @@ RUN apt-get update && apt-get install -y openjdk-11-jdk && apt-get clean && rm -
 
 
 # TODO X: 下载并安装 Android SDK（如果需要完整的 Android 开发环境）
-RUN wget -q https://dl.google.com/android/repository/commandlinetools-linux-7302050_latest.zip -O /tmp/cmdline-tools.zip && \
-    mkdir -p /usr/local/android-sdk/cmdline-tools && \
-    unzip /tmp/cmdline-tools.zip -d /usr/local/android-sdk/cmdline-tools && \
-    rm /tmp/cmdline-tools.zip
+# https://dl.google.com/android/repository/platform-tools-latest-linux.zip?hl=zh-cn
+# https://dl.google.com/android/repository/platform-tools_r34.0.4-linux.zip
+# 下载并安装最新的 Android SDK 平台工具（包括 ADB 34.0.4）
+RUN mkdir -p /usr/local/android-sdk && \
+    cd /usr/local/android-sdk && \
+    wget -q https://dl.google.com/android/repository/platform-tools-latest-linux.zip?hl=zh-cn -O platform-tools.zip && \
+    unzip platform-tools.zip && \
+    rm platform-tools.zip
 
 
 ######################################################################################################

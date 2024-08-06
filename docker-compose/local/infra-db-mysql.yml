@@ -37,6 +37,7 @@ services:
   mysql:
     image: mysql:5.7
     container_name: mysql
+    platform: linux/amd64 # fix for M1 Mac chip
     volumes:
       - mysql_data:/var/lib/mysql/
     restart: always

@@ -9,7 +9,96 @@ includes:
 tasks:
   default:
     cmds:
-      - task: echo
+      - task: init
 
-  echo:
-    cmd: echo "hello world"
+  init:
+    aliases: ["init:project"]
+    cmds:
+      - task: i:uv # install uv
+      - task: i:dev
+      - task: i:docs
+
+  i:uv:
+    aliases: ["install:uv"]
+    cmds:
+      - curl -LsSf https://astral.sh/uv/install.sh | sh
+
+  #########################################################################
+
+  uv:
+    aliases: ["pm", "pkg"]
+    cmds:
+      - uv {{.CLI_ARGS}}
+
+  i:dev:
+    aliases: ["add:dev", "install:dev"]
+    cmds:
+      - uv add --dev pytest isort black ruff mypy
+
+  i:docs:
+    aliases: ["add:docs", "install:docs"]
+    cmds:
+      - uv add --group=docs mkdocs mkdocs-material mkdocs-awesome-nav
+
+  sync:
+    aliases: ["i", "sc", "install"]
+    cmds:
+      - uv sync --all-packages --all-groups --upgrade
+
+  uv:migrate:
+    aliases: ["migrate", "uvm"]
+    cmds:
+      - uvx migrate-to-uv
+
+  #########################################################################
+
+  run:
+    aliases: ["r"]
+    cmds:
+      - uv run {{.CLI_ARGS}}
+    dir: "src/"
+
+  test:
+    aliases: ["t"]
+    cmds:
+      - uv run pytest --color=yes tests/{{.CLI_ARGS}}
+    dir: "src/"
+
+  #########################################################################
+
+  clean:
+    aliases: ["del", "cl"]
+    cmds:
+      - find . -name "__pycache__" -exec rm -rf {} \;
+      - find . -name "*.pyc" -exec rm -rf {} \;
+      - find . -name "*.pyo" -exec rm -rf {} \;
+      # - find . -name "*.db" -exec rm -rf {} \;
+      # - find . -name "*.sqlite3" -exec rm -rf {} \;
+    ignore_error: true
+
+  #########################################################################
+
+  docs:
+    aliases: ["docs:run", "run:docs"]
+    cmds:
+      # - uv sync --all-packages --all-groups
+      - uv run mkdocs serve --open --watch=docs --watch=mkdocs.yml --dev-addr=localhost:5005
+    dir: "../../"
+
+  # 创建文档目录
+  docs:init:
+    aliases: ["init:docs", "di"]
+    cmds:
+      - echo "$(pwd)"
+      # - uv run mkdocs new {{.CLI_ARGS}}
+      - uv run mkdocs new .
+    dir: "../../"
+
+  # 编译+部署到 Github gh-pages
+  docs:deploy:
+    aliases: ["docs:d", "dd", "du", "doc:up"]
+    cmds:
+      - uv run mkdocs gh-deploy # build and create gh-pages branch
+      - git push origin gh-pages:gh-pages --force # push to public repo
+    dir: "../../"
+    ignore_error: true

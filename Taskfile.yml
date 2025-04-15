@@ -19,12 +19,21 @@ includes:
   # https://taskfile.dev/usage/#os-specific-taskfiles
   #  - 跨平台, 会根据当前操作系统, 自动调用
   #
-  os: ./taskfile/os/Taskfile_{{OS}}.yml
+  os: ./taskfile/_os/Taskfile_{{OS}}.yml
+
+  x:
+    taskfile: .task/config/ # by rsync
+    dir: .
+    optional: true
+
+  x2:
+    taskfile: .task/sre/ # by git clone
+    dir: .
+    optional: true
 
   python:
     aliases: ["py"]
     taskfile: ./taskfile/python/
-    dir: ./taskfile/python/
     optional: true
 
   # typescript / javascript / nodejs
@@ -57,9 +66,18 @@ includes:
     dir: ./taskfile/zig/
     optional: true
 
+  infra: # 常用中间件
+    taskfile: ./taskfile/_infra/
+    optional: true
+
   tools:
     taskfile: ./taskfile/tools/
     dir: ./taskfile/tools/
+    optional: true
+
+  rsync:
+    taskfile: ./taskfile/rsync/
+    dir: ./taskfile/rsync/
     optional: true
 
   git:
@@ -112,37 +130,43 @@ env:
 
 # task groups:
 tasks:
-  default:
+  # by rsync
+  rsync:
+    aliases: ["mirror", "mr"]
     cmds:
-      - task: echo
+      - mkdir -p .task/
+      - |
+        rsync \
+          --exclude=".git*" \
+          --exclude=".venv" \
+          --exclude=".task" \
+          --exclude=".github" \
+          --exclude=".vscode" \
+          --exclude="tmp" \
+          --exclude="*.md" \
+          --exclude=".env*" \
+          --exclude="init.*" \
+          --include="*.yml" \
+          -avh \
+          --progress \
+          --no-perms \
+          --delete-before \
+          --delete \
+          . ./.task/config
+    dir: .
 
-  download:
+  # by git clone, with `--depth=1`: 只克隆最新的一个 commit
+  dl:
+    aliases: ["clone"]
     cmds:
-      - chmod +x init.sh
-      - ./init.sh
+      - mkdir -p .task/
+      - |
+        git clone --depth=1 \
+          https://github.com/better-sre/config.git \
+          ./.task/sre
+    ignore_error: true
 
-  init:
-    cmds:
-      - cp .env.local .env
-
-  echo:
-    cmds:
-      - echo "hello world"
-
-  # update itself:
-  update:
-    cmds:
-      - curl -fsSL https://raw.githubusercontent.com/better-sre/config/main/init.sh | sh
-
-  up:infra:
-    cmds:
-      - task: docker:local:up:mysql
-      - task: docker:local:up:redis
-      - task: docker:local:up:consul:v3 # 服务发现/服务注册
-      - task: docker:local:up:jaeger # 链路追踪 # https://go-kratos.dev/docs/component/middleware/tracing
-  #      - task: std:docker:local:up:prometheus
-
-  ################################################################################################
+  ################################################################################
 
   use:
     cmds:
@@ -170,18 +194,6 @@ tasks:
     cmds:
       - go run pub/main.go
     dir: ./script/nats/
-
-  #
-  # unit test for this project:
-  #
-  test:
-    cmds:
-      - task --dry os:install:go-task
-
-  tests:
-    cmds:
-      - task --dry os:init
-      - task --dry rust:init
 
   ################################################################################
 

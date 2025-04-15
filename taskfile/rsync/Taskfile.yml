@@ -1,0 +1,37 @@
+version: "3"
+
+includes:
+  os:
+    taskfile: ./Taskfile_{{OS}}.yml
+    dir: .
+    optional: true
+
+# ref: https://www.ruanyifeng.com/blog/2020/08/rsync.html
+tasks:
+  install:
+    cmds:
+      - brew install rsync
+      - rsync --version
+
+  rsync:
+    cmds:
+      - rsync {{.CLI_ARGS}}
+
+  # -a参数可以替代-r，除了可以递归同步以外，还可以同步元信息（比如修改时间、权限等）
+  # -v参数则是将结果输出到终端
+  copy:
+    aliases: ["cp"]
+    cmds:
+      - rsync -av  {{.CLI_ARGS}}
+
+  # --delete参数，将删除只存在于目标目录、不存在于源目录的文件
+  mirror:
+    aliases: ["mr"]
+    cmds:
+      - rsync -av --delete  {{.CLI_ARGS}}
+
+  # -n参数模拟命令执行的结果，并不真的执行命令
+  dry-run:
+    aliases: ["dry"]
+    cmds:
+      - rsync -anv  {{.CLI_ARGS}}

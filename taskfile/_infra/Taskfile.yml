@@ -1,0 +1,23 @@
+version: "3"
+
+includes:
+  os:
+    taskfile: ./Taskfile_{{OS}}.yml
+    dir: .
+    optional: true
+
+tasks:
+  i:dapr:
+    aliases: ["install:dapr"]
+    cmds:
+      - curl -fsSL https://raw.githubusercontent.com/dapr/cli/master/install/install.sh | /bin/bash
+      - dapr --version
+      - dapr init # 初始化, 安装 runtime, 并基于 docker 启动 3 个依赖服务（dapr_placement, dapr_redis, dapr_zipkin）
+      - dapr --version
+
+  i:mac:
+    aliases: ["install:macos"]
+    cmds:
+      - brew install cookiecutter
+      - brew install go-task/tap/go-task
+      - brew install protobuf

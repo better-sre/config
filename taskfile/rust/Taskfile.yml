@@ -42,6 +42,12 @@ tasks:
       - curl -L get.fleet.rs | sh
       - fleet -v
 
+  install:volo:
+    aliases: ["i:volo"]
+    cmds:
+      - cargo install volo-cli
+      - volo help
+
   check:
     cmds:
       - task: sys:check

@@ -11,71 +11,81 @@ version: "3"
 # sub namespace: https://taskfile.dev/#/usage?id=including-other-taskfiles
 #
 includes:
-  os:
-    taskfile: ./taskfile/Taskfile_{{OS}}.yml
-    dir: ./taskfile/
+  # os:
+  #   taskfile: ./taskfile/Taskfile_{{OS}}.yml
+  #   dir: ./taskfile/
 
-  base:
-    taskfile: ./taskfile/Taskfile_base.yml
-    dir: ./taskfile/
-
-  go:
-    taskfile: ./taskfile/Taskfile_base_go.yml
-    dir: ./taskfile/
-
-  flutter:
-    taskfile: ./taskfile/Taskfile_base_flutter.yml
-    dir: .
-
-  rust:
-    taskfile: ./taskfile/Taskfile_base_rust.yml
-    dir: ./taskfile/
-
-  zig:
-    taskfile: ./taskfile/Taskfile_base_zig.yml
-    dir: ./taskfile/
+  #
+  # https://taskfile.dev/usage/#os-specific-taskfiles
+  #  - 跨平台, 会根据当前操作系统, 自动调用
+  #
+  os: ./taskfile/os/Taskfile_{{OS}}.yml
 
   python:
-    taskfile: ./taskfile/Taskfile_base_python.yml
-    dir: ./taskfile/
+    aliases: ["py"]
+    taskfile: ./taskfile/python/
+    dir: ./taskfile/python/
+    optional: true
 
   # typescript / javascript / nodejs
-  ts:
-    taskfile: ./taskfile/Taskfile_base_typescript.yml
-    dir: ./taskfile/
+  js:
+    aliases: ["ts", "node", "nodejs"]
+    taskfile: ./taskfile/js/
+    dir: ./taskfile/js/
+    optional: true
+
+  flutter:
+    aliases: ["fl", "dart"]
+    taskfile: ./taskfile/flutter/
+    dir: ./taskfile/flutter/
+    optional: true
+
+  go:
+    aliases: ["golang"]
+    taskfile: ./taskfile/go/
+    dir: ./taskfile/go/
+    optional: true
+
+  rust:
+    aliases: ["rs"]
+    taskfile: ./taskfile/rust/
+    dir: ./taskfile/rust/
+    optional: true
+
+  zig:
+    taskfile: ./taskfile/zig/
+    dir: ./taskfile/zig/
+    optional: true
+
+  tools:
+    taskfile: ./taskfile/tools/
+    dir: ./taskfile/tools/
+    optional: true
 
   git:
-    taskfile: ./taskfile/Taskfile_infra_git.yml
-    dir: ./taskfile/
-
-  nvim:
-    taskfile: ./taskfile/Taskfile_infra_nvim.yml
-    dir: ./taskfile/
-    ignore_error: true
-
-  vim:
-    taskfile: ./taskfile/Taskfile_infra_nvim.yml
-    dir: ./taskfile/
-    ignore_error: true
+    taskfile: ./taskfile/git/
+    dir: ./taskfile/git/
+    optional: true
 
   docker:
-    taskfile: ./taskfile/Taskfile_infra_docker.yml
-    dir: ./taskfile/
+    taskfile: ./taskfile/docker/
+    dir: ./taskfile/docker/
+    optional: true
 
   dockerfile:
-    aliases: [ 'df', "dockerfiles" ]
+    aliases: ["df", "dockerfiles"]
     taskfile: ./dockerfile/
     dir: ./dockerfile/
     optional: true
 
   compose:
-    aliases: [ 'dc', "docker-compose" ]
+    aliases: ["dc", "docker-compose"]
     taskfile: ./docker-compose/local/
     dir: ./docker-compose/local/
     optional: true
 
   packages:
-    aliases: [ "p", "pkg" ]
+    aliases: ["p", "pkg"]
     taskfile: ./packages/
     dir: ./packages/
     optional: true
@@ -146,7 +156,6 @@ tasks:
       TASK_ROOT_DIR: "~/.task/local/"
     ignore_error: true
 
-
   ################################################################################
 
   #
@@ -174,41 +183,48 @@ tasks:
       - task --dry os:init
       - task --dry rust:init
 
-
   ################################################################################
 
   pull:
-    aliases: [ "pl" ]
+    aliases: ["pl"]
     cmds:
       - git config pull.rebase false
       - git pull origin main
 
   fetch:
-    aliases: [ "f" ]
+    aliases: ["f"]
     cmds:
       - git fetch
       - git rebase
       - git merge origin/main
 
   quick:
-    aliases: [ "q" ]
+    aliases: ["q"]
     cmds:
-      - task: commit
-      - task: commit
-      #      - task: pull
+      - task: cc
       - task: push
 
+  # usage: task rc -- 2
+  cf:
+    aliases: ["reset:commit", "rc"]
+    cmds:
+      - git reset --soft HEAD~{{.CLI_ARGS}}
+      - task: c
+
+  cc:
+    cmds:
+      - task: commit
+      - task: commit
+
   commit:
-    aliases: [ "c" ]
+    aliases: ["c"]
     cmds:
       - git add .
-      - |
-        git commit -m 'chore: update' --no-verify
+      - git status
+      - git commit -m "update" --no-verify
     ignore_error: true
 
   push:
-    aliases: [ "p" ]
     cmds:
       - git push origin main --tags
       - repo_url=`git remote -v | grep push | awk -F ":" '{print $2}' | awk -F ".git" '{print "https://github.com/"$1}'`; open $repo_url
-

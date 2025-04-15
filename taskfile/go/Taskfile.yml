@@ -1,28 +1,30 @@
-version: '3'
+version: "3"
 
-################################################################################################
-#
-# ref: https://goproxy.io/zh/
-#
-################################################################################################
-
-#
-# sub namespace: https://taskfile.dev/#/usage?id=including-other-taskfiles
-#
-includes:
-  micro:
-    taskfile: ./Taskfile_base_go_micro.yml
-
-################################################################################################
-
-# task groups:
 tasks:
   install:
     cmds:
+      - go install go-micro.dev/v4/cmd/micro@v4.6.0 # for go-micro v4 cli
+      - micro -v
       - go install github.com/cosmtrek/air@latest
       - go install github.com/BurntSushi/toml/cmd/tomlv@master # https://pre-commit.com/hooks.html
       - air -v
 
+  install:pkg:
+    cmds:
+      - go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+      - go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+      - go get -u -v github.com/gogo/protobuf/proto
+      - go install github.com/golang/protobuf/protoc-gen-go@latest
+      - go install go-micro.dev/v4/cmd/protoc-gen-micro@v4
+    ignore_error: true
+
+  install:proto:
+    cmds:
+      - go get -u -v github.com/gogo/protobuf/protoc-gen-gofast
+      - go get -u -v github.com/gogo/protobuf/proto
+      - go get -u -v github.com/gogo/protobuf/jsonpb
+      - go get -u -v github.com/gogo/protobuf/protoc-gen-gogo
+      - go get -u -v github.com/gogo/protobuf/gogoproto
 
   kratos:install:
     cmds:
@@ -112,4 +114,3 @@ tasks:
       - cd ..
       - cd app/biz
       - cookiecutter https://github.com/better-go/cookiecutter-go.git --directory="single-app/go-zero"
-

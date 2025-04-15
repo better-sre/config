@@ -1,0 +1,20 @@
+version: "3"
+
+includes:
+  os:
+    taskfile: ./Taskfile_{{OS}}.yml
+    dir: .
+    optional: true
+
+  local:
+    taskfile: ../../docker-compose/local/Taskfile.yml
+    dir: ../../docker-compose/local
+    optional: true
+
+tasks:
+  default:
+    cmds:
+      - task: echo
+
+  echo:
+    cmd: echo "hello world"

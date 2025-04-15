@@ -12,21 +12,21 @@
 - `dockerfile`
 - `Taskfile`
 
-## Manual:
+## Manual
 
 - ✅ [Manual](./manual.md)
 
-## Contents:
+## Contents
 
-### Docker-compose:
+### Docker-compose
 
 - ✅ [docker-compose/local](docker-compose/local)
 
-### Docker + Dockerfile:
+### Docker + Dockerfile
 
 - ✅ [Dockerfile](./dockerfile)
 
-#### Python + Ubuntu + Dockerfile:
+#### Python + Ubuntu + Dockerfile
 
 - ✅ [dockerfile/python](dockerfile/python)
 
@@ -39,4 +39,3 @@ task df:py:b312
 task df:py:t312
 
 ```
-

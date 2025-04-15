@@ -1,0 +1,52 @@
+version: "3"
+
+tasks:
+  install:
+    aliases: ["i"]
+    cmds:
+      - echo "install macos dependencies"
+      - task: install:dotnet
+      - task: install:uv
+
+  # https://learn.microsoft.com/zh-cn/dotnet/core/install/macos
+  # https://dotnet.microsoft.com/zh-cn/download/dotnet
+  # https://dotnet.microsoft.com/zh-cn/download/dotnet/9.0
+  # https://dotnet.microsoft.com/zh-cn/download/dotnet/8.0
+  # https://learn.microsoft.com/zh-cn/dotnet/core/install/macos#install-net-with-a-script
+  install:dotnet:
+    aliases: ["i:dot"]
+    cmds:
+      - echo "install dotnet dependencies"
+      - brew install wget
+      - wget https://dot.net/v1/dotnet-install.sh
+      - chmod +x dotnet-install.sh
+      - ./dotnet-install.sh
+      - dotnet --version # install dotnet sdk 9.0/8.0
+      - which dotnet
+
+  install:uv:
+    aliases: ["i:uv"]
+    cmds:
+      - echo "install uv"
+
+  ##################################################################
+
+  dotnet:build:
+    aliases: ["dot:b", "build:dotnet", "b:dot"]
+    cmds:
+      - dotnet build
+
+  dotnet:release:
+    aliases: ["dot:r", "r:dot"]
+    cmds:
+      - dotnet build --configuration Release
+
+  cp:dll:
+    aliases: ["cp:d", "dll"]
+    cmds:
+      - echo "copy .net dll to python libs folder"
+      - task: dotnet:release
+      # - cp src/CryptoExchangeLoad/bin/Release/net8.0/*.dll ./scripts/libs
+      - cp src/CryptoExchangeLoad/bin/Release/net8.0/*.dll packages/cex/src/cex/libs
+      -
+    ignore_error: true

@@ -1,13 +1,10 @@
-# Manual:
+# Manual
 
-
-
-
-## Setup:
+## Setup
 
 > 🍄 before use, please install [go-task](https://github.com/go-task/task).
 
-- https://taskfile.dev/#/installation
+- <https://taskfile.dev/#/installation>
 
 ```ruby
 
@@ -119,7 +116,7 @@ task sre:go:install
 
 - 😄 enjoy!
 
-## Contents:
+## Contents
 
 - [docker-compose/local](docker-compose/local)
 - [dockerfile](dockerfile)
@@ -135,11 +132,9 @@ task sre:go:install
 - 部分脚本写了跨平台, 比较少, 如果有兴趣, 欢迎 PR 支持.
 - Taskfile 原生支持跨平台, 改写起来也简单, 只是我没有太多精力, 照顾不到.😄
 
+## QuickStart
 
-
-## QuickStart:
-
-### 1. Setup:
+### 1. Setup
 
 > MacOS/Linux:
 
@@ -159,7 +154,7 @@ curl -fsSL https://raw.githubusercontent.com/better-sre/config/main/init.sh | sh
 
 - [Manual](./manual.md)
 
-### 2. Include in your Project:
+### 2. Include in your Project
 
 - 🍄 add these content to your `Taskfile.yml` file.
 
@@ -172,7 +167,7 @@ includes:
     optional: true # safeguard, if not found, no error
 ```
 
-### 3. Usage:
+### 3. Usage
 
 > ❓ Note that when using in your project, you need to use the [sre:]() `prefix` to use the following scripts.
 > like this:
@@ -188,7 +183,7 @@ task sre:docker:local:up:redis
 
 - 😄 enjoy!
 
-## Structure:
+## Structure
 
 - `Directory of files` automatically created by the `installation script`.
 
@@ -213,7 +208,6 @@ task sre:docker:local:up:redis
 
 ```
 
+## Related
 
-## Related:
-
-- https://github.com/service-mesh/devops
+- <https://github.com/service-mesh/devops>

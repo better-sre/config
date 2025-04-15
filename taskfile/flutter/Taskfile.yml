@@ -1,18 +1,11 @@
 version: "3"
 
-#
-# global vars: https://taskfile.dev/#/usage?id=variables
-#
-vars:
-  VAR1: "some-var"
+includes:
+  os:
+    taskfile: ./Taskfile_{{OS}}.yml
+    dir: .
+    optional: true
 
-# global env:
-env:
-  ENV1: testing
-
-################################################################################################
-
-# task groups:
 tasks:
   default:
     cmds:

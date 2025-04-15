@@ -1,0 +1,24 @@
+version: "3"
+
+includes:
+  os:
+    taskfile: ./Taskfile_{{OS}}.yml
+    dir: .
+    optional: true
+
+tasks:
+  init:
+    cmds:
+      - task: install:node
+      - task: install:yarn
+
+  install:node:
+    cmds:
+      - task: os:install:node
+
+  install:yarn:
+    cmds:
+      - node -v
+      - npm -v
+      - npm install --global yarn
+      - yarn -v

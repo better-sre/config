@@ -1,0 +1,19 @@
+version: "3"
+
+includes:
+  os:
+    taskfile: ./Taskfile_{{OS}}.yml
+    dir: .
+    optional: true
+
+  nvim:
+    taskfile: ./Taskfile_nvim.yml
+    optional: true
+
+tasks:
+  default:
+    cmds:
+      - task: echo
+
+  echo:
+    cmd: echo "hello world"

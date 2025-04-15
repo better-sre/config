@@ -1,14 +1,10 @@
-################################################################################################
-#
-# ref:
-#   - https://taskfile.dev/#/styleguide
-#     - https://taskfile.dev/#/styleguide?id=use-the-correct-order-of-keywords
-#     - https://taskfile.dev/#/styleguide?id=use-colon-for-task-namespacing
-#   - yml format: https://juejin.cn/post/6844903972688363534
-#
-################################################################################################
+version: "3"
 
-version: '3'
+includes:
+  os:
+    taskfile: ./Taskfile_{{OS}}.yml
+    dir: .
+    optional: true
 
 tasks:
   default:
@@ -42,4 +38,3 @@ tasks:
   stash:
     cmds:
       - git stash
-

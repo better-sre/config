@@ -1,0 +1,41 @@
+version: "3"
+
+tasks:
+  install:
+    aliases: ["i"]
+    cmds:
+      - echo "install windows dependencies"
+      - task: install:dotnet
+      - task: install:uv
+
+  install:dotnet:
+    aliases: ["i:dot"]
+    cmds:
+      - echo "install dotnet"
+
+  install:uv:
+    aliases: ["i:uv"]
+    cmds:
+      - echo "install uv"
+
+  ##################################################################
+
+  dotnet:build:
+    aliases: ["dot:b"]
+    cmds:
+      - echo "dotnet:build"
+
+  dotnet:release:
+    aliases: ["dot:r"]
+    cmds:
+      - dotnet build --configuration Release
+
+  cp:dll:
+    aliases: ["cp:d", "dll"]
+    cmds:
+      - echo "copy .net dll to python libs folder"
+      - task: dotnet:release
+      # - cp src/CryptoExchangeLoad/bin/Release/net8.0/*.dll ./scripts/libs
+      - cp src/CryptoExchangeLoad/bin/Release/net8.0/*.dll packages/cex/src/cex/libs
+      -
+    ignore_error: true

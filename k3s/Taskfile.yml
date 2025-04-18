@@ -1,0 +1,136 @@
+version: "3"
+
+includes:
+  os:
+    taskfile: ./Taskfile_{{OS}}.yml
+    dir: .
+    optional: true
+
+tasks:
+  default:
+    cmds:
+      - task: echo
+
+  echo:
+    cmd: echo "hello world"
+
+  # 更新 admin 配置参数, 添加用户: admin-user
+  dashboard:
+    aliases: ["dash", "admin"]
+    cmds:
+      - kubectl apply -f admin.yml
+      - kubectl apply -f admin.secret.yml
+    dir: ./dashboard/
+
+  dash2:
+    cmds:
+      - kubectl apply -f dashboard.admin-user.yml -f dashboard.admin-user-role.yml
+    dir: ./dashboard/
+
+  dash3:
+    cmds:
+      - kubectl apply -f kubernetes-dashboard.yml
+
+  # 给 admin-user 用户, 创建 token
+  token:
+    cmds:
+      - kubectl -n kubernetes-dashboard create token admin-user
+      - kubectl -n kubernetes-dashboard create token default
+      - kubectl -n kubernetes-dashboard create token kubernetes-dashboard-web
+      - kubectl -n kubernetes-dashboard create token kubernetes-dashboard-kong
+      - kubectl -n kubernetes-dashboard create token kubernetes-dashboard
+
+  setup:
+    cmds:
+      - |
+        GITHUB_URL=https://github.com/kubernetes/dashboard/releases
+        VERSION_KUBE_DASHBOARD=$(curl -w '%{url_effective}' -I -L -s -S ${GITHUB_URL}/latest -o /dev/null | sed -e 's|.*/||')
+        kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/${VERSION_KUBE_DASHBOARD}/aio/deploy/recommended.yaml
+
+  conf:
+    cmds:
+      - kubectl get deployment kubernetes-dashboard -n kubernetes-dashboard -o yaml > kubernetes-dashboard.yml
+
+  wget:
+    cmds:
+      - wget https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml -O kubernetes-dashboard.yml
+
+  doctor:
+    aliases: ["check"]
+    cmds:
+      - kubectl get namespaces
+      - kubectl get pods --all-namespaces
+      - kubectl get pods -n kubernetes-dashboard
+      - kubectl get deployments --all-namespaces
+      - kubectl get services --all-namespaces
+      - kubectl get secrets --all-namespaces
+      # account
+      - kubectl get sa --all-namespaces
+      # service account
+      - kubectl get serviceaccount --all-namespaces
+      - kubectl get ingress --all-namespaces
+    ignore_error: true
+
+  check:dash:
+    cmds:
+      - kubectl get service -n kubernetes-dashboard
+      - kubectl get deployment -n kubernetes-dashboard
+      - kubectl get secret -n kubernetes-dashboard
+      - kubectl get serviceaccount -n kubernetes-dashboard
+      - kubectl get ingress -n kubernetes-dashboard
+
+  dl:
+    cmds:
+      - |
+        wget https://github.com/cnrancher/kube-explorer/releases/download/v0.5.1/kube-explorer-darwin-arm64 -O ./kube-explorer \
+          && chmod +x ./kube-explorer
+
+  install:
+    aliases: ["i"]
+    cmds:
+      - mv ./kube-explorer ${HOME}/.local/bin/kube-explorer
+      - kube-explorer version
+
+  web:
+    cmds:
+      - kube-explorer --http-listen-port=9898
+
+  test2:
+    cmds:
+      - kubectl create namespace argocd
+      - kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+      - kubectl get pods -n argocd
+      - kubectl port-forward svc/argocd-server -n argocd 6080:443
+
+  # https://github.com/1Panel-dev/KubePi
+  # 用户名: admin
+  # 密码: kubepi
+  web2:
+    cmds:
+      - |
+        docker run --privileged -d --restart=unless-stopped --name kubepi \
+           -p 6080:80  \
+           1panel/kubepi
+      - docker ps
+      - open http://localhost:6080
+
+  # k8m: https://github.com/weibaohui/k8m
+  # 用户名: admin
+  # 密码: 123456 (在k8m.yaml配置中)
+  web3:
+    cmds:
+      - kubectl create ns k8m
+      - |
+        kubectl -n k8m \
+           apply -f https://raw.githubusercontent.com/weibaohui/k8m/refs/heads/main/deploy/k8m.yaml
+      - kubectl -n k8m get pods
+      # 获得节点信息
+      - kubectl -n k8m get svc | grep NodePort | awk '{print $3}' # 打开ip+ 31999 端口(NodePort), 不需要, 使用下面的端口映射功能
+      # proxy
+      - kubectl -n k8m port-forward svc/k8m 3618:3618 # 打开ip+ 3618 端口
+      - open http://localhost:3618
+
+  cluster:import:
+    aliases: ["ci"]
+    cmds:
+      - cat $HOME/.kube/config | grep server | awk '{print $2}'

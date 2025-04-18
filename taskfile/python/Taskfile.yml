@@ -40,8 +40,23 @@ tasks:
     cmds:
       - uv add --group=docs mkdocs mkdocs-material mkdocs-awesome-nav
 
+  # task fmt -- .
+  fmt:
+    cmds:
+      - uv run ruff check --fix  --config=pyproject.toml {{.CLI_ARGS}}
+      - uv run ruff check --fix  --config=pyproject.toml {{.CLI_ARGS}}
+      - uv run ruff format  --config=pyproject.toml {{.CLI_ARGS}} # - uv run ruff format .
+      - echo "$(pwd)"
+    dir: "../../"
+    ignore_error: true
+
   sync:
-    aliases: ["i", "sc", "install"]
+    aliases: ["i", "install"]
+    cmds:
+      - uv sync --all-packages --all-groups
+
+  sync:up:
+    aliases: ["iu"]
     cmds:
       - uv sync --all-packages --all-groups --upgrade
 
@@ -69,11 +84,23 @@ tasks:
   clean:
     aliases: ["del", "cl"]
     cmds:
-      - find . -name "__pycache__" -exec rm -rf {} \;
-      - find . -name "*.pyc" -exec rm -rf {} \;
-      - find . -name "*.pyo" -exec rm -rf {} \;
+      - find {{.CLI_ARGS}} -name "__pycache__" -exec rm -rf {} \;
+      - find {{.CLI_ARGS}} -name ".pytest_cache" -exec rm -rf {} \;
+      - find {{.CLI_ARGS}} -name ".ruff_cache" -exec rm -rf {} \;
+      - find {{.CLI_ARGS}} -name ".mypy_cache" -exec rm -rf {} \;
+      - find {{.CLI_ARGS}} -name "*.egg-info" -exec rm -rf {} \;
+      - find {{.CLI_ARGS}} -name "*.dist-info" -exec rm -rf {} \;
+      - find {{.CLI_ARGS}} -name ".tox" -exec rm -rf {} \;
+      - find {{.CLI_ARGS}} -name "build/" -exec rm -rf {} \;
+      - find {{.CLI_ARGS}} -name "dist/" -exec rm -rf {} \;
       # - find . -name "*.db" -exec rm -rf {} \;
       # - find . -name "*.sqlite3" -exec rm -rf {} \;
+
+      - rm -rf ./coverage.xml
+      - rm -rf ./coverage_html_report
+      - rm -rf ./coverage_html_report.zip
+      - echo "clean done, dir >> $(pwd)"
+    dir: "../../"
     ignore_error: true
 
   #########################################################################

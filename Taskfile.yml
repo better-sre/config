@@ -102,6 +102,11 @@ includes:
     dir: ./docker-compose/local/
     optional: true
 
+  k3s:
+    taskfile: ./k3s/
+    dir: ./k3s/
+    optional: true
+
   packages:
     aliases: ["p", "pkg"]
     taskfile: ./packages/

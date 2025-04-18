@@ -1,0 +1,20 @@
+#
+# openelb-nginx-svc.yaml
+#   - https://cloud.tencent.com/developer/article/2008314
+#
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  annotations:
+    lb.kubesphere.io/v1alpha1: openelb
+    protocol.openelb.kubesphere.io/v1alpha1: layer2
+    eip.openelb.kubesphere.io/v1alpha2: eip-sample-pool # eip-pool  # 更改此处!! # sample
+spec:
+  selector:
+    app: nginx
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 8000 # 端口
+      targetPort: 8000 # 端口

@@ -69,6 +69,8 @@ tasks:
       # service account
       - kubectl get serviceaccount --all-namespaces
       - kubectl get ingress --all-namespaces
+      # api server url
+      - kubectl config view
     ignore_error: true
 
   check:dash:
@@ -130,7 +132,133 @@ tasks:
       - kubectl -n k8m port-forward svc/k8m 3618:3618 # 打开ip+ 3618 端口
       - open http://localhost:3618
 
+  # kuboard: https://github.com/eip-work/kuboard-press
+  # 用户名: admin
+  # 密码: Kuboard123
+  web4:
+    cmds:
+      - docker-compose -f compose.yml up -d
+      - docker-compose -f compose.yml ps
+      - open http://localhost:6001
+    dir: kuboard/
+
+  web4:token:
+    aliases: ["w4t"]
+    cmds:
+      - kubectl apply -f kuboard-create-token.yml
+      - $(kubectl -n kuboard get secret $(kubectl -n kuboard get secret kuboard-admin-token | grep kuboard-admin-token | awk '{print $1}') -o go-template='{{.data.token}}' | base64 -d)
+    dir: kuboard/
+
+  # kubesphere: https://github.com/kubesphere/kubesphere
+  # 用户名: admin
+  # 密码:  P@88w0rd (首次更改为: Admin,1234) # https://kubesphere.io/docs/v4.1/02-quickstart/01-install-kubesphere/
+  web5:
+    cmds:
+      - helm upgrade --install -n kubesphere-system --create-namespace ks-core https://charts.kubesphere.io/main/ks-core-1.1.3.tgz --debug --wait
+      # 查看服务端口
+      - kubectl -n kubesphere-system get svc
+      # proxy
+      - kubectl -n kubesphere-system port-forward svc/ks-console 6002:80
+      - open http://localhost:6002
+
+  #############################################################################
+
+  #
+  # 负载均衡器: https://github.com/openelb/openelb
+  #
+  openelb:dl:
+    aliases: ["oedl"]
+    cmds:
+      - wget https://raw.githubusercontent.com/openelb/openelb/release-0.6/deploy/openelb.yaml
+    dir: openelb/
+
+  openelb:run:
+    aliases: ["oe"]
+    cmds:
+      - kubectl apply -f openelb.yaml
+      - kubectl get po -n openelb-system
+      - kubectl get validatingwebhookconfiguration
+      - kubectl get mutatingwebhookconfigurations
+      - kubectl get nodes -o wide # 配置ip段, 要保证所有 Kubernetes 集群节点必须在同一个二层网络中
+    dir: openelb/
+
+  # create eip
+  #   - https://openelb.io/docs/getting-started/usage/openelb-ip-address-assignment/
+  openelb:eip:
+    aliases: ["oeip"]
+    cmds:
+      - kubectl apply -f openelb.eip.yml
+    dir: openelb/
+
+  openelb:del:
+    aliases: ["od"]
+    cmds:
+      - kubectl delete -f openelb.yaml
+    dir: openelb/
+
+  # 示例服务: nginx
+  openelb:nginx:
+    aliases: ["ng"]
+    cmds:
+      - kubectl apply -f nginx.yml
+      - kubectl get pods
+    dir: openelb/
+
+  # load balancer
+  openelb:nginx:lb:
+    aliases: ["nglb"]
+    cmds:
+      - kubectl apply -f nginx.svc.yml
+      - kubectl get svc nginx
+    dir: openelb/
+
+  ng2:
+    cmds:
+      - kubectl apply -f nginx.svc2.yml
+      - kubectl get svc
+      - kubectl get pod,svc,ing
+    dir: openelb/
+
+  #############################################################################
+
+  #
+  #负载均衡的正确配置过程:
+  #
+  create:cluster:
+    cmds:
+      - k3d cluster create --api-port 6550 -p "8081:80@loadbalancer" --agents 2 k3d-test
+      - k3d cluster list
+      - kubectl --cluster k3d-k3d-test get nodes,svc,ing,pod
+
+  # k3d cluster
+  k3d:del:
+    aliases: ["kd"]
+    cmds:
+      - k3d cluster list
+      - k3d cluster delete # k3d-test
+
+  #
+  # 负载均衡的正确配置过程:
+  #   - https://k3d.io/stable/usage/exposing_services/#1-via-ingress-recommended
+  #   - 这个是成功的!!!!
+  #   - 基于 Ingress 公开暴露服务!!!
+  #
+  ng3:
+    cmds:
+      - kubectl --cluster k3d-k3d-test apply -f nginx.svc3.yml
+      - kubectl --cluster k3d-k3d-test get svc
+      - kubectl --cluster k3d-k3d-test get pod,svc,ing
+      - open http://localhost:8081 # 注意不是 https !!!
+    dir: openelb/
+
+  #############################################################################
+
   cluster:import:
     aliases: ["ci"]
     cmds:
       - cat $HOME/.kube/config | grep server | awk '{print $2}'
+
+  compose:
+    aliases: ["dc"]
+    cmds:
+      - docker-compose {{.CLI_ARGS}}

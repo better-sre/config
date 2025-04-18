@@ -1,0 +1,66 @@
+##########################################################################################
+#
+# ref:
+#   - https://github.com/eip-work/kuboard-press
+# run:
+#   - docker compose up -d
+#   - http://localhost:6001
+#     - 用户名: admin
+#     - 密码: Kuboard123
+#
+##########################################################################################
+
+configs:
+  create_db_sql:
+    content: |
+      CREATE DATABASE kuboard DEFAULT CHARACTER SET = 'utf8mb4' DEFAULT COLLATE = 'utf8mb4_unicode_ci';
+      create user 'kuboard'@'%' identified by 'kuboardpwd';
+      grant all privileges on kuboard.* to 'kuboard'@'%';
+      FLUSH PRIVILEGES;
+
+services:
+  db:
+    image: swr.cn-east-2.myhuaweicloud.com/kuboard/mariadb:11.3.2-jammy
+    # image: mariadb:11.3.2-jammy
+    # swr.cn-east-2.myhuaweicloud.com/kuboard/mariadb:11.3.2-jammy 与 mariadb:11.3.2-jammy 镜像完全一致
+    environment:
+      MARIADB_ROOT_PASSWORD: kuboardpwd
+      MYSQL_ROOT_PASSWORD: kuboardpwd
+      TZ: Asia/Shanghai
+
+    # 创建一个数据卷, 替换下面的参数
+    volumes:
+      - kuboard-mariadb-data:/var/lib/mysql:Z
+    configs:
+      - source: create_db_sql
+        target: /docker-entrypoint-initdb.d/create_db.sql
+        mode: 0777
+    networks:
+      kuboard_v4_dev:
+        aliases:
+          - db
+  kuboard:
+    image: swr.cn-east-2.myhuaweicloud.com/kuboard/kuboard:v4
+    # image: eipwork/kuboard:v4
+    environment:
+      - DB_DRIVER=org.mariadb.jdbc.Driver
+      - DB_URL=jdbc:mariadb://db:3306/kuboard?serverTimezone=Asia/Shanghai
+      - DB_USERNAME=kuboard
+      - DB_PASSWORD=kuboardpwd
+    ports:
+      - "6001:80" # 端口访问: http://127.0.0.1:6001
+    depends_on:
+      - db
+    networks:
+      kuboard_v4_dev:
+        aliases:
+          - kuboard
+
+networks:
+  kuboard_v4_dev:
+    driver: bridge
+
+# 数据卷
+volumes:
+  kuboard-mariadb-data:
+    driver: local

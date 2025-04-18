@@ -1,0 +1,45 @@
+#
+# Eip
+#   - https://openelb.io/docs/getting-started/configuration/configure-ip-address-pools-using-eip/
+#   - usage:
+#     - https://openelb.io/docs/getting-started/usage/openelb-ip-address-assignment/
+#     - https://cloud.tencent.com/developer/article/2008314
+#   - 查看可用的 eip
+#     - kubectl get eip
+#
+
+apiVersion: network.kubesphere.io/v1alpha2
+kind: Eip
+metadata:
+  name: eip-sample-pool
+  annotations:
+    eip.openelb.kubesphere.io/is-default-eip: "true"
+spec:
+  #
+  # ip pool
+  #
+  address: 192.168.147.50-192.168.147.100 # 192.168.0.91-192.168.0.100
+  priority: 100
+
+  #
+  # 命名空间
+  #
+  namespaces:
+    - test
+    - default
+  namespaceSelector:
+    kubesphere.io/workspace: workspace
+  disable: false
+  protocol: layer2
+  interface: eth0
+  # interface: can_reach:192.168.0.1
+status:
+  occupied: false
+  usage: 1
+  poolSize: 10
+  used:
+    "192.168.0.91": "default/test-svc"
+  firstIP: 192.168.147.50 # 192.168.0.91 # 起始IP
+  lastIP: 192.168.147.100 # 192.168.0.100 # 结束IP
+  ready: true
+  v4: true

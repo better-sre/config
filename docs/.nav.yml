@@ -1,0 +1,16 @@
+nav:
+  - "首页":
+      index.md
+      # - 首页: index.md
+      # - 中间件: infra/index.md
+      # - Docker: docker/index.md
+      # - K3S: k3s/index.md
+      # - Kubernetes: k8s/index.md
+      # - 参考: reference/index.md
+  - "📦️ 中间件": infra
+  - "🛳️ Docker": docker
+  - "🚀 K3S": k3s
+  - "🛰️ K8S": k8s
+  - "📚 参考": reference
+  - "📝 其他": related.md
+  - "*"

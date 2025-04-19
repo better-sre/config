@@ -1,0 +1,20 @@
+#
+# reference:
+#   - https://lukasgeiter.github.io/mkdocs-awesome-nav/reference/
+#
+
+title: 中间件
+
+preserve_directory_names: true
+
+hide: true
+
+flatten_single_child_sections: true
+
+ignore: "*.hidden.md"
+
+nav:
+  - 概述: index.md
+  - "🐳 Dockerfile": dockerfile
+  - "🐳 Docker-compose": docker-compose
+  - "*"

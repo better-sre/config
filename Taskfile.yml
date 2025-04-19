@@ -202,6 +202,24 @@ tasks:
 
   ################################################################################
 
+  uv:
+    cmds:
+      - uv {{.CLI_ARGS}}
+
+  sync:
+    cmds:
+      - task: x:py:sync
+
+  docs:
+    cmds:
+      - task: x:py:docs
+
+  docs:deploy:
+    cmds:
+      - task: x:py:docs:deploy
+
+  ################################################################################
+
   pull:
     aliases: ["pl"]
     cmds:

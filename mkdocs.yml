@@ -1,0 +1,123 @@
+site_name: "SRE 实践指南"
+
+docs_dir: docs
+
+##############################################################
+#
+# todo x: docs 目录, 使用插件替代手动添加!!!
+#
+# nav:
+#   - 首页: index.md #
+
+##############################################################
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - md_in_html
+  - pymdownx.blocks.caption
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+
+  - smarty
+  - toc:
+      permalink: True
+      separator: "-"
+      toc_depth: 5
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.arithmatex:
+      generic: true
+
+theme:
+  name: material
+  language: zh
+  features:
+    - header.autohide
+    - navigation.tabs # TODO X: 导航栏
+    - navigation.instant
+    - navigation.path
+    - navigation.top
+    - navigation.instant.preview
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - navigation.footer
+    - navigation.expand # todo x: 文档目录展开
+    - toc.follow
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep yellow # todo x: 颜色
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep purple # todo x: 颜色, deep purple, teal, deep orange
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+plugins:
+  - search
+
+  #
+  # 导航栏插件
+  #
+  - awesome-nav: # 自动生成导航 https://lukasgeiter.github.io/mkdocs-awesome-nav/features/nav/
+      flatten_single_child_sections: true # TODO X: 配合排序插件, 必备参数!!! (需要每个目录下, 都要配置这个参数!!!)
+
+  # 思维导图
+  #   - https://github.com/markmap/mkdocs_markmap
+  - markmap
+  # 代码高亮插件
+  #   - https://pawamoy.github.io/mkdocs-pygments/#fruity
+
+  - add-number: # todo x: 自动给目录添加序号
+      # strict_mode: True
+      # order: 1
+      increment_topnav: False
+      increment_pages: True
+      excludes:
+        - index.md
+        # - infra/index.md
+        # - docker/index.md
+        # - k3s/index.md
+        - 404.md
+      includes:
+        - sql/MySQL
+
+  #
+  # TODO X: 可能遇到问题, 默认可以注释掉, 生成的 PDF 效果不错!
+  #   - https://github.com/orzih/mkdocs-with-pdf
+  #
+  # - with-pdf: # TODO X: brew install weasyprint #
+  #     author: "Henry Huang"
+  #     output_path: /tmp/document.pdf # TODO X: 输出路径!!!
+
+extra:
+  alternate: # todo x: 多语言, https://squidfunk.github.io/mkdocs-material/setup/changing-the-language/#site-language-selector
+    - name: English
+      link: /en/
+      lang: en
+
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/better-sre
+    - icon: fontawesome/brands/telegram
+      link: https://t.me/
+
+copyright: Copyright &copy; 2025 -  Better SRE. All rights reserved.

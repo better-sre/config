@@ -1,18 +1,19 @@
-# docker-compose: 
+# docker-compose
 
+- 本地开发环境
 
-### docker:
+## docker
 
-- https://github.com/bitnami
+- <https://github.com/bitnami>
   - 不少高质量的 docker image
-  - https://github.com/bitnami/bitnami-docker-etcd
+  - <https://github.com/bitnami/bitnami-docker-etcd>
 - etcd:
-  - https://github.com/shiguanghuxian/etcd-manage
-  - https://github.com/evildecay/etcdkeeper
+  - <https://github.com/shiguanghuxian/etcd-manage>
+  - <https://github.com/evildecay/etcdkeeper>
 
-### tools:
+## tools
 
-- https://github.com/krallin/tini
+- <https://github.com/krallin/tini>
   - A tiny but valid `init` for containers
-- https://github.com/Yelp/dumb-init
+- <https://github.com/Yelp/dumb-init>
   - A minimal init system for Linux containers

@@ -13,10 +13,11 @@ docs_dir: docs
 
 markdown_extensions:
   - abbr
+
+  # 警告: https://squidfunk.github.io/mkdocs-material/reference/admonitions/
   - admonition
   - pymdownx.details
-  - attr_list
-  - md_in_html
+
   - pymdownx.blocks.caption
   - pymdownx.highlight:
       anchor_linenums: true
@@ -27,6 +28,36 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true
+
+  # 列表: https://squidfunk.github.io/mkdocs-material/reference/lists/
+  - def_list
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+  # 表情:
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - attr_list
+
+  #
+  # 网格: https://squidfunk.github.io/mkdocs-material/reference/grids/#using-generic-grids-unordered-list
+  - attr_list
+  - md_in_html
+
+  # 格式化: https://squidfunk.github.io/mkdocs-material/reference/formatting/
+  - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.tilde
+
+  # 图表: https://squidfunk.github.io/mkdocs-material/reference/diagrams/
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
 
   - smarty
   - toc:
@@ -42,8 +73,18 @@ markdown_extensions:
 theme:
   name: material
   language: zh
+
+  # 扩展主题: https://squidfunk.github.io/mkdocs-material/customization/#extending-the-theme
+  custom_dir: docs/_style/overrides # 注意路径
+
+  # 字体设置: https://squidfunk.github.io/mkdocs-material/setup/changing-the-fonts/
+  font:
+    code: Roboto Mono # 等宽字体
+
   features:
-    - header.autohide
+    - navigation.indexes
+    - header.autohide # 自动隐藏标题
+    - announce.dismiss # todo x: 公告 https://squidfunk.github.io/mkdocs-material/setup/setting-up-the-header/#mark-as-read
     - navigation.tabs # TODO X: 导航栏
     - navigation.instant
     - navigation.path
@@ -54,11 +95,21 @@ theme:
     - navigation.footer
     - navigation.expand # todo x: 文档目录展开
     - toc.follow
+    # 内容
+    - content.tabs.link
+    # 代码
+    - content.code.copy
+    - content.code.select
+    - content.code.annotate
+
+  # 配色更改: https://squidfunk.github.io/mkdocs-material/setup/changing-the-colors/
   palette:
+    # - accent: indigo
+    # - primary: indigo
     # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: deep yellow # todo x: 颜色
+      primary: indigo # todo x: 颜色
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
@@ -66,7 +117,7 @@ theme:
     # Palette toggle for dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: deep purple # todo x: 颜色, deep purple, teal, deep orange
+      primary: deep purple # todo x: 颜色 red, deep purple, teal, deep orange
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
@@ -74,11 +125,13 @@ theme:
 plugins:
   - search
 
+  # - typeset
+  # - social
   #
   # 导航栏插件
   #
-  - awesome-nav: # 自动生成导航 https://lukasgeiter.github.io/mkdocs-awesome-nav/features/nav/
-      flatten_single_child_sections: true # TODO X: 配合排序插件, 必备参数!!! (需要每个目录下, 都要配置这个参数!!!)
+  - awesome-nav # 自动生成导航 https://lukasgeiter.github.io/mkdocs-awesome-nav/features/nav/
+    # flatten_single_child_sections: true # TODO X: 配合排序插件, 必备参数!!! (需要每个目录下, 都要配置这个参数!!!)
 
   # 思维导图
   #   - https://github.com/markmap/mkdocs_markmap
@@ -86,19 +139,22 @@ plugins:
   # 代码高亮插件
   #   - https://pawamoy.github.io/mkdocs-pygments/#fruity
 
-  - add-number: # todo x: 自动给目录添加序号
-      # strict_mode: True
-      # order: 1
-      increment_topnav: False
-      increment_pages: True
-      excludes:
-        - index.md
-        # - infra/index.md
-        # - docker/index.md
-        # - k3s/index.md
-        - 404.md
-      includes:
-        - sql/MySQL
+  #
+  # 这个插件有bug!!! 跟 nav 导航栏插件冲突了!!
+  #
+  # - add-number: # todo x: 自动给目录添加序号
+  #     # strict_mode: True
+  #     # order: 1
+  #     increment_topnav: False
+  #     increment_pages: True
+  #     excludes:
+  #       - index.md
+  #       # - infra/index.md
+  #       # - docker/index.md
+  #       # - k3s/index.md
+  #       - 404.md
+  #     includes:
+  #       - sql/MySQL
 
   #
   # TODO X: 可能遇到问题, 默认可以注释掉, 生成的 PDF 效果不错!
@@ -107,6 +163,18 @@ plugins:
   # - with-pdf: # TODO X: brew install weasyprint #
   #     author: "Henry Huang"
   #     output_path: /tmp/document.pdf # TODO X: 输出路径!!!
+
+#
+# 扩展自定义 css
+#
+extra_css:
+  - _style/css/extra.css
+
+#
+# 扩展自定义 js: https://squidfunk.github.io/mkdocs-material/customization/#additional-javascript
+#
+extra_javascript:
+  - _style/js/extra.js
 
 extra:
   alternate: # todo x: 多语言, https://squidfunk.github.io/mkdocs-material/setup/changing-the-language/#site-language-selector

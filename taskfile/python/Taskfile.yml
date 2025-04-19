@@ -109,7 +109,7 @@ tasks:
     aliases: ["docs:run", "run:docs"]
     cmds:
       # - uv sync --all-packages --all-groups
-      - uv run mkdocs serve --open --watch=docs --watch=mkdocs.yml --dev-addr=localhost:5005
+      - uv run mkdocs serve -v --open --watch=docs --watch=mkdocs.yml --dev-addr=localhost:5005
     dir: "../../"
 
   # 创建文档目录

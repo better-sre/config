@@ -1,10 +1,9 @@
-# 其他指南
+# 其他
 
-## 其他教程
+## Rust 教程
 
-- [rust 指南](https://rs.trybetter.app)
+- ✅ [rust 指南](https://rs.trybetter.app)
 
-## 其他文档
+## Python 教程
 
-- Full Url: <https://lukasgeiter.github.io/mkdocs-awesome-nav>
-- Relative Path: ../
+- ✅ [python 指南](https://better-py.github.io/learn-py/)

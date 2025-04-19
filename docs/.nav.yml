@@ -8,7 +8,7 @@ nav:
       # - Kubernetes: k8s/index.md
       # - 参考: reference/index.md
   - "📦️ 中间件": infra
-  - "🛳️ Docker": docker
+  - "🐋 Docker": docker
   - "🚀 K3S": k3s
   - "🛰️ K8S": k8s
   - "📚 参考": reference

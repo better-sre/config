@@ -1,4 +1,4 @@
-# ETCD
+# Etcd
 
 ## Reference
 

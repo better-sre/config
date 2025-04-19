@@ -1,4 +1,4 @@
-# traefik
+# Traefik
 
 ## Reference
 

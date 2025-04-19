@@ -25,3 +25,49 @@
 - [fluent-bit](https://github.com/fluent/fluent-bit)
 - <https://fluentbit.io/how-it-works/>
 - <https://docs.fluentbit.io/manual/about/what-is-fluent-bit>
+
+> 教程
+
+- [Kubernetes日志采集——Fluent Bit详细介绍（一）](https://www.cnblogs.com/zhangmingcheng/p/15784496.html)
+- [使用fluent bit+ClickHouse 实现K8s日志采集](https://cloud.tencent.com/developer/article/1926584)
+- [使用 Fluentbit 采集夜莺日志写入 ElasticSearch](https://flashcat.cloud/blog/collect-n9e-logs-by-fluentbit/)
+- <https://docs.docker.com/engine/logging/drivers/fluentd/>
+
+```ruby
+
+docker run --log-driver=fluentd --log-opt fluentd-address=fluentdhost:24224
+```
+
+- <https://kevcodez.de/posts/2019-08-10-fluent-bit-docker-logging-driver-elasticsearch/>
+
+```ruby
+
+version: "3.5"
+services:
+  elasticsearch:
+    image: elasticsearch:7.3.0
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
+  
+  fluentbit:
+    build: .
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+    depends_on:
+      - elasticsearch
+  
+  ubuntu:
+    image: ubuntu
+    command: [/bin/echo, "Kevcodez"]
+    depends_on:
+      - fluentbit
+    logging: # 日志 driver
+      driver: fluentd
+      options:
+        tag: docker-ubuntu
+```

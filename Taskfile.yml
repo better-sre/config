@@ -215,6 +215,7 @@ tasks:
       - task: x:py:docs
 
   docs:deploy:
+    aliases: ["dd", "docs:d"]
     cmds:
       - task: x:py:docs:deploy
 

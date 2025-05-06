@@ -1,0 +1,9 @@
+nav:
+  - index.md
+  - "🇨🇳":
+      - tencent.md
+      - aliyun.md
+      - hw.md
+  - "🇺🇸":
+      - aws.md
+  - "*"

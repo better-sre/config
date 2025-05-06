@@ -102,6 +102,12 @@ includes:
     dir: ./docker-compose/local/
     optional: true
 
+  pulumi:
+    aliases: ["pul"]
+    taskfile: ./pulumi/
+    dir: ./pulumi/
+    optional: true
+
   k3s:
     taskfile: ./k3s/
     dir: ./k3s/
@@ -147,6 +153,9 @@ tasks:
           --exclude=".task" \
           --exclude=".github" \
           --exclude=".vscode" \
+          --exclude="docs" \
+          --exclude="site" \
+          --exclude="packages" \
           --exclude="tmp" \
           --exclude="*.md" \
           --exclude=".env*" \
@@ -215,6 +224,7 @@ tasks:
       - task: x:py:docs
 
   docs:deploy:
+    aliases: ["dd", "docs:d"]
     cmds:
       - task: x:py:docs:deploy
 

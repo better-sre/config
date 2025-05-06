@@ -8,4 +8,5 @@ flatten_single_child_sections: true # TODO X: 配合排序插件, 必备参数!!
 
 nav:
   - 概述: index.md
+  - k3d: k3d
   - "*"

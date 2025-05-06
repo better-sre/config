@@ -15,4 +15,13 @@ ignore: "*.hidden.md"
 
 nav:
   - 概述: index.md
+  - ☁️ IaC: iac # emoji: ☁️
+  - 📡 服务发现: discovery # emoji: 📡
+  - 🌐 配置中心: config # emoji: 🌐
+  - 🌊 负载均衡: loadbalancer # emoji: 分发 🌊
+  - 🎯 链路追踪: tracing # emoji: 🎯
+  - 📝 日志系统: logging # emoji: 📝
+  - 📊 监控系统: monitoring # emoji: 📊
+  - 🚨 告警系统: alerting # emoji: 🚨
+  - 📨 消息队列: queue # emoji: 📨
   - "*"

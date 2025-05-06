@@ -1,0 +1,12 @@
+#
+# reference:
+#   - https://lukasgeiter.github.io/mkdocs-awesome-nav/reference/
+#
+
+ignore: "*.hidden.md"
+
+nav:
+  - 概述: index.md
+  - "📦 镜像加速": mirrors.md
+  - "GHCR.IO": ghcr.io.md
+  - "*"

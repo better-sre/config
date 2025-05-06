@@ -1,5 +1,34 @@
 {
-    "recommendations": [
-        "task.vscode-task"
-    ]
+  "recommendations": [
+    "task.vscode-task",
+    // "ms-python.isort",
+    // "ms-python.black-formatter",
+    "ms-python.python",
+    "ms-python.debugpy",
+    "ms-python.vscode-pylance", // 显示函数文档
+    "charliermarsh.ruff",
+    "redhat.vscode-yaml",
+    "dbcode.dbcode",
+    "ms-azuretools.vscode-docker",
+    "ms-dotnettools.vscode-dotnet-runtime",
+    // "ms-dotnettools.csharp",
+    // "ms-dotnettools.csdevkit",
+    "ms-vscode-remote.remote-containers",
+    "ms-vscode-remote.remote-ssh",
+    "editorconfig.editorconfig",
+    "tamasfe.even-better-toml",
+    "antfu.file-nesting",
+    "ms-ossdata.vscode-postgresql",
+    "njpwerner.autodocstring",
+    "oderwat.indent-rainbow",
+    "shd101wyy.markdown-preview-enhanced",
+    "k3a.theme-dark-plus-contrast",
+    "joshumcode.functional-contrast",
+    // "bito.bito",
+    "continue.continue",
+    // "supermaven.supermaven",
+    "alibaba-cloud.tongyi-lingma",
+    "marscode.marscode-extension",
+    "vue.volar"
+  ]
 }

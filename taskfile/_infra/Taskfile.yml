@@ -21,3 +21,11 @@ tasks:
       - brew install cookiecutter
       - brew install go-task/tap/go-task
       - brew install protobuf
+
+  # pulumi: https://www.pulumi.com/docs/iac/download-install/
+  i:pulumi:
+    aliases: ["install:pulumi"]
+    cmds:
+      - brew install pulumi/tap/pulumi
+      # - curl -fsSL https://get.pulumi.com/ | sh
+      - pulumi version

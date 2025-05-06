@@ -1,0 +1,64 @@
+version: "3"
+
+tasks:
+  docker:
+    aliases: ["d"]
+    cmds:
+      - docker {{.CLI_ARGS}}
+
+  docker:build:
+    cmds:
+      - docker build {{.CLI_ARGS}}
+
+  build:12:
+    aliases: ["b12"]
+    cmds:
+      - docker build -f Dockerfile -t {{.IMAGE}}:{{.TAG}} .
+    dir: "12"
+    vars:
+      IMAGE: "debian"
+      TAG: "12-uv"
+
+  run:12:
+    aliases: ["r12"]
+    cmds:
+      - docker run -it --rm {{.IMAGE}}:{{.TAG}} bash
+    dir: "12"
+    vars:
+      IMAGE: "debian"
+      TAG: "12-uv"
+
+  login:
+    cmds:
+      - echo $GITHUB_PUSH_TOKEN
+      - echo $GITHUB_PUSH_TOKEN | docker login ghcr.io -u hhstore --password-stdin
+    dotenv:
+      - .env
+      - ../../.env
+      - ../../../.env
+
+  tag:
+    cmds:
+      - docker tag {{.IMAGE}}:{{.TAG}} ghcr.io/{{.ORG}}/{{.IMAGE}}:{{.TAG}}
+    vars:
+      IMAGE: "debian"
+      TAG: "12-uv"
+      ORG: "better-sre" # "hhstore"
+
+  rel:
+    aliases: ["push"]
+    cmds:
+      - docker tag {{.IMAGE}}:{{.TAG}} ghcr.io/{{.ORG}}/{{.IMAGE}}:{{.TAG}}
+      - docker push ghcr.io/{{.ORG}}/{{.IMAGE}}:{{.TAG}}
+    vars:
+      IMAGE: "debian"
+      TAG: "12-uv"
+      ORG: "better-sre" # "hhstore"
+
+  clean:
+    aliases: ["c", "rm"]
+    cmds:
+      - docker image prune -f
+      - docker images
+      - docker container prune -f
+      - docker ps -a

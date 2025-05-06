@@ -1,0 +1,5 @@
+nav:
+  - index.md
+  - "域名": domain
+  - "云主机": vps
+  - "*"

@@ -12,6 +12,6 @@ docs = [
     "mkdocs-add-number-plugin>=1.2.2",
     "mkdocs-awesome-nav>=3.1.1",
     "mkdocs-markmap>=2.5.2",
-    "mkdocs-material>=9.6.12",
+    "mkdocs-material[imaging]>=9.6.12",
     "mkdocs-with-pdf>=0.9.3",
 ]

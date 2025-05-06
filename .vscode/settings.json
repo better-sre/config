@@ -1,18 +1,117 @@
 {
-    "sqltools.connections": [
-        {
-            "mysqlOptions": {
-                "authProtocol": "default"
-            },
-            "previewLimit": 50,
-            "server": "localhost",
-            "port": 13306,
-            "driver": "MariaDB",
-            "name": "cms",
-            "group": "local",
-            "database": "cms",
-            "username": "root",
-            "password": "root"
-        }
-    ]
+  "editor.formatOnSave": true,
+  // python 配置
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff", // 默认使用 Ruff 格式化
+    "editor.formatOnSave": true, // 保存时自动格式化
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit", // 保存时自动修复可修复的 lint 错误
+      "source.organizeImports.ruff": "explicit" // 保存时自动排序 import 语句
+    }
+  },
+  // "isort.args": ["--profile", "ruff"],
+  "notebook.formatOnSave.enabled": true,
+  "notebook.diff.overviewRuler": true,
+  "notebook.consolidatedRunButton": true,
+  "sqltools.connections": [
+    {
+      "mysqlOptions": {
+        "authProtocol": "default"
+      },
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 13306,
+      "driver": "MariaDB",
+      "name": "cms",
+      "group": "local",
+      "database": "cms",
+      "username": "root",
+      "password": "root"
+    }
+  ],
+  "dbcode.connections": [
+    {
+      "connectionId": "ccGhCgCcO7YUxlzugel9Z",
+      "name": "redis.local",
+      "driver": "redis",
+      "connectionType": "host",
+      "host": "127.0.0.1",
+      "port": 6379,
+      "ssl": false,
+      "username": "default",
+      "savePassword": "secretStorage",
+      "readOnly": false,
+      "connectionTimeout": 30
+    }
+  ],
+  "python.testing.pytestArgs": [
+    "."
+  ],
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestEnabled": true,
+  "files.associations": {
+    "*.html": "django-html",
+    "*.tpl": "django-html"
+  },
+  "[django-html]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "Codegeex.CompletionDelay": 0.5,
+  "Codegeex.GenerationPreference": "block",
+  "marscode.chatLanguage": "cn",
+  //
+  // 隐藏文件+文件夹
+  //
+  "files.exclude": {
+    "**/.git": true,
+    "**/.idea": true, // idea
+    "**/node_modules": true, // node
+    "**/.venv": true, // python
+    "**/.mypy_cache": true, // python
+    "**/.pytest_cache": true, // python
+    "**/__pycache__": true, // python
+    "**/build": true,
+    // "**/out": true,
+    // "**/dist": true,
+    "**/target": true,
+    // "**/tmp": true // 临时文件// 会隐藏目录!!!
+  },
+  // 搜索排除
+  "search.exclude": {
+    "**/.git": true,
+    "**/.venv": true, // python
+    "**/.mypy_cache": true, // python
+    "**/.pytest_cache": true, // python
+    "**/__pycache__": true, // python
+    "**/node_modules": true, // node
+    "**/build": true,
+    "**/dist": true,
+    "**/dist-tsc": true,
+    "**/out": true,
+    "**/out-tsc": true,
+    "**/target": true, // rust
+  },
+  // 搜索结果排除
+  "explorer.autoRevealExclude": {
+    "**/.mypy_cache": true,
+    "**/.venv": true,
+    "**/node_modules": true,
+    "**/pytest_cache": true
+  },
+  //
+  // TODO X: 文件监控, 关键忽略!!!
+  //
+  "files.watcherExclude": {
+    "**/.venv": true, // python
+    "**/.mypy_cache": true, // python
+    "**/.pytest_cache": true, // python
+    "**/__pycache__": true, // python
+    "**/build": true,
+    "**/node_modules": true, // node
+    "**/out": true,
+    "**/dist": true,
+    "**/tmp": true,
+    "**/target": true, // rust
+  },
 }

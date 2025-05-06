@@ -1,0 +1,65 @@
+version: "3"
+
+tasks:
+  docker:
+    aliases: ["d"]
+    cmds:
+      - docker {{.CLI_ARGS}}
+
+  docker:build:
+    cmds:
+      - docker build {{.CLI_ARGS}}
+
+  # for python + uv
+  build:22:
+    aliases: ["b22"]
+    cmds:
+      - docker build -f Dockerfile.python -t {{.IMAGE}}:{{.TAG}} .
+    dir: "22.04"
+    vars:
+      IMAGE: "ubuntu"
+      TAG: "22-uv"
+
+  run:22:
+    aliases: ["r22"]
+    cmds:
+      - docker run -it --rm {{.IMAGE}}:{{.TAG}} bash
+    dir: "22.04"
+    vars:
+      IMAGE: "ubuntu"
+      TAG: "22-uv"
+
+  login:
+    cmds:
+      - echo $GITHUB_PUSH_TOKEN
+      - echo $GITHUB_PUSH_TOKEN | docker login ghcr.io -u hhstore --password-stdin
+    dotenv:
+      - .env
+      - ../../.env
+      - ../../../.env
+
+  tag:
+    cmds:
+      - docker tag {{.IMAGE}}:{{.TAG}} ghcr.io/{{.ORG}}/{{.IMAGE}}:{{.TAG}}
+    vars:
+      IMAGE: "ubuntu"
+      TAG: "22-uv"
+      ORG: "better-sre" # "hhstore"
+
+  rel:
+    aliases: ["push"]
+    cmds:
+      - docker tag {{.IMAGE}}:{{.TAG}} ghcr.io/{{.ORG}}/{{.IMAGE}}:{{.TAG}}
+      - docker push ghcr.io/{{.ORG}}/{{.IMAGE}}:{{.TAG}}
+    vars:
+      IMAGE: "ubuntu"
+      TAG: "22-uv"
+      ORG: "better-sre" # "hhstore"
+
+  clean:
+    aliases: ["c", "rm"]
+    cmds:
+      - docker image prune -f
+      - docker images
+      - docker container prune -f
+      - docker ps -a

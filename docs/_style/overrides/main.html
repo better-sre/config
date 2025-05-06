@@ -1,0 +1,42 @@
+{% extends "base.html" %} {% block htmltitle %}
+
+<!-- page title  在此处修改网站标题-->
+<title>{{ title }}</title>
+
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+{% endblock %}
+
+<!-- 添加公告栏 -->
+
+<!-- Announcement bar -->
+{% block announce %} For updates follow <strong>@TryBetterApp</strong> on
+
+<!-- Twitter -->
+<a href="https://x.com/trybetterapp">
+  <span class="twemoji twitter">
+    {% include ".icons/fontawesome/brands/twitter.svg" %}
+  </span>
+  <strong>Twitter</strong>
+</a>
+
+and
+
+<!-- Youtube -->
+<a rel="me" href="https://www.youtube.com/@try_better_app">
+  <span class="twemoji youtube">
+    {% include ".icons/fontawesome/brands/youtube.svg" %}
+  </span>
+  <strong>Youtube</strong>
+</a>
+
+{% endblock %}
+
+<!--   -->
+{% block scripts %}
+<!-- Add scripts that need to run before here -->
+{{ super() }}
+<!-- Add scripts that need to run afterwards here -->
+{% endblock %}

@@ -1,0 +1,43 @@
+##########################################################################################
+#                              nginx service:
+# ref:
+#   - https://hub.docker.com/_/nginx
+#   - https://cloud.tencent.com/developer/article/2219498
+#   - https://forums.docker.com/t/docker-compose-with-nginx-on-different-port/137622
+#
+#
+##########################################################################################
+
+version: "3.3"
+
+services:
+  nginx:
+    container_name: nginx
+    hostname: nginx
+    image: nginx:latest
+    # restart: unless-stopped
+    networks:
+      - biz_net
+    ports:
+      # - "8080:80" # 外部:内部
+      # - "443:443"
+      - "80:80"
+    environment:
+      # - NGINX_HOST=foobar.com
+      - NGINX_PORT=80
+    volumes:
+      # - ./www:/var/www:ro
+      # - ./nginx.conf:/etc/nginx/nginx.conf:ro # 如果需要配置 gzip 开关，请使用此配置文件
+      - ./conf.d:/etc/nginx/conf.d:ro # 导入自定义配置
+
+##########################################################################################
+#                                 自定义依赖:
+##########################################################################################
+
+# 自定义数据卷:
+volumes:
+  redis_data:
+
+networks:
+  biz_net:
+    external: true # 外部网络

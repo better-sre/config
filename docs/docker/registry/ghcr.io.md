@@ -23,6 +23,14 @@ docker pull ghcr.nju.edu.cn/github/super-linter:latest
 docker pull quay.io/prometheus/prometheus:latest
 
 docker pull quay.nju.edu.cn/prometheus/prometheus:latest
+
+
+# 重命名镜像为原镜像
+docker tag ghcr.nju.edu.cn/github/super-linter:latest ghcr.io/github/super-linter:latest
+
+# 删除镜像
+docker rmi ghcr.nju.edu.cn/github/super-linter:latest
+
 ```
 
 ## 使用教程

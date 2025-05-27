@@ -1,0 +1,11 @@
+version: "3"
+
+tasks:
+  # 导出默认配置
+  export:
+    cmds:
+      - docker run --rm --entrypoint=cat nginx /etc/nginx/nginx.conf > ./nginx.default.conf
+
+  up:
+    cmds:
+      - docker-compose up -d

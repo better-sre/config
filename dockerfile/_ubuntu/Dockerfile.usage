@@ -1,0 +1,4 @@
+FROM ghcr.io/better-sre/ubuntu:22-uv AS build
+
+
+WORKDIR /app

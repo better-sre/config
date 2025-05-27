@@ -15,12 +15,12 @@ version: "3.3"
 
 services:
   redis:
-    container_name: redis   # redis 4.0+
+    container_name: redis # redis 4.0+
     hostname: redis
     image: redis
     # restart: always
     networks:
-      - redis_net
+      - biz_net
     ports:
       - "0.0.0.0:6379:6379"
     volumes:
@@ -40,7 +40,6 @@ services:
   #   ports:
   #     - "0.0.0.0:18081:8081"
 
-
 ##########################################################################################
 #                                 自定义依赖:
 ##########################################################################################
@@ -50,4 +49,5 @@ volumes:
   redis_data:
 
 networks:
-  redis_net:
+  biz_net:
+    external: true # 外部网络

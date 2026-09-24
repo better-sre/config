@@ -44,10 +44,21 @@ jobs:
           #
           # todo x: 同步修改 tag 信息
           #
+          flavor: |
+            # 关闭内置 latest，避免生成无前缀的 :latest 标签
+            latest=false
           tags: |
-            type=ref,event=branch,prefix=13-py313-uv-
+            # main 分支：干净标签 13-py313-uv（去掉 -main 后缀）
+            type=raw,value=13-py313-uv,enable={{is_default_branch}}
+            # 关闭分支名后缀（否则会生成 13-py313-uv-main）
+            type=ref,event=branch,enable=false
+            # 推送 git tag 时保留原始 tag 名，如 13-py313-uv-v1.2.3
+            type=ref,event=tag,prefix=13-py313-uv-
+            # 语义化版本标签
             type=semver,pattern={{version}},prefix=13-py313-uv-
             type=semver,pattern={{major}}.{{minor}},prefix=13-py313-uv-
+            type=semver,pattern={{major}},prefix=13-py313-uv-
+            # 提交短 sha，便于精确回滚
             type=sha,format=short,prefix=13-py313-uv-
           labels: |
             org.opencontainers.image.revision=${{ github.sha }}

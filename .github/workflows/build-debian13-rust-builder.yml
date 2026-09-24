@@ -1,4 +1,4 @@
-name: Build Python Builder Image (Debian13 Trixie)
+name: Build Rust Builder Image (Debian13 Trixie)
 
 on:
   push:
@@ -16,7 +16,8 @@ env:
   # 镜像完整名称 ghcr.io/<owner>/<repo>/<镜像名>
   # 注意: workflow 级 env 块内不能互相引用（env 上下文不可用），
   # 因此镜像名直接内联写入 IMAGE_REPO，不能用 ${{ env.IMAGE_NAME }}
-  IMAGE_REPO: ${{ github.repository }}/debian # todo x: 镜像名放路径段，版本/变体用 tag 表达（不要带冒号）
+  # 变体（13-rust）用 tag 的 prefix 表达，不要写进镜像名（避免非法引用 debian:13-rust:main）
+  IMAGE_REPO: ${{ github.repository }}/debian
 
 jobs:
   build-and-push:
@@ -42,29 +43,23 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_REPO }}
           #
-          # todo x: 同步修改 tag 信息
+          # 变体前缀 13-rust- 对应 rust.Dockerfile（Debian13 + Rust stable）
           #
           tags: |
-            type=ref,event=branch,prefix=13-py313-uv-
-            type=semver,pattern={{version}},prefix=13-py313-uv-
-            type=semver,pattern={{major}}.{{minor}},prefix=13-py313-uv-
-            type=sha,format=short,prefix=13-py313-uv-
+            type=ref,event=branch,prefix=13-rust-
+            type=semver,pattern={{version}},prefix=13-rust-
+            type=semver,pattern={{major}}.{{minor}},prefix=13-rust-
+            type=sha,format=short,prefix=13-rust-
           labels: |
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.source=${{ github.event.repository.html_url }}
-            org.opencontainers.image.description=Debian13 Trixie Python3.13 + uv builder base image
+            org.opencontainers.image.description=Debian13 Trixie Rust stable (rustup) builder base image
 
       - name: Build and push image
         uses: docker/build-push-action@v6
         with:
-          context: ./dockerfile/_debian/13 # todo x: 同步修改
-          #
-          # TODO X: 👉 注意：你的Dockerfile放在仓库 dockerfile/_debian/Dockerfile
-          # file: ./dockerfile/_debian/Dockerfile
-          file: ./dockerfile/_debian/13/python13.Dockerfile
-          #
-          #
-          #
+          context: ./dockerfile/_debian/13
+          file: ./dockerfile/_debian/13/rust.Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

@@ -17,6 +17,8 @@ LABEL org.opencontainers.image.source="build-base-image"
 ENV DEBIAN_FRONTEND=noninteractive \
   LANG=C.UTF-8 \
   LC_ALL=C.UTF-8 \
+  # 强制 Python UTF-8 模式（与 C.UTF-8 locale 双重保险，确保标准输出编码为 utf-8）
+  PYTHONUTF8=1 \
   # 时区环境变量（解决日志/终端中文环境下的时间显示）
   TZ=Asia/Shanghai \
   PYTHONUNBUFFERED=1 \
@@ -152,8 +154,8 @@ RUN python3 --version && \
   pip --version && \
   uv --version && \
   # 验证中文支持：C.UTF-8 locale 已生成、Python 标准输出编码为 utf-8
-  locale -a | grep -i "C.UTF-8" && \
-  python3 -c "import sys; assert sys.stdout.encoding == 'utf-8'; print('stdout encoding:', sys.stdout.encoding)" && \
+  locale -a | grep -iE 'C\.?utf-?8' && \
+  python3 -c "import sys; print('stdout encoding:', sys.stdout.encoding); assert sys.stdout.encoding.lower() == 'utf-8', sys.stdout.encoding" && \
   python3 -c "print('中文日志测试：OK')" && \
   echo "=== Build base image ready ===" && \
   echo "Python: $(python3 --version)" && \

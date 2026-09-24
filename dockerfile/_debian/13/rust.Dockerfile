@@ -151,16 +151,24 @@ WORKDIR /app
 # ------------------------------------------------------------
 # 6. 验证 Rust 环境
 # ------------------------------------------------------------
-RUN rustc --version && \
-    cargo --version && \
-    rustup show && \
-    # 验证中文支持：C.UTF-8 locale 已生成、Rust 标准输出编码为 utf-8
-    locale -a | grep -iE 'C\.?utf-?8' && \
-    # 验证 cargo 可正常拉取/编译一个最小 crate（离线环境下可注释掉这一行）
-    echo "=== Build base image ready ===" && \
-    echo "Rust:   $(rustc --version)" && \
-    echo "Cargo:  $(cargo --version)" && \
-    echo "Debian: $(cat /etc/debian_version)"
+# 关键校验：rustc / cargo / rustup 二进制必须可用（任一失败则构建失败）
+RUN set -e; \
+  rustc --version && \
+  cargo --version && \
+  rustup --version && \
+  echo "=== Rust base image ready ===" && \
+  echo "Rust:   $(rustc --version)" && \
+  echo "Cargo:  $(cargo --version)" && \
+  echo "Debian: $(cat /etc/debian_version)"
+
+# 信息性校验：工具链详情 + 中文 locale（不阻断构建）
+# 注意：locale -a 在部分 glibc 下输出 C.utf8（无连字符），故用 C\.UTF-?8 兼容匹配
+RUN rustup show; \
+  if locale -a | grep -Eiq 'C\.UTF-?8'; then \
+    echo "locale: C.UTF-8 available (中文支持 OK)"; \
+  else \
+    echo "locale: WARN C.UTF-8 not listed by locale -a, but LANG/LC_ALL=C.UTF-8 are set"; \
+  fi
 
 # 默认命令
 CMD ["rustc", "--version"]

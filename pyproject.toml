@@ -3,15 +3,23 @@ name = "config"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
+authors = [{ name = "hhglory", email = "hhglory@outlook.com" }]
 requires-python = ">=3.12"
 dependencies = []
 
+[project.scripts]
+config = "config:main"
+
+[build-system]
+requires = ["uv_build>=0.12.5,<0.13.0"]
+build-backend = "uv_build"
+
 [dependency-groups]
 docs = [
-    "mkdocs>=1.6.1",
-    "mkdocs-add-number-plugin>=1.2.2",
-    "mkdocs-awesome-nav>=3.1.1",
-    "mkdocs-markmap>=2.5.2",
-    "mkdocs-material[imaging]>=9.6.12",
-    "mkdocs-with-pdf>=0.9.3",
+  "mkdocs>=1.6.1",
+  "mkdocs-add-number-plugin>=1.2.2",
+  "mkdocs-awesome-nav>=3.1.1",
+  "mkdocs-markmap>=2.5.2",
+  "mkdocs-material[imaging]>=9.6.12",
+  "mkdocs-with-pdf>=0.9.3",
 ]

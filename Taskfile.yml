@@ -230,6 +230,17 @@ tasks:
 
   ################################################################################
 
+  # 代码同步到远端: 环境变量配置
+  copy:
+    aliases: ["cp"]
+    cmds:
+      - ｜
+        echo "copy code to remote {{.CLI_ARGS}}"
+      - rsync {{.CLI_ARGS}}
+    ignore_error: true
+
+  ################################################################################
+
   pull:
     aliases: ["pl"]
     cmds:
@@ -266,7 +277,7 @@ tasks:
     cmds:
       - git add .
       - git status
-      - git commit -m "update" --no-verify
+      - git commit -m "👷 update" --no-verify
     ignore_error: true
 
   push:

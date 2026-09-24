@@ -1,0 +1,67 @@
+# ========== Git 相关 ==========
+.git
+.gitignore
+.gitattributes
+.github
+.gitlab-ci.yml
+
+# ========== Python 缓存、字节码 ==========
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.pyc
+*.pyo
+*.pyd
+
+# ========== 本地虚拟环境 极其重要，不要把本机venv打进镜像 ==========
+venv/
+.venv/
+env/
+.env/
+/.env
+/venv
+/.venv
+
+# ========== uv / pip 本地缓存 ==========
+.uv/
+.uv-cache/
+uv.lock.bak
+pip-wheel-cache/
+
+# ========== IDE、编辑器、操作系统垃圾文件 ==========
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ========== 日志、运行时输出、数据库文件 ==========
+logs/
+*.log
+tmp/
+temp/
+*.db
+*.sqlite
+*.sqlite3
+
+# ========== 测试文档，不打入镜像 ==========
+tests/
+test_*.py
+docs/
+README.md
+CHANGELOG.md
+
+# ========== docker 自身文件，防止递归拷贝 ==========
+Dockerfile
+.dockerignore
+docker-compose*.yml
+compose*.yaml
+
+# ========== 构建产物，前端静态资源如果是本地编译，这里排除；容器内编译则不要排除 ==========
+dist/
+build/
+*.egg-info/

@@ -2,6 +2,7 @@ nav:
   - index.md
   - "🇨🇳":
       - tencent.md
+      - jd.md
       - aliyun.md
       - hw.md
   - "🇺🇸":

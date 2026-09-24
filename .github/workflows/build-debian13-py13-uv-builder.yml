@@ -1,0 +1,70 @@
+name: Build Python Builder Image (Debian13 Trixie)
+
+on:
+  push:
+    branches: [main]
+    tags:
+      - "v*"
+  pull_request:
+    branches: [main]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  # 镜像完整名称 ghcr.io/<owner>/<repo>/<镜像名>
+  # 注意: workflow 级 env 块内不能互相引用（env 上下文不可用），
+  # 因此镜像名直接内联写入 IMAGE_REPO，不能用 ${{ env.IMAGE_NAME }}
+  IMAGE_REPO: ${{ github.repository }}/debian:13-py313-uv # todo x: 镜像名称 debian:12-uv
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_REPO }}
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,format=short
+          labels: |
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.source=${{ github.event.repository.html_url }}
+            org.opencontainers.image.description=Debian13 Trixie Python3.13 + uv builder base image
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./dockerfile/_debian/13 # todo x: 同步修改
+          #
+          # TODO X: 👉 注意：你的Dockerfile放在仓库 dockerfile/_debian/Dockerfile
+          # file: ./dockerfile/_debian/Dockerfile
+          file: ./dockerfile/_debian/13/py13.build.Dockerfile
+          #
+          #
+          #
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/amd64,linux/arm64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

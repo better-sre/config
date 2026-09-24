@@ -10,18 +10,25 @@ tasks:
     cmds:
       - docker build {{.CLI_ARGS}}
 
-  # for python + uv
-  build:22:
-    aliases: ["b22"]
+  # for python3.12 + uv + cn mirror
+  build:ubuntu22:py312:
+    aliases: ["b22py"]
     cmds:
-      - docker build -f Dockerfile.python -t {{.IMAGE}}:{{.TAG}} .
+      - |
+        docker build -f python.cn.Dockerfile \
+          -t {{.IMAGE}}:{{.TAG}} \
+          -t {{.IMAGE}}:{{.TAG}}-py312 \
+          -t {{.IMAGE}}:{{.TAG}}-py312-{{.DATE}} \
+          -t {{.IMAGE}}:{{.TAG}}-py312-latest \
+          .
     dir: "22.04"
     vars:
       IMAGE: "ubuntu"
       TAG: "22-uv"
+      DATE: "20260916" # todo x: 及时更新参数， 20260916 是 2026年9月16日的镜像构建时间
 
-  run:22:
-    aliases: ["r22"]
+  run:ubuntu22:py312:
+    aliases: ["r22py"]
     cmds:
       - docker run -it --rm {{.IMAGE}}:{{.TAG}} bash
     dir: "22.04"

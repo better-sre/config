@@ -1,6 +1,7 @@
 # docker-ubuntu
 
 - <https://hub.docker.com/_/ubuntu>
+- <https://hub.docker.com/r/ubuntu/python>
 - <https://github.com/docker-library/official-images>
 - <https://ubuntu.com/about/release-cycle>
 
@@ -20,7 +21,11 @@
 # 使用方式:
 docker pull ghcr.io/better-sre/ubuntu:22-uv
 
-# 国内镜像加速
+
+# 推荐加速： https://gh-proxy.com/docker
+docker pull gh-proxy.org/docker/ghcr.io/better-sre/ubuntu:22-uv
+
+# 国内镜像加速：南京大学镜像加速
 docker pull ghcr.nju.edu.cn/better-sre/ubuntu:22-uv
 
 ```
@@ -100,6 +105,14 @@ docker pull ubuntu:24.04
 - <https://hub.docker.com/r/ubuntu/redis>
 
 ## Reference
+
+### 🔥 github release 镜像加速工具
+
+- <https://gh-proxy.com/>
+
+### 🔥 docker 镜像加速工具
+
+- <https://gh-proxy.com/docker>
 
 ### 参考 dockerfile
 

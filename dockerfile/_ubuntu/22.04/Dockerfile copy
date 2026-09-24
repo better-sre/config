@@ -1,0 +1,121 @@
+#
+# ref:
+#    - https://hub.docker.com/r/ubuntu/python
+#    - install: https://www.linuxtuto.com/how-to-install-python-3-12-on-ubuntu-22-04/
+#
+# docker pull ubuntu:24.04 # 安装 python3.12
+# docker pull ubuntu/python:3.12-24.04 # 精简镜像， 不要用！！！
+#
+# 多阶段构建：
+#   base —— 系统依赖 + uv + python3.12（低频变化，稳定缓存，代码改动不触发重建）
+#   app  —— 项目代码 + uv sync（日常改动只重建此阶段）
+################################################################
+
+
+# FROM debian:12 AS build
+FROM --platform=$BUILDPLATFORM ubuntu:22.04 AS base
+
+
+# 维护者信息
+LABEL maintainer="hhglory@outlook.com"
+
+WORKDIR /app
+
+################################################################
+
+# env
+ENV TZ=Asia/Shanghai
+ENV TIME_ZONE=Asia/Shanghai
+ENV PATH="/opt/venv/bin:$PATH"
+
+# for uv
+ENV UV_DEFAULT_INDEX="https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple"
+
+# uv cn mirror: https://gh-proxy.com/
+# "https://gh-proxy.com/github.com/indygreg/python-build-standalone/releases/download"
+ENV UV_PYTHON_INSTALL_MIRROR="https://gh-proxy.com/github.com/astral-sh/python-build-standalone/releases/download"
+# ENV UV_PYTHON_INSTALL_MIRROR="https://gh-proxy.com/github.com/indygreg/python-build-standalone/releases/download"
+
+# 设置环境变量，以避免在安装软件包时交互提示
+ENV DEBIAN_FRONTEND=noninteractive
+ARG DEBIAN_FRONTEND=noninteractive
+
+################################################################
+
+# 腾讯云公网源（内外网均可解析；内网源 mirrors.cloud.tencentyun.com 在容器构建时可能无法解析内网 DNS）
+RUN sed -i 's/archive.ubuntu.com/mirrors.cloud.tencent.com/g' /etc/apt/sources.list && \
+    sed -i 's/security.ubuntu.com/mirrors.cloud.tencent.com/g' /etc/apt/sources.list
+
+# 系统依赖（libxmlsec1-dev / pkg-config 为 xmlsec 所需）
+RUN apt update -qy && \
+    apt install -qy --no-install-recommends \
+    build-essential \
+    software-properties-common \
+    gpg-agent \
+    tini \
+    tzdata \
+    python3.10-venv \
+    libxmlsec1-dev pkg-config
+
+################################################################
+
+# for python3.12
+# RUN add-apt-repository ppa:deadsnakes/ppa -y
+
+# RUN apt update -qy && \
+#     apt install -qy --no-install-recommends \
+#     python3.12-dev \
+#     python3.12-venv \
+#     && apt clean \
+#     && rm -rf /var/lib/apt/lists/*
+
+
+################################################################
+
+# python 3.11.2 + venv
+# RUN python3.12 -m venv /opt/venv
+
+# ubuntu 22.04 默认 python3.10，用 venv 承载 uv，避免污染系统环境
+RUN python3.10 -m venv /opt/venv && \
+    pip config set global.extra-index-url "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple" && \
+    python3 -m pip install --upgrade pip && \
+    pip install uv --upgrade
+
+# use cn proxy mirror:
+RUN uv python install 3.12 -v
+
+
+################################################################
+# Stage 2: app —— 项目代码 + 依赖安装（代码/依赖变化只重建此阶段）
+################################################################
+
+FROM base AS app
+
+# python（pyproject.toml 声明了 readme = "README.md"，uv sync 必需）
+COPY pyproject.toml README.md ./
+
+# todo x: 注意代码路径
+COPY src/ ./src/
+
+# install
+# RUN uv sync --all-packages --upgrade
+RUN uv sync --all-packages --all-groups
+
+
+# collectstatic, 服务器上运行， 容器内无需运行， 是要 copy 到 nginx 容器内（不要混淆）
+# RUN uv run python src/manage.py  collectstatic --noinput
+
+# env file
+# COPY .env .
+
+
+################################################################
+
+# todo x: fastapi 默认端口
+EXPOSE 9999
+
+# run
+# CMD ["bash"]
+
+# ENTRYPOINT ["/tini", "--"]
+ENTRYPOINT ["/usr/bin/tini", "--"]

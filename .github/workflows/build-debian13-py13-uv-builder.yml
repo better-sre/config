@@ -16,7 +16,7 @@ env:
   # 镜像完整名称 ghcr.io/<owner>/<repo>/<镜像名>
   # 注意: workflow 级 env 块内不能互相引用（env 上下文不可用），
   # 因此镜像名直接内联写入 IMAGE_REPO，不能用 ${{ env.IMAGE_NAME }}
-  IMAGE_REPO: ${{ github.repository }}/debian:13-py313-uv # todo x: 镜像名称 debian:12-uv
+  IMAGE_REPO: ${{ github.repository }}/debian # todo x: 镜像名放路径段，版本/变体用 tag 表达（不要带冒号）
 
 jobs:
   build-and-push:
@@ -41,11 +41,14 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_REPO }}
+          #
+          # todo x: 同步修改 tag 信息
+          #
           tags: |
-            type=ref,event=branch
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=sha,format=short
+            type=ref,event=branch,prefix=13-py313-uv-
+            type=semver,pattern={{version}},prefix=13-py313-uv-
+            type=semver,pattern={{major}}.{{minor}},prefix=13-py313-uv-
+            type=sha,format=short,prefix=13-py313-uv-
           labels: |
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.source=${{ github.event.repository.html_url }}
